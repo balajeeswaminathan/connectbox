@@ -16,6 +16,8 @@ public class User {
 	private String gender;
 	private String imgPath;
 	private String dob;
+	private String countryState;
+	private String country;
 	private String state;
 	
 	public String getUser_Id() {
@@ -66,5 +68,17 @@ public class User {
 	}
 	public void setState(String state) {
 		this.state = state;
+	}
+	public String getCountryState() {
+		return countryState;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountryState(String countryState) {
+		this.countryState = countryState;
+	}
+	public void setCountry(String country) {
+		this.country = country;
 	}
 }

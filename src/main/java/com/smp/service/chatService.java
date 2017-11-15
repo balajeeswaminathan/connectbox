@@ -3,8 +3,10 @@ package com.smp.service;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,14 +14,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.output.NullWriter;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -60,6 +71,7 @@ public class chatService {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	public static HashMap onlineMembers = new HashMap();
 
 	//define collection name
 	public static final String COLLECTION_USER = "user", COLLECTION_CHAT = "chat", COLLECTION_COMMUNITIES = "communities";
@@ -135,7 +147,7 @@ public class chatService {
 	}
 	
 	//Register
-	public String updateUser(String userId, String userName, String email, String password, String dob, String gender, String profileImgUrl,boolean isEdit){
+	public String updateUser(String userId, String userName, String email, String password, String dob, String gender, String countryState, String country, String profileImgUrl, boolean isEdit){
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		String curentTime = dateFormat.format(date);
@@ -183,6 +195,14 @@ public class chatService {
 			{
 				update.set("gender", gender);
 			}
+			if(!countryState.isEmpty())
+			{
+				update.set("countryState", countryState);
+			}
+			if(!country.isEmpty())
+			{
+				update.set("country", country);
+			}
 			if(!profileImgUrl.isEmpty())
 			{
 				update.set("imgPath", profileImgUrl);
@@ -223,6 +243,8 @@ public class chatService {
 		    user.setPassword(password);
 		    user.setDob(dob);
 		    user.setGender(gender);
+		    user.setCountryState(countryState);
+		    user.setCountry(country);
 		    user.setState("inActive");
 		    
 			//Query
@@ -540,7 +562,7 @@ public class chatService {
 	
 	//Get Chat List need to sort
 	@SuppressWarnings("unchecked")
-	public String getChatListData(String senderId)
+	public String getChatListData(String senderId, String clientTZ) throws ParseException
 	{
 		JSONObject chatListJson = new JSONObject();
 		JSONObject chatListResponseJson = new JSONObject();
@@ -567,7 +589,7 @@ public class chatService {
 				}
 				chatListJson.put("chatListId", chatListDataList.get(i).getChatList_Id());
 				chatListJson.put("chatNames", chatListDataList.get(i).getChatNames());
-				chatListJson.put("dateAndTime", chatListDataList.get(i).getDateAndTime());
+				chatListJson.put("dateAndTime", getDateFormat(chatListDataList.get(i).getDateAndTime(), clientTZ));
 				chatListJson.put("lastMgs", chatListDataList.get(i).getLastMgs());
 				newL.add(chatListJson);
 			}
@@ -652,12 +674,13 @@ public class chatService {
 	
 	//Friends List
 	@SuppressWarnings("unchecked")
-	public String getFriendsList(String collName, int friendsType) {
+	public String getFriendsList(String collName, int friendsType, boolean isOnline) throws ParseException {
 		int status;
 		DBObject friendData, userData;
 		List <DBObject> frndsList = new ArrayList <DBObject>();
 		JSONObject frndsDataJson = new JSONObject();
 		String userId;
+		boolean isOnlineMember = false;
 		
 		DBCollection frndsListCollName = mongoTemplate.getCollection(collName);
 		DBCursor frndsDocCursor = frndsListCollName.find();
@@ -666,14 +689,24 @@ public class chatService {
 		{
 			//Query
 			friendData = frndsDocCursor.next();
-			status = (Integer) friendData.get("status");
-			if(status == friendsType)
+			userId = (String) friendData.get("_id");
+			if(isOnline)
 			{
-				userId = (String) friendData.get("_id");
-				userData = getUserData(userId);
-				friendData.putAll(userData);
-				frndsList.add(friendData);
+				ArrayList<String> userList = new ArrayList<String>();
+				userList.add(userId);
+				isOnlineMember = isMemberOnline(userId);
 			}
+			if(isOnlineMember || !isOnline)
+			{
+				status = (Integer) friendData.get("status");
+				if(status == friendsType)
+				{
+					userData = getUserData(userId);
+					friendData.putAll(userData);
+					frndsList.add(friendData);
+				}
+			}
+			isOnlineMember = false;
 		}
 		frndsDataJson.put("friendsList",frndsList);
 		return frndsDataJson.toString();
@@ -683,15 +716,10 @@ public class chatService {
 	{
 		DBCollection userCollName = mongoTemplate.getCollection(COLLECTION_USER);
 		BasicDBObject objRef = new BasicDBObject();
-		BasicDBObject fields = new BasicDBObject();
 
 		//Query
 		objRef.append("_id", profileId);
-		fields.put("username", 1);
-		fields.put("imgPath", 2);
-		fields.put("gender", 3);
-		fields.put("dob", 4);
-		DBObject profileData = userCollName.findOne(objRef, fields);
+		DBObject profileData = userCollName.findOne(objRef);
 		return profileData;
 	}
 	
@@ -732,17 +760,15 @@ public class chatService {
 		
 		//Query
 		DBObject profileData = profileData(profileId);
-
-		String profileName = (String) profileData.get("username");
-		String profileImg = (String) profileData.get("imgPath");
-		String gender = (String) profileData.get("gender");
 		String dob = (String) profileData.get("dob");
 		
 		responseJson.put("profileId", profileId);
-		responseJson.put("profileName", profileName);
-		responseJson.put("profileImgUrl", profileImg);
-		responseJson.put("gender", gender);
+		responseJson.put("profileName", profileData.get("username"));
+		responseJson.put("profileImgUrl", profileData.get("imgPath"));
+		responseJson.put("gender", profileData.get("gender"));
 		responseJson.put("dob", dob);
+		responseJson.put("country", profileData.get("country"));
+		responseJson.put("countryState", profileData.get("countryState"));
 		
 		if(dob != null)
 		{
@@ -796,15 +822,37 @@ public class chatService {
 		String  imgPath = sysImgPath + userId + "/" + imgType + "/" + imgId + ".jpg";
 		String  imgUrl = serverImgUrl + userId + "/" + imgType + "/" + imgId + ".jpg";
 		
+		compressImage(imgBytes, imgPath);
 		// convert byte array back to BufferedImage
-		InputStream inputStream = new ByteArrayInputStream(imgBytes);
+		/*InputStream inputStream = new ByteArrayInputStream(imgBytes);
      	BufferedImage imgBufferedData = ImageIO.read(inputStream);
      	
-     	ImageIO.write(imgBufferedData, "jpg", new File(imgPath));
+     	ImageIO.write(imgBufferedData, "jpg", new File(imgPath));*/
      	
      	return imgUrl;
 	}
 
+	public void compressImage(byte[] imgBytes, String imgPath) throws IOException
+	{
+		ByteArrayInputStream bais = new ByteArrayInputStream(imgBytes);
+		BufferedImage image = ImageIO.read(bais);
+		
+		File compressedImageFile = new File(imgPath);
+	    OutputStream os =new FileOutputStream(compressedImageFile);
+
+	    Iterator<ImageWriter>writers =  ImageIO.getImageWritersByFormatName("jpg");
+	    ImageWriter writer = (ImageWriter) writers.next();
+
+	    ImageOutputStream ios = ImageIO.createImageOutputStream(os);
+	    writer.setOutput(ios);
+
+	    ImageWriteParam param = writer.getDefaultWriteParam();
+	    
+	    param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+	    param.setCompressionQuality(0.5f);
+	    writer.write(null, new IIOImage(image, null, null), param);
+	}
+	
 	public long findCollectionCount(String collName)
 	{
 		try
@@ -838,10 +886,19 @@ public class chatService {
 		
 	}
 
-	public String getLikeOrCmnts(String uerId, String id,String collName){
+	public String getLikeOrCmnts(String uerId, String id, String type, String clientTZ) throws ParseException{
 		List dataList = new ArrayList();
 		JSONObject dataJson = new JSONObject();
 		DBObject data;
+		String collName = null;
+		if(type.equals("like"))
+		{
+			collName = id + "_LikedList";
+		}
+		else if(type.equals("comments"))
+		{
+			collName = id + "_CommentList";
+		}
 		
 		//Query
 		DBCollection collection = mongoTemplate.getCollection(collName);
@@ -850,6 +907,10 @@ public class chatService {
 		while(resultSet.hasNext())
 		{
 			data = resultSet.next();
+			if(type.equals("comments"))
+			{
+				data.put("dateAndTime", getDateFormat((String) data.get("dateAndTime"), clientTZ));
+			}
 			dataList.add(data);
 		}
 		dataJson.put("likeOrCmntsList", dataList);
@@ -894,7 +955,7 @@ public class chatService {
 		}
 	}
 	
-	public String getPhotos(String userId, String profileId, String photosCollName)
+	public String getPhotos(String userId, String profileId, String photosCollName, String clientTZ) throws ParseException
 	{
 		List photosList = new ArrayList();
 		JSONObject photoData = new JSONObject();
@@ -919,6 +980,7 @@ public class chatService {
 			{
 				photo.put("isLiked", true);
 			}
+			photo.put("dateAndTime", getDateFormat((String)photo.get("dateAndTime"), clientTZ));
 			photo.put("likeCount", likeCount);
 			photo.put("cmntsCount", cmntsCount);
 			photosList.add(photo);
@@ -1440,6 +1502,64 @@ public class chatService {
 		{
 			saveChat(senderId, senderName, friendsListId[i].toString(), friendsListName.toString(), commId, "invite");
 		}
+	}
+	
+	public void setOnlineMember(String userId)
+	{
+		onlineMembers.put(userId, new Date());
+	}
+	
+	/*public String getOnlineMembers(HttpSession session, ArrayList<String> userIds) throws ParseException
+	{
+		JSONObject OnlineMembersJsonObj = new JSONObject();
+		ArrayList OnlineMembersArr = new ArrayList();
+		for(String userId : userIds)
+		{
+			try
+			{
+				boolean isOnline = isMemberOnline(userId);
+				if(isOnline)
+				{
+					OnlineMembersArr.add(userId);
+				}
+				else
+				{
+					onlineMembers.remove(userId);
+				}
+			}
+			catch(NullPointerException ex)
+			{
+				
+			}
+		}
+		OnlineMembersJsonObj.put("onlineMembers", OnlineMembersArr);
+		return OnlineMembersJsonObj.toString();
+	}*/
+	
+	public boolean isMemberOnline(String userId)
+	{
+		Date currDate = new Date();
+		Date startDate = (Date) onlineMembers.get(userId);
+		long duration  = currDate.getTime() - startDate.getTime();
+		long diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+		if(diffInMinutes > 2)//2 mins
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	public String getDateFormat(String date, String clientTZ) throws ParseException
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm, MMM dd, yyyy", Locale.ENGLISH);
+		SimpleDateFormat sdf1 = new SimpleDateFormat("HH:mm, MMM dd, yyyy", Locale.ENGLISH);
+		
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + clientTZ));
+		Date dateObj = sdf.parse(date);
+		return sdf1.format(dateObj);
 	}
 	
 	/*public String clearHomeFeeds()

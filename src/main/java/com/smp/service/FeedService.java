@@ -199,7 +199,7 @@ public class FeedService {
 		}
 	}
 
-	public String geHomeFeeds(String userId, int pageLevel, int limits) throws ParseException
+	public String geHomeFeeds(String userId, int pageLevel, int limits, String clientTZ) throws ParseException
 	{
 		List homeFeedList = new ArrayList();
 		List userFeedList = new ArrayList();
@@ -252,19 +252,19 @@ public class FeedService {
 				
 				if(type.equals("user") || type.equals("community") || type.equals("photo"))
 				{
-					DBObject userCommHomeFeedObj = getUserCommPhotosHomeFeeds(userId, homeFeedObj, type);
+					DBObject userCommHomeFeedObj = getUserCommPhotosHomeFeeds(userId, homeFeedObj, type, clientTZ);
 					userCommHomeFeedObj.putAll(userDataResultSet);
 					homeFeedList.add(userCommHomeFeedObj);
 				}
 				else if(type.equals("createCommunity") || type.equals("updateCommunity") || type.equals("updateProfile"))
 				{
-					JSONObject createUpdateCommProfileHomeFeedList = getUsercreateOrUpdateCommOreProfileHomeFeeds(commId, homeFeedObj, type);
+					JSONObject createUpdateCommProfileHomeFeedList = getUsercreateOrUpdateCommOreProfileHomeFeeds(commId, homeFeedObj, type, clientTZ);
 					createUpdateCommProfileHomeFeedList.putAll(userDataResultSet);
 					homeFeedList.add(createUpdateCommProfileHomeFeedList);
 				}
 				else if(type.equals("like") || type.equals("comments"))
 				{
-					DBObject likeOrCommentsHomeFeedObj = getUserHomeLikeOrCmtsFeeds(userId, homeFeedObj, type);
+					DBObject likeOrCommentsHomeFeedObj = getUserHomeLikeOrCmtsFeeds(userId, homeFeedObj, type, clientTZ);
 					likeOrCommentsHomeFeedObj.putAll(userDataResultSet);
 					homeFeedList.add(likeOrCommentsHomeFeedObj);
 				}
@@ -308,7 +308,7 @@ public class FeedService {
 		return userDataJsonObj;
 	}
 	
-	public DBObject getUserCommPhotosHomeFeeds(String userId, DBObject homeFeedObj, String type)
+	public DBObject getUserCommPhotosHomeFeeds(String userId, DBObject homeFeedObj, String type, String clientTZ) throws ParseException
 	{
 		String feedId, userFeedId, commId, feedColl = null;
 		DBCollection userFeedsColl;
@@ -344,6 +344,7 @@ public class FeedService {
 		
 		isLiked = chatService.dataExist(userId, feedId + "_LikedList");
 		
+		userFeedData.put("dateAndTime", chatService.getDateFormat((String)userFeedData.get("dateAndTime"), clientTZ));
 		userFeedData.putAll(commJsonObj);
 		userFeedData.put("likeCount", likeCount);
 		userFeedData.put("cmntsCount", cmntsCount);
@@ -356,7 +357,7 @@ public class FeedService {
 		return userFeedData;
 	}
 	
-	public JSONObject getUsercreateOrUpdateCommOreProfileHomeFeeds(String commId, DBObject homeFeedObj, String type)
+	public JSONObject getUsercreateOrUpdateCommOreProfileHomeFeeds(String commId, DBObject homeFeedObj, String type, String clientTZ) throws ParseException
 	{
 		ArrayList updatedKeys = new ArrayList();
 		ArrayList updatedValues = new ArrayList();
@@ -390,6 +391,7 @@ public class FeedService {
 			}
 		}
 	
+		commJsonObj.put("dateAndTime", chatService.getDateFormat((String) homeFeedObj.get("dateAndTime"), clientTZ));
 		commJsonObj.put("updatedKeys", updatedKeys);
 		commJsonObj.put("updatedValues", updatedValues);
 		commJsonObj.put("type", type);
@@ -397,7 +399,7 @@ public class FeedService {
 	}
 	
 	//get home like or comment feed
-		public DBObject getUserHomeLikeOrCmtsFeeds(String userId, DBObject homeFeedObj, String type) throws ParseException{
+		public DBObject getUserHomeLikeOrCmtsFeeds(String userId, DBObject homeFeedObj, String type, String clientTZ) throws ParseException{
 			String userFeedId, feedImgUrl, feedId, commId,  userImgUrl, userDataCmntsId, userDataCmntsDateAndTime;
 			String comments, userFeedUsername, userFeedUserImg, userName, userImg;
 			DBCollection userFeedsColl, commFeedsColl, feedDataCmntsColl;
@@ -458,6 +460,7 @@ public class FeedService {
 			userFeedData.put("userName", userName);
 			userFeedData.put("userImg", userImg);
 			
+			userFeedData.put("dateAndTime", chatService.getDateFormat((String) homeFeedObj.get("dateAndTime"), clientTZ));
 			userFeedData.put("type", type);
 			if(type.equals("comments"))
 			{
@@ -603,7 +606,7 @@ public class FeedService {
 		return UserCommHomeFeedList;
 	}*/
 
-	public String getFeed(String userId, String profileId, String feedCollName){
+	public String getFeed(String userId, String profileId, String feedCollName, String clientTZ) throws ParseException{
 		List feedList = new ArrayList();
 		JSONObject feedData = new JSONObject();
 		DBObject feed = null;
@@ -645,6 +648,7 @@ public class FeedService {
 			{
 				feed.put("userImgUrl", userimgUrl);
 			}
+			feed.put("dateAndTime", chatService.getDateFormat((String)feed.get("dateAndTime"), clientTZ));
 			feed.put("likeCount", likeCount);
 			feed.put("cmntsCount", cmntsCount);
 			feedList.add(feed);

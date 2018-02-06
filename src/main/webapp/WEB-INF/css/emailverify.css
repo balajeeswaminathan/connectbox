@@ -1,0 +1,48 @@
+body {
+  font-family: 'Titillium Web', sans-serif;
+  margin: 0px;
+}
+
+.connUs-header-cont{
+	height: 50px;
+    background-color: #616161;
+    padding: 7px;
+}
+
+.connUs-header-label{
+	font-weight: 600;
+    font-size: 23px;
+    width: 200px;
+    margin: 0 auto;
+    color: #fff;
+}
+
+.connUs-emailVerify-cont{
+  padding: 20px;
+  max-width: 500px;
+  margin: 40px auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+}
+
+button {
+  border: 0;
+  outline: none;
+  border-radius: 0;
+  padding: 8px 0px;
+  font-size: 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  background: #03A9F4;
+  color: #ffffff;
+  width: 50%;
+  margin-top: 15px;
+  margin-left: 26%;
+}
+
+.emailVerifyContent{
+	text-align: center;
+    color: #616161;
+    font-size: 15px;
+}

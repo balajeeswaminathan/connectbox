@@ -1,0 +1,464 @@
+@media screen and (max-width: 767px)
+{
+	.connUs-profileData-innerCont
+	{
+		padding: 5px !important;
+	}
+}
+
+.profile-active .connUs-profileData-wrapper, .profile-active .connUs-feedList-wrapper, .friends-active .connUs-friendsListAll-wrapper, .communities-active .connUs-comm-wrapper, .img-crop-active .upload-wrapper, .img-crop-active .upload-crop-cont{
+	display: block;
+}
+
+.connUs-profileData-wrapper, .connUs-feedList-wrapper, .connUs-comm-wrapper, .img-crop-active .upload-wrapper, .upload-crop-cont{
+	display: none;
+}
+
+.connUs-myProfile #profileImg-edit{
+	display: block;
+	margin: 0px auto;
+    width: 60%;
+}
+
+.friends-active{
+	
+}
+
+.connUs-myProfile .connUs-profileTab-cont{
+	display: none;	
+}
+
+.connUs-myProfile .connUs-addPtos-uploadCont{
+	display: block;
+}
+
+.connUs-friends-tab{
+	width: 130px;
+    height: 37px;
+    background-color: #FF4C07;
+    float: left;
+    clear: both;
+    margin-left: 5px;
+    color: #fff;
+}
+
+.connUs-msg{
+	margin-top: 17px;
+}
+
+.connUs-chats-submit{
+    width: 130px;
+    height: 37px;
+    background-color: #FF4C07;
+    margin-top: 8px;
+    margin-left: 137px;
+}
+
+.connUs-chats-list{
+	margin-top: -120px;
+    float: left;
+    width: 70%;
+    background-color: #FFFFFF;
+}
+
+.connUs-chats-all-cont{
+	overflow: hidden;
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.connUs-chats-head{
+	color: #FF4C07;
+    line-height: 3;
+}
+
+.connUs-chats-cont{
+	clear: both;
+	float: left;
+	width: 80px;
+    background-color: #C4C4C4;
+    margin-top: 7px;
+    margin-left: 6px;
+    line-height: 2;
+}
+
+.connUs-chats-sender{
+	float: right;
+	margin-right: 6px;
+	background-color: #FF4C07;
+	color: #fff;
+}
+
+.connUs-chats-input-cont{
+	clear: both;
+}
+
+.connUs-profileData-cont{
+	width: 95%;
+    padding: 10px;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.connUs-profileData-img-cont, .connUs-profileData-innerCont{
+	float: left;
+	padding: 20px;
+}
+
+.connUs-profileData-innerCont{
+	width: 32%;
+}
+
+.connUs-profileData-img{
+	width: 120px;
+    height: 120px;
+    border-radius: 75px;
+}
+
+.connUs-profileData-innerCont input{
+	padding: 5px 10px;
+    color: #828282;
+    font-size: 17px;
+    border: none;
+    pointer-events: none;
+    -webkit-transition: border-color .75s ease;
+    transition: border-color .75s ease;
+    border-bottom: 2px solid #fff;
+    outline: none;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.edit_active .profile-name, .edit_active .profile-dob{
+	pointer-events: fill;
+	border-bottom: 2px solid #828282;
+}
+
+.edit_active .profile-edit-saveBtn{
+	opacity: 1;
+    pointer-events: fill;
+}
+
+.connUs-profileData-innerCont input[type="text"]:focus{
+    border-color: #03A9F4;
+}
+
+.profile-edit-icon{
+	width: 30px;
+    height: 30px;
+    background-image: url("/WEB-INF/img/edit_icon.png");
+    background-size: 30px 30px;
+    border-radius: 15px;
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.profile-edit-saveBtn{
+	width: 40px;
+    height: 40px;
+    background-image: url("/WEB-INF/img/save-btn.png");
+    background-size: 40px 40px;
+    border-radius: 15px;
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+    opacity: 0;
+    pointer-events: none;
+    -webkit-transition: opacity .75s ease;
+    transition: opacity .75s ease;
+}
+
+.connUs-connect-btn, .connUs-msg{
+	width: 80%;
+    clear: both;
+    padding: 15px;
+    background-color: #03A9F4;
+    margin-top: 10px;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+}
+
+.connUs-profileTab-cont, .connUs-commTab-cont{
+	overflow: hidden;
+    padding: 10px;
+}
+
+.connUs-tab, .comm-tab{
+	float: left;
+    width: 25%;
+    text-align: center;
+    color: #828282;
+    font-size: 18px;
+}
+
+.comm-tab{
+	width: 33%;
+}
+
+.connUs-tab.active, .comm-tab.active{
+    border-bottom: 2px solid #03A9F4;
+    pointer-events: none;
+}
+
+.connUs-friendsListAll-wrapper{
+	background-color: #fff;
+    overflow: hidden;
+    display: none;
+}
+
+.connUs-frnds{
+	float: left;
+    padding: 10px;
+}
+
+.connUs-frnds-img-cont{
+	width: 90px;
+    height: 90px;
+	border-radius: 50%;
+	overflow: hidden;
+	z-index: 1;
+	position: relative;
+}
+
+.connUs-frnds-img{
+	width: 90px;
+    height: 90px;
+   -webkit-transition: all .75s ease;
+    transition: all .75s ease; 
+}
+
+.connUs-frnds-img:hover{
+	transform: scale(1.5);
+	-webkit-transform: scale(1.5);
+}
+
+.connUs-frnds-name{
+	color: #03A9F4;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.connUs-frnds-gender{
+	color: #828282;
+    font-size: 13px;
+    text-align: center;
+}
+
+.connUs-friendsList-innerAll-wrapper, .connUs-friendsList-online-wrapper{
+	overflow: hidden;
+    clear: both;
+}
+
+.comm-liked-wrapper, .comm-member-wrapper, .comm-yours-wrapper{
+    float: left;
+    overflow: hidden;
+    width: 100%;
+    display: none;
+}
+
+.comm-liked-wrapper.active, .comm-member-wrapper.active, .comm-yours-wrapper.active{
+	display: block;
+}
+
+.comm-all-list-cont{
+	overflow: hidden;
+	padding: 10px;
+}
+
+.comm-list{
+	float: left;
+	width: 220px;
+    height: 220px;
+    color: #fff;
+    background-color: #2196f3;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.comm-cover-img{
+	width: 100%;
+	height: 50%;
+}
+
+.comm-img{
+	width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    margin-top: -26px;
+    margin-left: 12px;
+}
+
+.comm-details-cont{
+	padding-left: 20px;
+    padding-top: 10px;
+}
+
+.comm-name{
+	font-size: 20px;
+}
+
+.comm-member-count{
+    font-size: 40px;
+}
+
+.connUs-comm-wrapper{
+	background-color: #fff;
+}
+
+.comm-add-new-cont{
+	float: left;
+	width: 100px;
+    height: 100px;
+    border: 1px solid #828282;
+    color: #828282;
+    padding: 59px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.comm-add-new-plus{
+	background-image: url(/WEB-INF/img/plus-icon.png);
+	background-size: 40px;
+    width: 40px;
+    height: 40px;
+    margin: 20px auto;
+}
+
+.connUs-upload-picCont{
+	display: none;
+	position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    width: 500px;
+    height: 540px;
+    overflow: hidden;
+    color: #828282;
+    z-index: 9999;
+    background-color: #fff;
+}
+
+.upload-icon{
+    background-image: url("/WEB-INF/img/upload.png");
+    width: 50px;
+    height: 50px;
+    background-size: 50px;
+    float: left;
+}
+
+.upload-txt{
+    float: left;
+    margin-top: 15px;
+}
+
+.upload-pic-close-icon{
+    float: right;
+    font-size: 20px;
+    margin-right: 10px;
+    color: #828282;
+}
+
+.upload-cont{
+	width: 80%;
+    margin: 15px auto;
+    overflow: hidden;
+}
+
+#profileImg-edit input{
+    width: 100%;
+    height: 50px;
+    opacity: 0;
+    margin-top: -50px;
+    overflow: hidden;
+}
+
+.upload-line{
+	float: left;
+    width: 45%;
+    height: 19px;
+    border-bottom: 1px solid #828282;
+}
+
+.upload-or-txt{
+	float: left;
+    margin: 7px;
+}
+
+.display-img-wrapper{
+	width: 95%;
+    height: 400px;
+    margin: 0px auto;
+    background-color: #e9ebee;
+    overflow-y: auto;
+    padding-top: 20px;
+}
+
+.connUs-display-Img{
+	width: 200px;
+	height: auto;
+	margin-bottom: 20px;
+	margin-left: 20px;
+}
+
+select#connUs-country, select#connUs-state{
+	width: 120%;
+    padding: 5px;
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1;
+    border: none;
+    border-radius: 5px;
+    height: 34px;
+    color: #828282;
+    -webkit-appearance: none;
+    pointer-events: none;
+}
+
+.edit_active select#connUs-country, .edit_active select#connUs-state{
+	pointer-events: fill;
+	background-image: url(/WEB-INF/img/down-arrow.png);
+    background-size: 22px;
+    background-repeat: no-repeat;
+    background-position: 100%;
+}
+
+#connUs-country option{
+	width: 120%;
+}
+
+.upload-crop-cont{
+	margin: 30px;
+}
+
+.upload-crop-img-close, .upload-crop-img-conform{
+	width: 60px;
+    height: 60px;
+    background-image: url(/WEB-INF/img/cross-tick-sprite.jpg);
+    background-size: 180px;
+    margin-top: -10px;
+}
+
+.upload-crop-img-close{
+    background-position: 160px;
+    float: left;
+}
+
+.upload-crop-img-conform{
+    background-position: 85px;
+    float: right;
+}
+
+.connUs-frndstext, .connUs-active-frndstext{
+    float: left;
+    width: 50%;
+    line-height: 2;
+    text-align: center;
+    color: #828282;
+    font-size: 18px;
+}

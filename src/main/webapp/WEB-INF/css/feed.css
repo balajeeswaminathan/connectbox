@@ -1,0 +1,365 @@
+@media screen and (max-width: 767px)
+{
+	.connUs-moreLikesAndCmnts-cont
+	{
+		width: 78% !important;
+	}
+	
+	.connUs-addFeed-cont
+	{
+		width: 95% !important;
+	}
+}
+
+.connUs-youtubeAddCont
+{
+	height: 0px;
+	overflow: hidden;
+	-webkit-transition: height 800ms ease;
+	transition: height 800ms ease;
+}
+
+.connUs-youtubeAddCont.active
+{
+	height: 50px;
+	overflow: hidden;
+}
+
+.feed-youtubeVideo-display
+{
+	margin-top: 10px;
+}
+
+.youtube-url{
+  margin-top: 20px;
+  font-size: 15px;
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  background: none;
+  background-image: none;
+  color: #828282;
+  border: none;
+  border-bottom: 2px solid #828282;
+  -webkit-transition: border-color .75s ease;
+  transition: border-color .75s ease;
+}
+
+.youtube-url:focus{
+  outline: 0;
+  border-color: #03A9F4;
+}
+
+.add-youtubeIcon{
+	float: left;
+	width: 30px;
+	height: 30px;
+    background-image: url(/WEB-INF/img/youtube-icon.png);
+    background-size: 45px 45px;
+    background-position: -7px -7px;
+}
+
+.feed-videoCont
+{
+	margin: 20px 0px;
+}
+
+.feed-addOptionCont{
+	margin-top: 20px;
+}
+
+.connUs-addFeedImgDisplayCont{
+	display: none;
+	margin-top: 10px;
+}
+
+.connUs-addFeedImgDisplayCont .active{
+	display: block !important;
+}
+
+.connUs-addFeedImgDisplay{
+	width: 100px;
+    height: 100px;
+}
+.connUs-addFeed-cont{
+	padding: 10px;
+	background-color: #fff;
+	overflow: hidden;
+}
+
+.connUs-addFeed-desc{
+	resize: none;
+	font-size: 14px;
+    width: 100%;
+    padding: 5px;
+    border: none;
+    border-bottom: 1px solid #B2B2B2;
+    color: #444444;
+    height: 50px;
+    overflow: auto;
+    box-sizing: border-box;
+	-webkit-transition: border-color 800ms ease;
+    transition: border-color 800ms ease;
+}
+
+.connUs-addFeed-desc:focus{
+	outline: 0;
+	border-color: #03a9f4;
+}
+
+.connUs-feed-smiley{
+	 width: 25px;
+    height: 25px;
+    float: right;
+    margin-top: 4px;
+    background-image: url("/WEB-INF/img/smiley.jpg");
+    background-size: 19px 18px;
+    background-repeat: no-repeat;
+}
+
+.connUs-addFeed-cont .emoji-menu{
+	top: 175px;
+    right: 145px;
+}
+
+#connUs-addFeed-img{
+	float: left;
+	overflow: hidden;
+	background-image: url("/WEB-INF/img/picture-attachment.png");
+	width: 35px;
+    height: 35px;
+    background-size: 35px 35px;
+}
+
+#connUs-feed-imgUpload{
+	opacity: 0;
+	width: 100%;
+    height: 100%;
+}
+
+.connUs-addFeed-btn{
+	margin-top: 10px;
+    clear: both;
+    width: 80px;
+    height: 25px;
+    font-size: 13px;
+    background-color: #03a9f4;
+    color: #fff;
+    text-align: center;
+    line-height: 2;
+}
+
+.connUs-feed-head{
+    text-align: center;
+    font-size: 16px;
+    color: #828282;	
+}
+
+.connUs-feed-cont{
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    font-size: 15px;
+    overflow: hidden;
+}
+
+.connUs-feed-desc{
+	padding: 10px;
+    color: #828282;
+}
+
+.connUs-feed-img{
+	height: auto;
+    width: 100%;
+    padding: 5%
+}
+
+.connUs-giveLike{
+	margin-left: 10px;
+    background-image: url("/WEB-INF/img/heart-sprite.png");
+    width: 30px;
+    height: 30px;
+    background-size: 85px 50px;
+    background-position: -8px -9px;
+    float: left;
+}
+
+#connUs-liked{
+	background-position: -45px -9px;
+	pointer-events: none !important;
+}
+
+.connUs-moreLikesAndCmnts-cont{
+	float: left;
+    width: 85%;
+}
+
+.connUs-moreLikesAndCmnts-cont div{
+	float: left;
+    width: 49%;
+    text-align: center;
+    line-height: 2;
+}
+
+.connUs-noLikes, .connUs-viewMoreLikes{
+	border-right: 1px solid #828282;
+}
+
+.connUs-cmntsOrLike-userImg-cont, .connUs-data-cont{
+	float: left;
+	padding: 3px;
+}
+
+.connUs-cmntsOrLike-img{
+	width: 35px;
+    height: 35px;
+    background-size: 35px 35px;
+    border-radius: 55px;
+}
+
+.connUs-cmntsOrLike-cont{
+	padding: 2px;
+	clear: both;
+    overflow: hidden;
+	border-top: 1px solid #aeaeae;
+	background-color: #e9ebee;
+}
+
+.connUs-cmntsOrLike-name{
+	font-size: 13px;
+    color: #03A9F4;
+    float: left;
+}
+
+.connUs-cmnts-cmntTxt, .connUs-noCmntsOrLikeTxt{
+	font-size: 12px;
+    color: #828282;
+    float: left;
+    margin-left: 10px;
+}
+
+.connUs-cmnts-DateAndTime{
+	font-size: 10px;
+    color: #828282;
+    margin-top: 4px;
+    clear: both;
+}
+
+.moreIcon{
+	float: right;
+    color: #616161;
+    margin-right: 8px;
+}
+
+.connUs-giveCmnts-cont{
+	overflow: hidden;
+}
+
+.connUs-feedCmnts-wrapper, .connUs-feedLike-wrapper{
+	clear: both;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.connUs-cmntsTxt{
+	resize: none;
+	float: left;
+    font-size: 14px;
+    width: 70%;
+    padding: 5px;
+    border: 1px solid #B2B2B2;
+    color: #444444;
+    height: 50px;
+	-webkit-transition: border-color 800ms ease;
+    transition: border-color 800ms ease;
+}
+
+.connUs-cmntsTxt:focus{
+	outline: 0;
+	border-color: #ffc107;
+}
+
+.connUs-cmnts-smiley{
+	width: 25px;
+    height: 25px;
+    float: left;
+    margin-top: 4px;
+    margin-left: 10px;
+    background-image: url(/WEB-INF/img/smiley.jpg);
+    background-size: 19px 18px;
+    background-repeat: no-repeat;
+}
+
+.connUs-giveCmnts-cont .emoji-menu{
+	right: 240px;
+}
+
+.connUs-addcomnts-btn{
+	float: right;
+    width: 16%;
+    line-height: 2;
+    background-color: #2196f3;
+    text-align: center;
+    font-size: 15px;
+    color: #fff;
+}
+
+.feed-user-cont{
+    padding-top: 20px;
+    padding-left: 5px;
+}
+
+.feed-userImg, .feed-commImg{
+	width: 60px;
+    height: 60px;
+    border-radius: 75px;
+    float: left;
+}
+
+.feed-commImg{
+	margin-top: -20px;
+}
+
+.connUs-feed-nameAndImg-cont{
+	clear: both;
+	overflow: hidden;
+}
+
+.feed-userName, .feed-commName{
+	color: #1c2b45;
+    font-weight: bold;
+    float: left;
+}
+
+.feed-comm-arrow{
+	float: left;
+    font-size: 24px;
+    margin: -5px 10px;
+    color: #1c2b45;
+}
+
+.feed-desc, .feed-updated-keys-val{
+	float: left;
+}
+
+.feed-dateAndTime{
+	float: right;
+	color: #828282;
+}
+
+.feed-likeOrCmntsLabel{
+    padding-top: 2px;
+    clear: both;
+}
+
+.feed-cmntsTxt{
+	color: #828282;
+	font-size: 14px;
+}
+
+.connUs-feed-likeOrCmnt-cont{
+	padding: 10px 0px;
+	border-bottom: 1px solid #a9a9a9;
+    overflow: hidden;
+    margin-bottom: 10px;
+}

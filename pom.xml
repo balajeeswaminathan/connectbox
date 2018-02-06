@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.smp</groupId>
-    <artifactId>ConnectingUsData</artifactId>
+    <artifactId>connectbox</artifactId>
     <packaging>war</packaging>
     <version>1.0</version>
 
-    <name>Connecting Us Data Maven Webapp</name>
+    <name>Connect Box Data Maven Webapp</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -95,7 +95,7 @@
         
     </dependencies>
 
-    <!--  <build>
+    <build>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -106,7 +106,7 @@
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>ConnectingUsData</finalName>
-    </build>-->
+        <finalName>connectbox</finalName>
+    </build>
 
 </project>

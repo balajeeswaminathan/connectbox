@@ -1,0 +1,131 @@
+body {
+  font-family: 'Titillium Web', sans-serif;
+  margin: 0px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+    -webkit-transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+    -webkit-transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+    -webkit-transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+    -webkit-transform: translate3d(4px, 0, 0);
+  }
+}
+
+
+.connUs-header-cont{
+	height: 50px;
+    background-color: #616161;
+    padding: 7px;
+}
+
+.connUs-header-label{
+	font-weight: 600;
+    font-size: 23px;
+    width: 200px;
+    margin: 0 auto;
+    color: #fff;
+}
+
+.connUsform{
+  padding: 20px;
+  max-width: 500px;
+  margin: 40px auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+}
+
+input{
+  margin-top: 20px;
+  font-size: 15px;
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  background: none;
+  background-image: none;
+  color: #828282;
+  border: none;
+  border-bottom: 2px solid #828282;
+  -webkit-transition: border-color .75s ease;
+  transition: border-color .75s ease;
+}
+
+input:focus{
+  outline: 0;
+  border-color: #03A9F4;
+}
+
+#connUs-errCont {
+    color: #ff3d00;
+    font-size: 13px;
+}
+
+.input-error {
+    border-bottom: 2px solid #ff3d00;
+}
+
+button {
+  border: 0;
+  outline: none;
+  border-radius: 0;
+  padding: 8px 0px;
+  font-size: 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  background: #03A9F4;
+  color: #ffffff;
+  width: 50%;
+  margin-top: 15px;
+  margin-left: 26%;
+}
+
+.adding-error-Cont{
+	animation: shake 1s infinite;
+}
+
+.connUs-forget-cont, .connUs-OTP-cont, .connUs-OTP-success{
+	overflow: hidden;
+	-webkit-transition: height 800ms ease;
+	transition: height 800ms ease;
+	height: 0px;
+}
+
+.connUs-forgetPsw-form .connUs-forget-cont{
+	height: 170px;
+}
+
+.connUs-OTP-form .connUs-OTP-cont{
+	height: 130px;
+}
+
+.connUs-OTPSucess-form .connUs-OTP-success{
+	height: 90px;
+}
+
+.connUs-OTP-content{
+	text-align: center;
+    color: #616161;
+    font-size: 15px;
+}
+
+@media screen and (max-width: 767px)
+{
+	.connUs-forget-cont
+	{
+		width: 320px;
+	}
+}

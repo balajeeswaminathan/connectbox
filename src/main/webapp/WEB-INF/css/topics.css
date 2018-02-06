@@ -1,0 +1,72 @@
+.connUs-addTopics-cont{
+	display: none;
+	padding: 10px;
+	width: 300px;
+    float: left;
+    margin-left: 40px;
+    box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+}
+
+#connUs-addTopics-img{
+	margin-top: 20px;
+}
+
+.connUs-addTopics-btn{
+	margin-top: 10px;
+    float: left;
+    width: 80px;
+    height: 25px;
+    font-size: 13px;
+    background-color: #1ab188;
+    text-align: center;
+    line-height: 2;
+}
+
+.connUs-topicsMenu-cont{
+	overflow: hidden;
+    padding: 0px 60px;
+}
+
+.connUs-topicsMenu-member, .connUs-topicsMenu-liked, .connUs-topicsMenu-owner{
+	color: #828282;
+    width: 30%;
+    float: left;
+    line-height: 45px;
+    text-align: center;
+}
+
+.topicActive{
+	border-bottom: 1px solid #1ab188;
+}
+
+.active{
+	display: block;
+}
+
+.connUs-topic-member-wrapper, .connUs-topic-liked-wrapper, .connUs-topic-owner-wrapper{
+	display: none;
+}
+
+.connUs-topicsList-cont{
+	float: left;
+    margin-left: 40px;
+    margin-top: 25px;
+    width: 75%;
+}
+
+.connUs-topicsList-innerCont{
+	float: left;
+	margin: 10px;
+}
+
+.connUs-topicsList-img{
+	width: 200px;
+	height: 200px;
+}
+
+.connUs-topicsList-name{
+	padding: 15px;
+	color: #fff;
+    background-color: #1ab188;
+    font-size: 15px;
+}

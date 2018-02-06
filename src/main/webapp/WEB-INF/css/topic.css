@@ -1,0 +1,12 @@
+.connUs-topicHead-img{
+	width: 200px;
+	height: 200px;
+}
+
+.connUs-topicHead-cont{
+	padding: 10px;
+    width: 300px;
+    float: left;
+    margin-left: 40px;
+    box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+}

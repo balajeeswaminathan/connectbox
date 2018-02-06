@@ -1,0 +1,66 @@
+.connUs-friends-list{
+	width: 70%;
+}
+
+.connUs-friends-list{
+    margin-top: -120px;
+    float: left;
+}
+
+.connUs-frnds-tag-cont{
+    overflow: hidden;
+    padding: 0px 130px;
+}
+
+.connUs-frnds-all-tag, .connUs-frnds-request-tag{
+    background-color: #828282;
+    color: #FFF;
+    width: 50%;
+    float: left;
+    line-height: 45px;
+    text-align: center;
+    font: 20px;
+}
+
+.connUs-all-frnds .connUs-frnds-all-tag, .connUs-request-frnds .connUs-frnds-request-tag{
+    background-color: #1ab188;
+    color: #FFFFFF;
+}
+
+.connUs-frnds-all-cont, .connUs-frnds-request-cont{
+    display: none;
+    height: 600px;
+    padding: 15px;
+}
+
+.connUs-all-frnds .connUs-frnds-all-cont,.connUs-request-frnds .connUs-frnds-request-cont{
+    display: block;
+}
+
+.connUs-frnds-wrapper{
+    background-color: #FFFFFF;
+}
+
+.connUs-frnds-head{
+    color: #FF4C07;
+    line-height: 3;
+    margin-left: 15px;
+}
+
+.connUs-frnds{
+    float: left;
+    margin-left: 25px;
+    margin-top: 20px;
+}
+
+.connUs-frnds-name{
+    line-height: 3;
+    text-align: center;
+}
+
+.connUs-frnds-accept{
+    line-height: 3;
+    text-align: center;
+    background-color: #FF4C07;
+    color: #FFFFFF;
+}

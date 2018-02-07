@@ -7,10 +7,10 @@
 	<!-- End emoji-picker Stylesheets -->
 
     <!-- Begin emoji-picker JavaScript -->
-    <script src="//localhost/chatClient/js/lib/config.js"></script>
-    <script src="//localhost/chatClient/js/lib/util.js"></script>
-    <script src="//localhost/chatClient/js/lib/jquery.emojiarea.js"></script>
-    <script src="//localhost/chatClient/js/lib/emoji-picker.js"></script>
+    <script src="<c:url value="/resources/js/lib/config.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/util.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/jquery.emojiarea.js" />"></script>
+    <script src="<c:url value="/resources/js/lib/emoji-picker.js" />"></script>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDs8OiIs_wwNnZ_kKeLsIP3aAZv096jXtM"></script>
     <!-- End emoji-picker JavaScript -->
 

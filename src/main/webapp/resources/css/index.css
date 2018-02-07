@@ -1,0 +1,301 @@
+@media screen and (max-width: 767px)
+{
+    .connUsform
+    {
+        width: 340px;
+    }
+    .connUs-intro
+    {
+        width: 85%;
+    }
+    .emailVerification-form .connUs-emailVerification-cont
+    {
+        height: 220px;
+    }
+}
+
+body {
+  font-family: 'Titillium Web', sans-serif;
+  margin: 0px;
+  color: #fff;
+  background: linear-gradient(90deg, #8668ad 0%, #55bbeb 100%);
+  background: -webkit-linear-gradient(90deg, #8668ad 0%, #55bbeb 100%);
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+::-webkit-input-placeholder {
+  color: #fff;
+}
+
+@keyframes converBbackground{
+	10%, 20%, 30%, 90%, 100%{
+		background: linear-gradient(90deg, #8668ad 0%, #55bbeb 100%);
+		background: -webkit-linear-gradient(90deg, #8668ad 0%, #55bbeb 100%);
+	}
+	40%, 50%, 60%, 70%, 80%{
+		background: linear-gradient(90deg, #55bbeb 0%, #8668ad 100%);
+		background: -webkit-linear-gradient(90deg, #55bbeb 0%, #8668ad 100%);
+	}
+}
+
+@keyframes wiggle {
+    0% { transform: rotate(0deg); }
+   80% { transform: rotate(0deg); }
+   85% { transform: rotate(5deg); }
+   95% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+    -webkit-transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+    -webkit-transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+    -webkit-transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+    -webkit-transform: translate3d(4px, 0, 0);
+  }
+}
+
+.connUs-header-cont{
+    padding-top: 40px;
+}
+
+.connUs-header-label{
+    font-size: 32px;
+    width: 200px;
+    margin: auto;
+}
+
+.connUsform {
+  padding: 20px;
+  max-width: 450px;
+  margin: 40px auto;
+  border-radius: 4px;
+}
+
+.tab-group {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px 0;
+}
+
+.tab-group:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.tab-group li {
+  display: block;
+  text-decoration: none;
+  padding: 15px;
+  color: #fff;
+  font-size: 15px;
+  float: left;
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  border-bottom: 0px solid #FFEB3B;
+  -webkit-transition: all .5s ease;
+  transition: all .5s ease;
+}
+
+.tab-group .active {
+  border-bottom: 1px solid #FFEB3B;
+  color: #FFEB3B;
+}
+
+.connUs-login-cont, .connUs-signup-Cont, .connUs-forgetPsw-Cont, .connUs-emailVerification-cont, .connUs-forgetPswSuccess-cont{
+	overflow: hidden;
+	-webkit-transition: height 800ms ease;
+	transition: height 800ms ease;
+	height: 0px;
+}
+
+.login-form .connUs-login-cont{
+    height: 230px;
+}
+
+.forgetPsw-form .connUs-forgetPsw-Cont {
+    height: 200px;
+}
+
+.register-form .connUs-signup-Cont{
+	height: 445px;
+}
+
+.emailVerification-form .connUs-emailVerification-cont {
+    height: 200px;
+}
+
+.forgetPswSuccess-form .connUs-forgetPswSuccess-cont {
+    height: 100px;
+}
+
+.cont-label{
+  text-align: center;
+  font-size: 25px;
+  color: #FFEB3B;
+}
+
+.connUs-intro
+{
+    width: 60%;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.emailVerification-fun-label{
+	text-align: center;
+    color: #FF5722;
+    font-size: 25px;
+    font-family: cursive;
+    margin-bottom: 25px;
+}
+
+.emailVerification-content, .forgetPswSuccess-content{
+	text-align: center;
+    color: #616161;
+    font-size: 13px;
+	margin-bottom: 20px;
+}
+
+.cont-close-btn{
+	float: right;
+    margin-bottom: 15px;
+    color: #828282;
+    font-size: 13px;
+}
+
+.connUs-radio-Cont{
+	margin: 20px 0px;
+    overflow: hidden;
+    padding: 10px 0px;
+}
+
+.gender-radio{
+	height: auto;
+    width: 18px;
+    float: left;
+    margin: 0px;
+    display: inline-block;
+}
+
+.connUs-gender-label{
+	float: left;
+    font-size: 13px;
+    color: #fff;
+    margin-right: 10px;
+}
+
+input{
+  margin-top: 20px;
+  font-size: 15px;
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  background: none;
+  background-image: none;
+  border: none;
+  color: #fff;
+  border-bottom: 2px solid #fff;
+  -webkit-transition: border-color .75s ease;
+  transition: border-color .75s ease;
+}
+
+input:focus{
+  outline: 0;
+  border-color: #FFEB3B;
+}
+
+button {
+  border: 0;
+  outline: none;
+  border-radius: 0;
+  padding: 8px 0px;
+  font-size: 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  background: #03A9F4;
+  color: #ffffff;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+}
+
+.forgotPsw-btn {
+  text-align: right;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #FFEB3B;
+}
+
+.sendEmail-btn{
+	margin-top: 20px;
+}
+
+#connUs-errCont{
+	color: #FFEB3B;
+    font-size: 13px;
+}
+
+.input-error{
+	border-bottom: 2px solid #ff3d00;
+}
+
+.gender-error{
+	color: #ff3d00;
+}
+
+.adding-error-Cont{
+	animation: shake 1s infinite;
+}
+
+.connUs-login-Btn, .connUs-signUp-Btn{
+	width: 50px;
+    height: 50px;
+    background-image: url(../img/canva-arrow-MAB5nccL-pw.png);
+    background-size: 50px;
+    margin: 0px auto;
+}
+
+select#connUs-country, select#connUs-state{
+    width: 100%;
+    padding: 5px;
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1;
+    border: none;
+    border-radius: 5px;
+    height: 34px;
+    color: #fff;
+    -webkit-appearance: none;
+    background-color: transparent;
+    background-image: url(../img/down-arrow.png);
+    background-size: 22px;
+    background-repeat: no-repeat;
+    background-position: 100%;
+}
+
+#connUs-country option, #connUs-state option{
+    color: #828282;
+}

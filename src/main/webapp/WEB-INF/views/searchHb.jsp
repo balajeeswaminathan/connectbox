@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <script src="//localhost/chatclient/js/search.js"></script>
+        <script src="<c:url value="/resources/js/search.js" />"></script>
     </head>
 <body>
 <script id="searchList-hb-template" type="text/x-handlebars-template">

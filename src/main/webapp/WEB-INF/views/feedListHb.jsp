@@ -1,5 +1,5 @@
 <html>
-<script src="//localhost/chatClient/js/HandlebarHelper.js"></script>
+<script src="<c:url value="/resources/js/HandlebarHelper.js" />"></script>
 <script id="feedListData-hb-template" type="text/x-handlebars-template">
 {{#if data}}
      <div class="connUs-feed-head">Feed</div>

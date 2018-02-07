@@ -1,0 +1,150 @@
+.pancake-cont
+{
+	display: none;
+	width: 30px;
+    height: 30px;
+    float: left;
+    color: #fff;
+    line-height: 1;
+    margin-top: -4px;
+}
+.pancake-top, .pancake-bottom
+{
+	transform: scale(1) rotate(0deg);
+    -ms-transform: transform 800ms ease;
+	-webkit-transition: transform 800ms ease;
+	transition: transform 800ms ease;
+	position: absolute;
+}
+.pancake-top
+{
+	top: 5px;
+}
+.pancake-bottom
+{
+	top: 15px;
+}
+
+.pancake-active .pancake-top
+{
+	-webkit-transform: scale(1) rotate(40deg);
+	left: 10px;
+	top: 8px;
+}
+.pancake-active .pancake-bottom
+{
+	top: 8px;
+	-webkit-transform: scale(1) rotate(-40deg);
+	left: 0px;
+}
+
+.connUs-menu-cont{
+	float: left;
+	position: fixed;
+    z-index: 999;
+    width: 25%;
+}
+
+.menu-cont{
+	color: #828282;
+	box-sizing: border-box;
+	width: 200px;
+    margin: 0px auto;
+    font-size: 21px;
+}
+
+.connUs-basicInfo{
+	padding-left: 15px;
+}
+
+.connUs-profile-name{
+	color: #009688;
+	font-size: 23px;
+	margin-left: 17px;
+    margin-top: 10px;
+}
+
+.menu-innerCont{
+	margin-top: 10px;
+}
+
+.connUs-menu{
+	padding-left: 15px;
+	line-height: 40px;
+}
+
+.connUs-menu:hover{
+    background-color: #cecece;
+}
+
+.connUs-menu.active{
+	color: #009688;
+}
+
+.connUs-profile-img{
+	width: 100px;
+    height: 100px;
+    background-size: 100px 100px;
+    border-radius: 55px;
+}
+
+.connUs-myProfile .profileImg-edit-btn{
+    position: relative;
+    width: 30px;
+    height: 30px;
+    margin-top: -25px;
+    margin-left: 80px;
+    background-image: url("../img/editProfile_pic.png");
+    background-size: 30px 30px;
+    border-radius: 15px;
+    border: 1px solid #616161;
+}
+
+@media screen and (max-width: 767px)
+{
+	.connUs-menu-cont
+	{
+		overflow: hidden;
+		height: 0px;
+		top: 50px;
+		-ms-transform: height 800ms ease;
+		-webkit-transition: height 800ms ease;
+		transition: height 800ms ease;
+		background-color: #fff;
+		color: #616161;
+		width: 100%;
+    	position: absolute;
+    }
+	
+	.menu-cont{
+		padding-left: 20px;
+		padding-top: 10px;
+	}
+	
+	.connUs-basicInfo{
+		width: 40%;
+    	float: left;
+	}
+	
+	.menu-innerCont
+	{
+		float: left;
+		width: 50%;
+	}
+	
+	.pancake-active .connUs-menu-cont
+	{
+		height: 150px;
+	}
+	
+	.pancake-cont
+	{
+		display: block;
+	}
+	
+	#profileImg-edit
+	{
+		top: 80px;
+		left: 90px;
+	}
+}

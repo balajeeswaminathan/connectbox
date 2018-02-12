@@ -2,6 +2,7 @@ package com.smp.controller;
 
 //Import core Java Package
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.text.*;
 import java.util.*;
 
@@ -75,7 +76,7 @@ public class ChatController {
 	//Login
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
-	public String login(@RequestParam String email, @RequestParam String password) {
+	public String login(@RequestParam String email, @RequestParam String password) throws UnknownHostException {
 		String response = chatService.userExist(email,password);
 		return createJsonObject(JSON.parse(response));
     }

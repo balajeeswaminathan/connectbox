@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +38,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -44,9 +46,13 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
+import com.mongodb.MongoClientURI;
 import com.smp.model.Chat;
 import com.smp.model.ChatList;
 import com.smp.model.ChatNotification;
@@ -65,6 +71,7 @@ import com.smp.model.Topics;
 import com.smp.model.User;
 import com.smp.model.UserTopics;
 import com.smp.service.PropertiesData;
+import com.smp.utils.Util;
 
 @Repository
 public class chatService {
@@ -72,6 +79,8 @@ public class chatService {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	public static HashMap onlineMembers = new HashMap();
+	public MongoClientURI uri;
+	public MongoClient mongoClient;
 
 	//define collection name
 	public static final String COLLECTION_USER = "user", COLLECTION_CHAT = "chat", COLLECTION_COMMUNITIES = "communities";
@@ -84,8 +93,10 @@ public class chatService {
 	
 	//User Exist
 	@SuppressWarnings("unchecked")
-	public String userExist(String email, String password) {
-		DBCollection userCollName = mongoTemplate.getCollection(COLLECTION_USER);
+	public String userExist(String email, String password){
+		DB database = Util.mongoClientInit();
+		DBCollection userCollName = database.getCollection(COLLECTION_USER);
+		
 		BasicDBObject andQuery = new BasicDBObject();
 		BasicDBObject andQuery1 = new BasicDBObject();
 		List<BasicDBObject> objRefList = new ArrayList<BasicDBObject>();
@@ -127,7 +138,8 @@ public class chatService {
 
 	//get user data
 	public DBObject getUserData(String user_Id){
-		DBCollection userCollName = mongoTemplate.getCollection(COLLECTION_USER);
+		DB database = Util.mongoClientInit();
+		DBCollection userCollName = database.getCollection(COLLECTION_USER);
 		BasicDBObject objRef = new BasicDBObject();
 		BasicDBObject fields = new BasicDBObject();
 
@@ -152,103 +164,103 @@ public class chatService {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		String curentTime = dateFormat.format(date);
 		String user_Id;
+		DB database = Util.mongoClientInit();
+		DBCollection userCollName = database.getCollection(COLLECTION_USER);
+		DBObject user = new BasicDBObject();
 		
 		if(isEdit)
 		{
 			DBCursor frndsDataCursor;
 			String updatedDataKeys = "", updatedDataValues = "", frndId;
-			Query query = new Query();
-			Update update = new Update();
+			DBObject query = new BasicDBObject();
+			DBObject homeFeed = new BasicDBObject();
 			DBObject objDoc;
 			
 			user_Id = userId;
-			
-			HomeFeed homeFeed = new HomeFeed();
 			DateFormat feedDateFormat = new SimpleDateFormat("HH:mm, MMM dd, yyyy");
 			String feedDateAndTime = feedDateFormat.format(date);
 
-			homeFeed.setDateAndTime(feedDateAndTime);
-			homeFeed.setUserFeedId(user_Id);
-			homeFeed.setType("updateProfile");
+			homeFeed.put("dateAndTime", feedDateAndTime);
+			homeFeed.put("userFeedId", user_Id);
+			homeFeed.put("type", "updateProfile");
 			
 			if(!userName.isEmpty())
 			{
-				update.set("username", userName);
+				user.put("username", userName);
 				updatedDataKeys += "name|||";
 				updatedDataValues += userName + "|||";
 			}
 			if(!email.isEmpty())
 			{
-				update.set("email", email);
+				user.put("email", email);
 			}
 			if(!password.isEmpty())
 			{
-				update.set("password", password);
+				user.put("password", password);
 			}
 			if(!dob.isEmpty())
 			{
-				update.set("dob", dob);
+				user.put("dob", dob);
 				updatedDataKeys += "Date Of Birth|||";
 				updatedDataValues += dob + "|||";
 			}
 			if(!gender.isEmpty())
 			{
-				update.set("gender", gender);
+				user.put("gender", gender);
 			}
 			if(!countryState.isEmpty())
 			{
-				update.set("countryState", countryState);
+				user.put("countryState", countryState);
 			}
 			if(!country.isEmpty())
 			{
-				update.set("country", country);
+				user.put("country", country);
 			}
 			if(!profileImgUrl.isEmpty())
 			{
-				update.set("imgPath", profileImgUrl);
-				homeFeed.setUpdatedDataKeys("profile picture");
-				homeFeed.setUpdatedDataValues(profileImgUrl);
+				user.put("imgPath", profileImgUrl);
+				homeFeed.put("updatedDataKeys", "profile picture");
+				homeFeed.put("updatedDataValues", profileImgUrl);
 			}
 			
-			query.addCriteria(Criteria.where("_id").is(user_Id));
-			mongoTemplate.updateFirst(query, update, COLLECTION_USER);
+			query.put("_id", user_Id);
+			userCollName.update(query, user);
 			
 			if(!updatedDataKeys.isEmpty())
 			{
-				homeFeed.setUpdatedDataKeys(updatedDataKeys);
+				homeFeed.put("updatedDataKeys", updatedDataKeys);
 			}
 			if(!updatedDataValues.isEmpty())
 			{
-				homeFeed.setUpdatedDataValues(updatedDataValues);
+				homeFeed.put("updatedDataValues", updatedDataValues);
 			}
 			
-			DBCollection frndsCollName = mongoTemplate.getCollection(user_Id + "_FriendsList");
+			DBCollection frndsCollName = database.getCollection(user_Id + "_FriendsList");
 			frndsDataCursor = frndsCollName.find(); //friends list
 			while(frndsDataCursor.hasNext())
 			{
 				objDoc = frndsDataCursor.next();
 				frndId = (String) objDoc.get("_id");
-
-				mongoTemplate.insert(homeFeed, frndId + "_HomeFeeds");
+				
+				DBCollection frndIdCollName = database.getCollection(frndId + "_HomeFeeds");
+				frndIdCollName.insert(homeFeed);
 			}
 		}
 		else
 		{
 			user_Id = userName+"_"+curentTime;
+			user.put("user_Id", user_Id);
+			user.put("userName", userName);
+			user.put("email", email);
+			user.put("password", password);
+			user.put("dob", dob);
+			user.put("gender", gender);
+			user.put("countryState", countryState);
+			user.put("country", country);
+			user.put("state", "inActive");
 
-			User user = new User();
-		    user.setUser_Id(user_Id);
-		    user.setUsername(userName);
-		    user.setEmail(email);
-		    user.setPassword(password);
-		    user.setDob(dob);
-		    user.setGender(gender);
-		    user.setCountryState(countryState);
-		    user.setCountry(country);
-		    user.setState("inActive");
-		    
 			//Query
-			mongoTemplate.insert(user, COLLECTION_USER);
+			userCollName.insert(user);
 		}
 
 		return user_Id;
@@ -256,17 +268,21 @@ public class chatService {
 	
 	public void activateUser(String userId)
 	{
-		Query query = new Query();
+		DBObject query = new BasicDBObject();
+		DBObject update = new BasicDBObject();
+		query.put("_id", userId);
+		update.put("state", "active");
 		
-		query.addCriteria(Criteria.where("_id").is(userId));
-		//Query
-		mongoTemplate.updateFirst(query, Update.update("state", "active"), COLLECTION_USER);
+		DB database = Util.mongoClientInit();
+		DBCollection userCollName = database.getCollection(COLLECTION_USER);
+		userCollName.update(query, update);
 	}
 	
 	public String emailExist(String email){
-		DBCollection userCollName = mongoTemplate.getCollection(COLLECTION_USER);
-		BasicDBObject objRef = new BasicDBObject();
-		BasicDBObject fields = new BasicDBObject();
+		DB database = Util.mongoClientInit();
+		DBCollection userCollName = database.getCollection(COLLECTION_USER);
+		DBObject objRef = new BasicDBObject();
+		DBObject fields = new BasicDBObject();
 		DBObject resultSet;
 		JSONObject response = new JSONObject();
 		
@@ -304,25 +320,28 @@ public class chatService {
 	
 	@SuppressWarnings("unchecked")
 	public JSONObject searchListUser(String userName) {
-		Query query = new Query();
+		DBObject query = new BasicDBObject();
 		List<JSONObject> userSearchList = new ArrayList<JSONObject> ();
 		JSONObject UserSearchJson = new JSONObject();
 		String imgUrl;
 
 		//Query
 		//query.limit(10);
-		query.addCriteria(Criteria.where("username").regex(userName));
-		List<User> searchListUser = mongoTemplate.find(query, User.class);
+		DB database = Util.mongoClientInit();
+		DBCollection userCollName = database.getCollection(COLLECTION_USER);
+		query.put("username", userName);
+		DBCursor searchListUser = userCollName.find(query);
 		
 		if(searchListUser.size() > 0)
 		{
-			for(int i = 0;i < searchListUser.size(); i++)
+			while(searchListUser.hasNext())
 			{
+				DBObject user = searchListUser.next();
 				JSONObject UserSearchDataJson = new JSONObject();
-				UserSearchDataJson.put("userId", searchListUser.get(i).getUser_Id());
-				UserSearchDataJson.put("userName", searchListUser.get(i).getUsername());
-				UserSearchDataJson.put("gender", searchListUser.get(i).getGender());
-				imgUrl = searchListUser.get(i).getImgPath();
+				UserSearchDataJson.put("userId", user.get("user_Id"));
+				UserSearchDataJson.put("userName", user.get("username"));
+				UserSearchDataJson.put("gender", user.get("gender"));
+				imgUrl = (String) user.get("imgPath");
 				if(imgUrl != "")
 				{
 					UserSearchDataJson.put("userImgUrl", imgUrl);

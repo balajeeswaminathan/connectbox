@@ -82,7 +82,7 @@ public class ChatController {
     }
 	
 	//Register
-	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateUser(@RequestParam String userId, @RequestParam String userName, @RequestParam String email, @RequestParam String password, @RequestParam String dob, @RequestParam String countryState, @RequestParam String country, @RequestParam String gender, @RequestParam String profileImgUrl, @RequestParam boolean isEdit) throws ParseException {
 			JSONObject response = new JSONObject();
@@ -437,7 +437,7 @@ public class ChatController {
 		chatService.setOnlineMember(userId);
 	}*/
 	
-	@RequestMapping(value = "/getOnlineMembers", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/getOnlineMembers", method = RequestMethod.POST)
 	@ResponseBody
 	public String getOnlineMembers(HttpSession session, @RequestParam String userId) throws ParseException{
 		/*StringTokenizer strToken = new StringTokenizer(userIds, "|||");
@@ -448,10 +448,10 @@ public class ChatController {
 		}
 		String response = chatService.getOnlineMembers(session, userList);*/
 		
-		boolean isOnline = chatService.isMemberOnline(userId);
+		/*boolean isOnline = chatService.isMemberOnline(userId);
 		
 		return createJsonObject(isOnline);
-	}
+	}*/
 	
 	/*@RequestMapping(value = "/clearHomeFeeds", method = RequestMethod.GET)
 	@ResponseBody

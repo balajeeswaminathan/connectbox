@@ -77,7 +77,7 @@ import com.smp.utils.Util;
 public class chatService {
 
 	@Autowired
-	private MongoTemplate mongoTemplate;
+	//private MongoTemplate mongoTemplate;
 	public static HashMap onlineMembers = new HashMap();
 	public MongoClientURI uri;
 	public MongoClient mongoClient;
@@ -137,7 +137,7 @@ public class chatService {
 	}
 
 	//get user data
-	public DBObject getUserData(String user_Id){
+	/*public DBObject getUserData(String user_Id){
 		DB database = Util.mongoClientInit();
 		DBCollection userCollName = database.getCollection(COLLECTION_USER);
 		BasicDBObject objRef = new BasicDBObject();
@@ -848,7 +848,7 @@ public class chatService {
      	
      	ImageIO.write(imgBufferedData, "jpg", new File(imgPath));*/
      	
-     	return imgUrl;
+     	/*return imgUrl;
 	}
 
 	public void compressImage(byte[] imgBytes, String imgPath) throws IOException
@@ -1526,7 +1526,7 @@ public class chatService {
 	public void setOnlineMember(String userId)
 	{
 		onlineMembers.put(userId, new Date());
-	}
+	}*/
 	
 	/*public String getOnlineMembers(HttpSession session, ArrayList<String> userIds) throws ParseException
 	{
@@ -1555,7 +1555,7 @@ public class chatService {
 		return OnlineMembersJsonObj.toString();
 	}*/
 	
-	public boolean isMemberOnline(String userId)
+	/*public boolean isMemberOnline(String userId)
 	{
 		Date currDate = new Date();
 		Date startDate = (Date) onlineMembers.get(userId);
@@ -1579,7 +1579,7 @@ public class chatService {
 		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + clientTZ));
 		Date dateObj = sdf.parse(date);
 		return sdf1.format(dateObj);
-	}
+	}*/
 	
 	/*public String clearHomeFeeds()
 	{

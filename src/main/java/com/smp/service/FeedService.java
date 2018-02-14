@@ -33,7 +33,7 @@ import com.smp.service.Pagination;
 @Repository
 public class FeedService {
 	
-	@Autowired
+	/*@Autowired
 	private MongoTemplate mongoTemplate;
 	@Autowired
 	private chatService chatService;
@@ -279,7 +279,7 @@ public class FeedService {
 			{
 				homeFeedList.addAll(likeOrCmntFeedList);
 			}*/
-			if(skipLevel == 0)
+			/*if(skipLevel == 0)
 			{
 				userFeedFinalDataJson.put("isLast", true);
 			}
@@ -478,7 +478,7 @@ public class FeedService {
 			}
 
 			return userFeedData;
-		}
+		}*/
 	
 	//get home feed
 	/*public List getUserCommPhotosHomeFeeds(String userId, DBCollection homeUserFeedsColl) throws ParseException{
@@ -604,7 +604,7 @@ public class FeedService {
 		}
 		
 		return UserCommHomeFeedList;
-	}*/
+	}
 
 	public String getFeed(String userId, String profileId, String feedCollName, String clientTZ) throws ParseException{
 		List feedList = new ArrayList();

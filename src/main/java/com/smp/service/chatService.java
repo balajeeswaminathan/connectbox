@@ -76,8 +76,6 @@ import com.smp.utils.Util;
 @Repository
 public class chatService {
 
-	@Autowired
-	//private MongoTemplate mongoTemplate;
 	public static HashMap onlineMembers = new HashMap();
 	public MongoClientURI uri;
 	public MongoClient mongoClient;

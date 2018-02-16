@@ -42,6 +42,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
@@ -72,7 +73,7 @@ import com.smp.model.UserTopics;
 import com.smp.service.PropertiesData;
 import com.smp.utils.Util;
 
-@Repository
+@Component
 public class chatService {
 
 	public static HashMap onlineMembers = new HashMap();

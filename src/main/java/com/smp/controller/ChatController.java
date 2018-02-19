@@ -68,7 +68,8 @@ import com.smp.service.chatService;
 @Controller
 public class ChatController {
 	
-	private chatService chatService = new chatService();
+	@Autowired
+	private chatService chatService;
 	@Autowired
 	private FeedService feedService;
 	

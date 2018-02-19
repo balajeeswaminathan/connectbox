@@ -61,15 +61,15 @@ import com.mongodb.util.JSON;
 //Import User Defined Package
 import com.smp.model.Chat;
 import com.smp.model.User;
+import com.smp.service.ChatService;
 import com.smp.service.FeedService;
 import com.smp.service.MailSend;
-import com.smp.service.chatService;
 
 @Controller
 public class ChatController {
 	
 	@Autowired
-	private chatService chatService;
+	private ChatService chatService;
 	@Autowired
 	private FeedService feedService;
 	

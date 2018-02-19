@@ -74,7 +74,7 @@ import com.smp.service.PropertiesData;
 import com.smp.utils.Util;
 
 @Component
-public class chatService {
+public class ChatService {
 
 	public static HashMap onlineMembers = new HashMap();
 	public MongoClientURI uri;

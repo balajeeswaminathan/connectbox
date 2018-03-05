@@ -11,9 +11,7 @@
        http://www.springframework.org/schema/context 
        http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="com.smp.controller, com.smp.model, com.smp.service, com.smp.utils">
-    	<context:exclude-filter type="assignable" expression="com.smp.service.chatService"/>
-	</context:component-scan>
+    <context:component-scan base-package="com.smp.controller"/>
 
     <!-- Factory bean that creates the Mongo instance -->
     <!--<bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
@@ -31,6 +29,10 @@
     
     <bean id="multipartResolver"
         class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    </bean>
+    
+    <bean id="chatService"
+        class="com.smp.service.ChatService">
     </bean>
         
     <bean id="jspViewResolver"

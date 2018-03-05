@@ -70,8 +70,8 @@ public class ChatController {
 	
 	@Autowired
 	private ChatService chatService;
-	@Autowired
-	private FeedService feedService;
+	//@Autowired
+	//private FeedService feedService;
 	
 	//Login
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

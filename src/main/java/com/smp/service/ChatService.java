@@ -91,7 +91,7 @@ public class ChatService {
 	
 	//User Exist
 	@SuppressWarnings("unchecked")
-	public String userExist(String email, String password){
+	public static String userExist(String email, String password){
 		DB database = Util.mongoClientInit();
 		DBCollection userCollName = database.getCollection(COLLECTION_USER);
 		

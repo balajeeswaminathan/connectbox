@@ -68,7 +68,7 @@ import com.smp.service.MailSend;
 @Controller
 public class ChatController {
 	
-	private ChatService chatService = new ChatService();
+	//private ChatService chatService = new ChatService();
 	//@Autowired
 	//private FeedService feedService;
 	
@@ -76,7 +76,7 @@ public class ChatController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
 	public String login(@RequestParam String email, @RequestParam String password) throws UnknownHostException {
-		String response = chatService.userExist(email,password);
+		String response = ChatService.userExist(email,password);
 		return createJsonObject(JSON.parse(response));
     }
 	

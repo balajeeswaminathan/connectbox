@@ -16,7 +16,7 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
  
-    <bean id="demoTimerTask" class="com.smp.service.chatService"></bean>
+    <bean id="demoTimerTask" class="com.smp.service.ChatService"></bean>
  
     <bean id="timerTaskFactoryBean" class="org.springframework.scheduling.timer.MethodInvokingTimerTaskFactoryBean">
         <property name="targetObject" ref="demoTimerTask"></property>

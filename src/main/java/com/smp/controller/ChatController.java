@@ -81,12 +81,12 @@ public class ChatController {
     }
 	
 	//Register
-	/*@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateUser(@RequestParam String userId, @RequestParam String userName, @RequestParam String email, @RequestParam String password, @RequestParam String dob, @RequestParam String countryState, @RequestParam String country, @RequestParam String gender, @RequestParam String profileImgUrl, @RequestParam boolean isEdit) throws ParseException {
 			JSONObject response = new JSONObject();
 
-		    String user_Id = chatService.updateUser(userId, userName, email, password, dob, gender, countryState, country, profileImgUrl, isEdit);
+		    String user_Id = ChatService.updateUser(userId, userName, email, password, dob, gender, countryState, country, profileImgUrl, isEdit);
 
     		response.put("status", "0");
         	response.put("sucessMessage", "Registered Sucessfully!");
@@ -96,7 +96,7 @@ public class ChatController {
         	return createJsonObject(response);
     }
 	
-	@RequestMapping(value = "/forgetPsw", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/forgetPsw", method = RequestMethod.POST)
 	@ResponseBody
 	public String forgetPsw(@RequestParam String email){
 		String response = chatService.emailExist(email);

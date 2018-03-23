@@ -127,7 +127,7 @@ public class ChatService {
 		{
 			response.put("status", 0);
 			response.put("sucessMessage","Username And Password Is Correct");
-			response.put("user_Id", userExistData.get("_id"));
+			response.put("user_Id", userExistData.get("user_Id"));
 			response.put("userName", userExistData.get("username"));
 		}
 
@@ -154,16 +154,24 @@ public class ChatService {
 	//Home call
 	public DBObject homeCall(String user_Id) {
 		return getUserData(user_Id);
-	}
+	}*/
 	
 	//Register
-	public String updateUser(String userId, String userName, String email, String password, String dob, String gender, String countryState, String country, String profileImgUrl, boolean isEdit){
+	public static String updateUser(String userId, String userName, String email, String password, String dob, String gender, String countryState, String country, String profileImgUrl, boolean isEdit){
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		String curentTime = dateFormat.format(date);
 		String user_Id;
 		DB database = Util.mongoClientInit();
-		DBCollection userCollName = database.getCollection(COLLECTION_USER);
+		DBCollection userCollName;
+		if(database.collectionExists(COLLECTION_USER))
+		{
+			userCollName = database.getCollection(COLLECTION_USER);
+		}
+		else
+		{
+			userCollName = database.createCollection(COLLECTION_USER, null);
+		}
 		DBObject user = new BasicDBObject();
 		
 		if(isEdit)
@@ -264,7 +272,7 @@ public class ChatService {
 		return user_Id;
 	}
 	
-	public void activateUser(String userId)
+	/*public void activateUser(String userId)
 	{
 		DBObject query = new BasicDBObject();
 		DBObject update = new BasicDBObject();

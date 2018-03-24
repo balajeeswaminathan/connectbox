@@ -111,6 +111,12 @@
 		    <artifactId>mongo-java-driver</artifactId>
 		    <version>3.4.0</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>com.cloudinary</groupId>
+		    <artifactId>cloudinary-http44</artifactId>
+		    <version>1.18.0</version>
+	  	</dependency>
 
     </dependencies>
 

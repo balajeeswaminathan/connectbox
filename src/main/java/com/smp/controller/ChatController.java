@@ -68,7 +68,7 @@ import com.smp.service.MailSend;
 @Controller
 public class ChatController {
 	
-	//private ChatService chatService = new ChatService();
+	private ChatService chatService = new ChatService();
 	//@Autowired
 	//private FeedService feedService;
 	
@@ -76,7 +76,7 @@ public class ChatController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
 	public String login(@RequestParam String email, @RequestParam String password) throws UnknownHostException {
-		String response = ChatService.userExist(email,password);
+		String response = chatService.userExist(email,password);
 		return createJsonObject(JSON.parse(response));
     }
 	
@@ -86,7 +86,7 @@ public class ChatController {
 	public String updateUser(@RequestParam String userId, @RequestParam String userName, @RequestParam String email, @RequestParam String password, @RequestParam String dob, @RequestParam String countryState, @RequestParam String country, @RequestParam String gender, @RequestParam String profileImgUrl, @RequestParam boolean isEdit) throws ParseException {
 			JSONObject response = new JSONObject();
 
-		    String user_Id = ChatService.updateUser(userId, userName, email, password, dob, gender, countryState, country, profileImgUrl, isEdit);
+		    String user_Id = chatService.updateUser(userId, userName, email, password, dob, gender, countryState, country, profileImgUrl, isEdit);
 
     		response.put("status", "0");
         	response.put("sucessMessage", "Registered Sucessfully!");
@@ -175,19 +175,16 @@ public class ChatController {
 		String getChatData = chatService.saveChat(senderId, senderName, receiverId, receiverName, message, commType);
 
 		return createJsonObject(JSON.parse(getChatData));
-	}
+	}*/
 	
 	//Home
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	@ResponseBody
 	public String homeCall(@RequestParam String userId)
 	{
-		JSONObject response = new JSONObject();
-		List <DBObject> userDataList = new ArrayList <DBObject>();
-		DBObject userData = chatService.homeCall(userId);
-		userDataList.add(userData);
+		String response = chatService.homeCall(userId);
 		
-		return createJsonObject(userDataList);
+		return createJsonObject(JSON.parse(response));
 	}
 	
 	//Profile
@@ -240,7 +237,7 @@ public class ChatController {
 	}
 	
 	//Search Users List
-	@RequestMapping(value = "/searchList", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/searchList", method = RequestMethod.GET)
 	@ResponseBody
 	public String searchList(@RequestParam String searchTerm) {
 		String slData = chatService.searchList(searchTerm);
@@ -316,7 +313,7 @@ public class ChatController {
 	@ResponseBody
 	public void addPhotos(@RequestParam String userId, @RequestParam String desc, @RequestParam String imgUrl){
 		chatService.addPhotos(userId, desc, imgUrl);
-	}
+	}*/
 	
 	@RequestMapping(value = "/getPhotos", method = RequestMethod.POST)
 	@ResponseBody
@@ -326,7 +323,7 @@ public class ChatController {
 		return createJsonObject(JSON.parse(photos));
 	}
 	
-	@RequestMapping(value = "/addTopic", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/addTopic", method = RequestMethod.POST)
 	@ResponseBody
 	public void addTopic(@RequestParam String topicName, @RequestParam String imgUrl, @RequestParam String userId){
 		chatService.addTopic(topicName, imgUrl, userId);

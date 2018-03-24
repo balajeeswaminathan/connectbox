@@ -90,7 +90,7 @@ var headerAndMenuClass = {
 	{
 		var _self = this;
 		var profileId = utilClass.getCookie("userId");
-		var myProfileUrl = "http://localhost:8080/chatUI/profile.jsp?pId="+profileId;
+		var myProfileUrl = "profile.jsp?pId="+profileId;
 		if(type == 1)
 		{
 			myProfileUrl += "&groupId=members";

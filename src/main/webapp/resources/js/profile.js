@@ -89,6 +89,8 @@ var profileClass = {
 		utilClass.callHandlebar("#profileData-hb-template", ".connUs-profileData-wrapper", obj.properties);
 		print_country("connUs-country", obj.properties.data.profileDataList.country);
 		print_state('connUs-state',"", obj.properties.data.profileDataList.countryState);
+		
+		feedClass.getFeedCall();
 	},
 	
 	profileCall : function(cbk)

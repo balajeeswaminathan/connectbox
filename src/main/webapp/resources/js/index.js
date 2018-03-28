@@ -44,7 +44,7 @@ var indexClass= {
 		
 		$(".connUsform").addClass("login-form");
 		$(".login").addClass("active");
-		print_country("connUs-country");
+		//print_country("connUs-country");
 	},
 	
 	madeLoginAjaxCall: function(){
@@ -111,8 +111,9 @@ var indexClass= {
 	        userData.email = email;
 	        userData.password = password;
 	        userData.dob = dob;
-	        userData.countryState = $("#connUs-state").val();
-	        userData.country = $("#connUs-country").val();
+	        userData.city = $("#cityId").val();
+	        userData.countryState = $("#stateId").val();
+	        userData.country = $("#countryId").val();
 	        userData.gender = gender;
 	        userData.imgUrl = "";
 	        

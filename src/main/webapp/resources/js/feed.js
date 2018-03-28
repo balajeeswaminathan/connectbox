@@ -12,7 +12,10 @@ var feedClass = {
 		var _self = this;
 		
 		_self.RegisterEvents();
-		_self.getFeedCall();
+		if(!$("body").hasClass("connUs-profile"))
+		{
+			_self.getFeedCall();
+		}
 	},
 
 	RegisterEvents : function()

@@ -6,7 +6,8 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="<c:url value="/resources/js/Utils/utils.js" />"></script>
     <script src="<c:url value="/resources/js/index.js" />"></script>
-    <script src="<c:url value="/resources/js/plugins/location.js" />"></script>
+    <!--<script src="<c:url value="/resources/js/plugins/location.js" />"></script>-->
+    <script src="<c:url value="/resources/js/plugins/countrystatecity.js" />"></script>
     
     <link href="<c:url value="/resources/css/index.css" />" rel="stylesheet">
     <meta name="viewport" content="width=device-width" />

@@ -69,8 +69,7 @@ import com.smp.service.MailSend;
 public class ChatController {
 	
 	private ChatService chatService = new ChatService();
-	//@Autowired
-	//private FeedService feedService;
+	private FeedService feedService = new FeedService();
 	
 	//Login
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -83,10 +82,10 @@ public class ChatController {
 	//Register
 	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	@ResponseBody
-	public String updateUser(@RequestParam String userId, @RequestParam String userName, @RequestParam String email, @RequestParam String password, @RequestParam String dob, @RequestParam String countryState, @RequestParam String country, @RequestParam String gender, @RequestParam String profileImgUrl, @RequestParam boolean isEdit) throws ParseException {
+	public String updateUser(@RequestParam String userId, @RequestParam String userName, @RequestParam String email, @RequestParam String password, @RequestParam String dob, @RequestParam String city, @RequestParam String countryState, @RequestParam String country, @RequestParam String gender, @RequestParam String profileImgUrl, @RequestParam boolean isEdit) throws ParseException {
 			JSONObject response = new JSONObject();
 
-		    String user_Id = chatService.updateUser(userId, userName, email, password, dob, gender, countryState, country, profileImgUrl, isEdit);
+		    String user_Id = chatService.updateUser(userId, userName, email, password, dob, gender, city, countryState, country, profileImgUrl, isEdit);
 
     		response.put("status", "0");
         	response.put("sucessMessage", "Registered Sucessfully!");
@@ -96,7 +95,7 @@ public class ChatController {
         	return createJsonObject(response);
     }
 	
-	/*@RequestMapping(value = "/forgetPsw", method = RequestMethod.POST)
+	@RequestMapping(value = "/forgetPsw", method = RequestMethod.POST)
 	@ResponseBody
 	public String forgetPsw(@RequestParam String email){
 		String response = chatService.emailExist(email);
@@ -117,8 +116,8 @@ public class ChatController {
 	public String requestFriends(@RequestParam String requesterId, @RequestParam String requesterName, @RequestParam String accepterId, @RequestParam String accepterName) {
 		JSONObject response = new JSONObject();
 		
-		chatService.addFriends(requesterId+"_FriendsList", accepterId, accepterName,-1);
-		chatService.addFriends(accepterId+"_FriendsList", requesterId, requesterName,1);
+		chatService.addFriends(requesterId+"_FriendsList", accepterId, accepterName, -1);
+		chatService.addFriends(accepterId+"_FriendsList", requesterId, requesterName, 1);
 		
 		response.put("status","-1");
 		response.put("sucessMessage","Friend request send successfully");
@@ -175,7 +174,7 @@ public class ChatController {
 		String getChatData = chatService.saveChat(senderId, senderName, receiverId, receiverName, message, commType);
 
 		return createJsonObject(JSON.parse(getChatData));
-	}*/
+	}
 	
 	//Home
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
@@ -230,14 +229,14 @@ public class ChatController {
 		{
 			imgId = userId + "_Photo_" + dateFormat.format(date);
 		}
-		imgUrl = chatService.uploadImage(userId, imgType, imgId, imgBytes);
+		imgUrl = chatService.uploadImage(imgBytes);
 		
         response.put("imgPath", imgUrl);
         return createJsonObject(response);
 	}
 	
 	//Search Users List
-	/*@RequestMapping(value = "/searchList", method = RequestMethod.GET)
+	@RequestMapping(value = "/searchList", method = RequestMethod.GET)
 	@ResponseBody
 	public String searchList(@RequestParam String searchTerm) {
 		String slData = chatService.searchList(searchTerm);
@@ -313,7 +312,7 @@ public class ChatController {
 	@ResponseBody
 	public void addPhotos(@RequestParam String userId, @RequestParam String desc, @RequestParam String imgUrl){
 		chatService.addPhotos(userId, desc, imgUrl);
-	}*/
+	}
 	
 	@RequestMapping(value = "/getPhotos", method = RequestMethod.POST)
 	@ResponseBody
@@ -361,7 +360,7 @@ public class ChatController {
 		String userFeed = chatService.getTopicFeed(topicId+"_Feed");
 		
 		return createJsonObject(JSON.parse(userFeed));
-	}
+	}*/
 	
 	@RequestMapping(value = "/getUserHomeFeeds", method = RequestMethod.POST)
 	@ResponseBody
@@ -393,7 +392,7 @@ public class ChatController {
 		return createJsonObject(JSON.parse(response));
 	}
 	
-	@RequestMapping(value = "/updateCommunities", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/updateCommunities", method = RequestMethod.POST)
 	@ResponseBody
 	public void  updateCommunities(@RequestParam String commId, @RequestParam String name, @RequestParam String coverImg, @RequestParam String img, @RequestParam String address, @RequestParam String email, @RequestParam String phNo, @RequestParam String ownerId, @RequestParam boolean isEdit){
 		chatService.updateCommunities(commId, name, coverImg, img, address, phNo, email, ownerId, isEdit);
@@ -425,29 +424,29 @@ public class ChatController {
 	@ResponseBody
 	public void  communitiesInvite(@RequestParam String commId, @RequestParam String senderId, @RequestParam String senderName, @RequestParam List[] friendsListId, @RequestParam List[] friendsListName){
 		chatService.communitiesInvite(commId, senderId, senderName, friendsListId, friendsListName);
-	}
+	}*/
 	
-	/*@RequestMapping(value = "/setOnlineMember", method = RequestMethod.POST)
+	@RequestMapping(value = "/setOnlineMember", method = RequestMethod.POST)
 	@ResponseBody
 	public void  setOnline(HttpSession session, @RequestParam String userId){
 		chatService.setOnlineMember(userId);
-	}*/
+	}
 	
-	/*@RequestMapping(value = "/getOnlineMembers", method = RequestMethod.POST)
+	@RequestMapping(value = "/getOnlineMembers", method = RequestMethod.POST)
 	@ResponseBody
 	public String getOnlineMembers(HttpSession session, @RequestParam String userId) throws ParseException{
-		/*StringTokenizer strToken = new StringTokenizer(userIds, "|||");
+		StringTokenizer strToken = new StringTokenizer(userId, "|||");
 		ArrayList<String> userList = new ArrayList<String>();
 		while(strToken.hasMoreTokens())
 		{
 			userList.add(strToken.nextToken());
 		}
-		String response = chatService.getOnlineMembers(session, userList);*/
+		String response = chatService.getOnlineMembers(session, userList);
 		
-		/*boolean isOnline = chatService.isMemberOnline(userId);
+		boolean isOnline = chatService.isMemberOnline(userId);
 		
 		return createJsonObject(isOnline);
-	}*/
+	}
 	
 	/*@RequestMapping(value = "/clearHomeFeeds", method = RequestMethod.GET)
 	@ResponseBody

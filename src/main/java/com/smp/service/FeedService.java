@@ -19,6 +19,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -29,29 +30,29 @@ import com.smp.model.Like;
 import com.smp.model.LikeOrCmtHomeFeed;
 
 import com.smp.service.Pagination;
+import com.smp.utils.Util;
 
 @Repository
 public class FeedService {
 	
-	/*@Autowired
-	private MongoTemplate mongoTemplate;
-	@Autowired
-	private chatService chatService;
+	DB database = Util.mongoClientInit();
+	private ChatService chatService = new ChatService();
 	
 	//Add Feed
 	public void addFeed(String userId, String commId, String feedDesc, String feedImgUrl, String videoUrl) throws IOException, ParseException{
 		DBObject objDoc;
 		String frndId, feedId, type;
 		DBCollection frndsCollName;
-		HomeFeed homeFeed = new HomeFeed();
+		DBObject homeFeedObj = new BasicDBObject();
 	
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		DateFormat feedDateFormat = new SimpleDateFormat("HH:mm, MMM dd, yyyy");
 		String feedDateAndTime = feedDateFormat.format(date);
 	
-		Feed feed = new Feed();
-		if(!commId.isEmpty())
+		DBCollection userFeedColl = database.getCollection(userId+"_Feed");
+		DBObject feedObj = new BasicDBObject();
+		/*if(!commId.isEmpty())
 		{
 			feedId = commId + "_Feed_" + dateFormat.format(date);
 			feed.setCommId(commId);
@@ -59,96 +60,97 @@ public class FeedService {
 			type = "community";
 		}
 		else
-		{
+		{*/
 			feedId = userId + "_Feed_" + dateFormat.format(date);
 			type = "user";
-		}
-		feed.setId(feedId);
-		feed.setDesc(feedDesc);
-		feed.setImgUrl(feedImgUrl);
-		feed.setDateAndTime(feedDateAndTime);
-		feed.setVideoUrl(videoUrl);
+		//}
+		feedObj.put("id", feedId);
+		feedObj.put("desc", feedDesc);
+		feedObj.put("imgUrl", feedImgUrl);
+		feedObj.put("videoUrl", videoUrl);
+		feedObj.put("dateAndTime", feedDateAndTime);
 		
 		
-		if(!commId.isEmpty())
+		/*if(!commId.isEmpty())
 		{
 			mongoTemplate.insert(feed, commId+"_Feed");
 			homeFeed.setCommId(commId);
 			frndsCollName = mongoTemplate.getCollection(commId + "_MemberList");
 		}
 		else
-		{
-			mongoTemplate.insert(feed, userId+"_Feed");
-			frndsCollName = mongoTemplate.getCollection(userId + "_FriendsList");
-		}
+		{*/
+			userFeedColl.insert(feedObj);
+			frndsCollName = database.getCollection(userId + "_FriendsList");
+		//}
 		DBCursor frndsDataCursor = frndsCollName.find();
 		
-		homeFeed.setFeedId(feedId);
-		homeFeed.setDateAndTime(feedDateAndTime);
-		homeFeed.setType(type);
-		homeFeed.setUserFeedId(userId);
+		homeFeedObj.put("feedId", feedId);
+		homeFeedObj.put("dateAndTime", feedDateAndTime);
+		homeFeedObj.put("type", type);
+		homeFeedObj.put("userFeedId", userId);
 		while(frndsDataCursor.hasNext())
 		{
 			objDoc = frndsDataCursor.next();
 			frndId = (String) objDoc.get("_id");
+			DBCollection homeFeedColl = database.getCollection(frndId + "_HomeFeeds");
 			
 			//get yesterday date
-			Calendar cal = Calendar.getInstance();
+			/*Calendar cal = Calendar.getInstance();
 			//cal.add(Calendar.DATE, -1);
 			cal.add(Calendar.MINUTE, -2);
 			String objRefDate = feedDateFormat.format(cal.getTime());
-			Query query = new Query(Criteria.where("dateAndTime").lt(objRefDate));
-			
-			mongoTemplate.remove(query, frndId + "_HomeFeeds");
+			query = new Query(Criteria.where("dateAndTime").lt(objRefDate));			
+			mongoTemplate.remove(query, frndId + "_HomeFeeds");*/
 
-			mongoTemplate.insert(homeFeed, frndId + "_HomeFeeds");
+			homeFeedColl.insert(homeFeedObj);
 		}
 	}
 	
 	//Give Feed Like
 	public void giveLike(String userId, String commId, String userFeedId, String feedId){
-		Like like = new Like();
+		DBObject likeObj = new BasicDBObject();
 		DBObject userData= chatService.getUserData(userId);
 		DBObject objDoc;
 		String frndId, type = "like";
 		
+		DBCollection feedLikeColl = database.getCollection(feedId+"_LikedList");
 		String userName = (String) userData.get("username");
 		String userImg = (String) userData.get("imgPath");
 
-		like.setUserId(userId);
-		like.setUserName(userName);
-		like.setUserImg(userImg);
+		likeObj.put("userId", userId);
+		likeObj.put("userName", userName);
+		likeObj.put("userImg", userImg);
 
 		Date date = new Date();
 		DateFormat feedDateFormat = new SimpleDateFormat("HH:mm, MMM dd, yyyy");
 		String feedDateAndTime = feedDateFormat.format(date);
 		setLikeOrCmtHomeFeed(feedId, commId, userFeedId, userId, feedDateAndTime, type);
-		//Query
-		mongoTemplate.insert(like, feedId+"_LikedList");
+
+		feedLikeColl.insert(likeObj);
 	}
 	
 	//Add feed comment
 	public void addComment(String userId, String commId, String userFeedId, String feedId, String comments){
-		Comment comment = new Comment();
+		DBObject commentObj = new BasicDBObject();
 		Date date = new Date();
 		DateFormat feedCmtDateFormat = new SimpleDateFormat("HH:mm, MMM dd, yyyy");
 		String feedCmtDateAndTime = feedCmtDateFormat.format(date);
 		String type = "comments";
 		
+		DBCollection feedLikeColl = database.getCollection(feedId+"_CommentList");
 		DBObject resultSet= chatService.getUserData(userId);
 		String userName = (String) resultSet.get("username");
 		String userImg = (String) resultSet.get("imgPath");
 		
-		comment.setId(UUID.randomUUID().toString());
-		comment.setUserId(userId);
-		comment.setUserName(userName);
-		comment.setUserImg(userImg);
-		comment.setComments(comments);
-		comment.setDateAndTime(feedCmtDateAndTime);
+		commentObj.put("id", UUID.randomUUID().toString());
+		commentObj.put("userId", userId);
+		commentObj.put("userName", userName);
+		commentObj.put("userImg", userImg);
+		commentObj.put("comments", comments);
+		commentObj.put("dateAndTime", feedCmtDateAndTime);
 
 		setLikeOrCmtHomeFeed(feedId, commId, userFeedId, userId, feedCmtDateAndTime, type);
-		//Query
-		mongoTemplate.insert(comment, feedId+"_CommentList");
+		feedLikeColl.insert(commentObj);
 	}
 	
 	//set home like or comment
@@ -158,31 +160,32 @@ public class FeedService {
 		String frndId;
 		DBCollection frndsCollName;
 		
-		LikeOrCmtHomeFeed likeOrCmtHomeFeed = new LikeOrCmtHomeFeed();
+		DBObject likeOrCmtHomeFeedObj = new BasicDBObject();
 		
-		if(!commId.isEmpty())
+		/*if(!commId.isEmpty())
 		{
 			likeOrCmtHomeFeed.setCommId(commId);
 			frndsCollName = mongoTemplate.getCollection(commId + "_MemberList");
 		}
 		else
-		{
-			frndsCollName = mongoTemplate.getCollection(userId + "_FriendsList");
-		}
+		{*/
+			frndsCollName = database.getCollection(userId + "_FriendsList");
+		//}
 		DBCursor frndsDataCursor = frndsCollName.find();
 		
-		likeOrCmtHomeFeed.setId(UUID.randomUUID().toString());
-		likeOrCmtHomeFeed.setFeedId(feedId);
-		likeOrCmtHomeFeed.setUserFeedId(userFeedId);
-		likeOrCmtHomeFeed.setUserId(userId);
-		likeOrCmtHomeFeed.setDateAndTime(feedDateAndTime);
-		likeOrCmtHomeFeed.setType(type);
+		likeOrCmtHomeFeedObj.put("id", UUID.randomUUID().toString());
+		likeOrCmtHomeFeedObj.put("feedId", feedId);
+		likeOrCmtHomeFeedObj.put("userFeedId", userFeedId);
+		likeOrCmtHomeFeedObj.put("userId", userId);
+		likeOrCmtHomeFeedObj.put("dateAndTime", feedDateAndTime);
+		likeOrCmtHomeFeedObj.put("type", type);
 		while(frndsDataCursor.hasNext())
 		{
 			objDoc = frndsDataCursor.next();
-			frndId = (String) objDoc.get("_id");
+			frndId = (String) objDoc.get("id");
 
-			mongoTemplate.insert(likeOrCmtHomeFeed, frndId + "_HomeFeeds");
+			DBCollection frndHomeFeedsColl = database.getCollection(frndId + "_HomeFeeds");
+			frndHomeFeedsColl.insert(likeOrCmtHomeFeedObj);
 		}
 	}
 	
@@ -190,7 +193,7 @@ public class FeedService {
 	{
 		try
 		{
-			DBCollection coll = mongoTemplate.getCollection(collName);
+			DBCollection coll = database.getCollection(collName);
 			return coll.count();
 		}
 		catch(Exception ex)
@@ -210,7 +213,7 @@ public class FeedService {
 		int skipLevel, homeFeedDataListCount;
 		String userFeedId, commId, type, homeFeedCollName = userId + "_HomeFeeds";		
 		
-		DBCollection userFrndsColl = mongoTemplate.getCollection(userId + "_FriendsList");
+		DBCollection userFrndsColl = database.getCollection(userId + "_FriendsList");
 		
 		//get yesterday date
 		Calendar cal = Calendar.getInstance();
@@ -220,13 +223,13 @@ public class FeedService {
 		
 		DBCursor userFrndsDC = userFrndsColl.find();
 		
-		skipLevel = page.getSkipLevel(mongoTemplate, homeFeedCollName, pageLevel, limits);
+		skipLevel = page.getSkipLevel(homeFeedCollName, pageLevel, limits);
 		if(skipLevel < 0)
 		{
 			limits = page.getLimits(skipLevel, limits);
 			skipLevel = 0;
 		}
-		homeFeedDataList = page.getPaginationData(mongoTemplate, homeFeedCollName, true, skipLevel, limits);
+		homeFeedDataList = page.getPaginationData(homeFeedCollName, true, skipLevel, limits);
 		homeFeedDataListCount = homeFeedDataList.size();
 		
 		if(userFrndsDC.count() == 0)
@@ -279,7 +282,7 @@ public class FeedService {
 			{
 				homeFeedList.addAll(likeOrCmntFeedList);
 			}*/
-			/*if(skipLevel == 0)
+			if(skipLevel == 0)
 			{
 				userFeedFinalDataJson.put("isLast", true);
 			}
@@ -297,7 +300,7 @@ public class FeedService {
 		DBObject userDataResultSet;
 		
 		userDataResultSet = chatService.getUserData(userId);
-		userDataJsonObj.put("userFeedId", userDataResultSet.get("_id"));
+		userDataJsonObj.put("userFeedId", userDataResultSet.get("user_Id"));
 		userDataJsonObj.put("userFeedUserName", userDataResultSet.get("username"));
 		userImgUrl = (String) userDataResultSet.get("imgPath");
 		if(userImgUrl != null)
@@ -314,7 +317,7 @@ public class FeedService {
 		DBCollection userFeedsColl;
 		BasicDBObject feedIdRef = new BasicDBObject();
 		DBObject userFeedData;
-		JSONObject commJsonObj = new JSONObject();
+		//JSONObject commJsonObj = new JSONObject();
 		long likeCount, cmntsCount;
 		boolean isLiked;
 		
@@ -324,18 +327,18 @@ public class FeedService {
 		{
 			feedColl = userFeedId + "_Feed";
 		}
-		else if(type.equals("community"))
+		/*else if(type.equals("community"))
 		{
 			feedColl = commId + "_Feed";
 			commJsonObj = chatService.getCommunity(commId, "");
-		}
+		}*/
 		else if(type.equals("photo"))
 		{
 			feedColl = userFeedId + "_Photos";
 		}
 		
 		feedId = (String) homeFeedObj.get("_id");
-		userFeedsColl = mongoTemplate.getCollection(feedColl);
+		userFeedsColl = database.getCollection(feedColl);
 		feedIdRef.append("_id", feedId);
 		userFeedData = userFeedsColl.findOne(feedIdRef);
 		
@@ -345,7 +348,7 @@ public class FeedService {
 		isLiked = chatService.dataExist(userId, feedId + "_LikedList");
 		
 		userFeedData.put("dateAndTime", chatService.getDateFormat((String)userFeedData.get("dateAndTime"), clientTZ));
-		userFeedData.putAll(commJsonObj);
+		//userFeedData.putAll(commJsonObj);
 		userFeedData.put("likeCount", likeCount);
 		userFeedData.put("cmntsCount", cmntsCount);
 		if(isLiked)
@@ -363,12 +366,13 @@ public class FeedService {
 		ArrayList updatedValues = new ArrayList();
 		JSONObject commJsonObj = new JSONObject();
 		
-		if(type.equals("createCommunity") || type.equals("updateCommunity"))
+		/*if(type.equals("createCommunity") || type.equals("updateCommunity"))
 		{
 			commJsonObj = chatService.getCommunity(commId, "");
-		}
+		}*/
 		
-		if(type.equals("updateCommunity") || type.equals("updateProfile"))
+		//if(type.equals("updateCommunity") || type.equals("updateProfile"))
+		if(type.equals("updateProfile"))
 		{
 			String key, value;
 			String updatedDataKeys = (String) homeFeedObj.get("updatedDataKeys");
@@ -420,20 +424,20 @@ public class FeedService {
 			userFeedDataResultSet = chatService.getUserData(userFeedId);
 			userDataResultSet = chatService.getUserData(userId);
 			
-			userFeedsColl = mongoTemplate.getCollection(userFeedId + "_Feed");
+			userFeedsColl = database.getCollection(userFeedId + "_Feed");
 			feedIdRef.append("_id", feedId);
 			userFeedData = userFeedsColl.findOne(feedIdRef);
 			
-			if(userFeedData == null && commId != null) // for community
+			/*if(userFeedData == null && commId != null) // for community
 			{
-				commFeedsColl = mongoTemplate.getCollection(commId + "_Feed");
+				commFeedsColl = database.getCollection(commId + "_Feed");
 				userFeedData = commFeedsColl.findOne(feedIdRef);
 				commJsonObj = chatService.getCommunity(commId, "");
 				userFeedData.putAll(commJsonObj);
-			}
+			}*/
 			if(userFeedData == null) //for photos
 			{
-				commFeedsColl = mongoTemplate.getCollection(userFeedId + "_Photos");
+				commFeedsColl = database.getCollection(userFeedId + "_Photos");
 				userFeedData = commFeedsColl.findOne(feedIdRef);
 			}
 			userFeedId = (String) userFeedDataResultSet.get("_id");
@@ -464,7 +468,7 @@ public class FeedService {
 			userFeedData.put("type", type);
 			if(type.equals("comments"))
 			{
-				feedDataCmntsColl = mongoTemplate.getCollection(feedId+"_CommentList");
+				feedDataCmntsColl = database.getCollection(feedId+"_CommentList");
 				userDataCmntsId = userId;
 				userDataCmntsDateAndTime = (String) homeFeedObj.get("dateAndTime");
 				
@@ -478,7 +482,7 @@ public class FeedService {
 			}
 
 			return userFeedData;
-		}*/
+		}
 	
 	//get home feed
 	/*public List getUserCommPhotosHomeFeeds(String userId, DBCollection homeUserFeedsColl) throws ParseException{
@@ -604,22 +608,21 @@ public class FeedService {
 		}
 		
 		return UserCommHomeFeedList;
-	}
+	}*/
 
 	public String getFeed(String userId, String profileId, String feedCollName, String clientTZ) throws ParseException{
 		List feedList = new ArrayList();
 		JSONObject feedData = new JSONObject();
 		DBObject feed = null;
 		DBObject userDataResultSet;
-		String user_Id, userName, userimgUrl, feedId, feedimgUrl, likeUserId, videoUrl;
+		String userName, userimgUrl, feedId, feedimgUrl, likeUserId, videoUrl;
 		long likeCount, cmntsCount;
 		boolean isLiked;
 		
 		//Query
-		DBCollection collection = mongoTemplate.getCollection(feedCollName);
+		DBCollection collection = database.getCollection(feedCollName);
 		DBCursor resultSet = collection.find();
 		userDataResultSet = chatService.getUserData(userId);
-		user_Id = (String) userDataResultSet.get("_id");
 		userName = (String) userDataResultSet.get("username");
 		userimgUrl = (String) userDataResultSet.get("imgPath");
 		
@@ -635,7 +638,7 @@ public class FeedService {
 			{
 				feed.put("isLiked", true);
 			}
-			feed.put("userId", user_Id);
+			feed.put("userId", userId);
 			if(userId.equals(profileId))
 			{
 				feed.put("userName", "You");

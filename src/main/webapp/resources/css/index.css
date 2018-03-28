@@ -278,7 +278,7 @@ button {
     margin: 0px auto;
 }
 
-select#connUs-country, select#connUs-state{
+select#countryId, select#stateId, select#cityId{
     width: 100%;
     padding: 5px;
     margin-top: 10px;

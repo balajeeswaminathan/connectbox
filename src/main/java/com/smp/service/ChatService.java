@@ -33,6 +33,7 @@ import javax.imageio.stream.ImageOutputStream;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.output.NullWriter;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.support.MultipartFilter;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -167,7 +169,7 @@ public class ChatService {
 	}
 	
 	//Register
-	public String updateUser(String userId, String userName, String email, String password, String dob, String gender, String countryState, String country, String profileImgUrl, boolean isEdit){
+	public String updateUser(String userId, String userName, String email, String password, String dob, String gender, String city, String countryState, String country, String profileImgUrl, boolean isEdit){
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		String curentTime = dateFormat.format(date);
@@ -185,6 +187,7 @@ public class ChatService {
 		
 		if(isEdit)
 		{
+			BasicDBObject userUpdatedData = new BasicDBObject();
 			DBCursor frndsDataCursor;
 			String updatedDataKeys = "", updatedDataValues = "", frndId;
 			DBObject query = new BasicDBObject();
@@ -223,6 +226,10 @@ public class ChatService {
 			{
 				user.put("gender", gender);
 			}
+			if(!city.isEmpty())
+			{
+				user.put("city", city);
+			}
 			if(!countryState.isEmpty())
 			{
 				user.put("countryState", countryState);
@@ -238,8 +245,9 @@ public class ChatService {
 				homeFeed.put("updatedDataValues", profileImgUrl);
 			}
 			
+			userUpdatedData.append("$set", user);
 			query.put("user_Id", user_Id);
-			userCollName.update(query, user);
+			userCollName.update(query, userUpdatedData);
 			
 			if(!updatedDataKeys.isEmpty())
 			{
@@ -270,6 +278,7 @@ public class ChatService {
 			user.put("password", password);
 			user.put("dob", dob);
 			user.put("gender", gender);
+			user.put("city", city);
 			user.put("countryState", countryState);
 			user.put("country", country);
 			user.put("state", "inActive");
@@ -280,7 +289,7 @@ public class ChatService {
 
 		return user_Id;
 	}
-	
+
 	public void activateUser(String userId)
 	{
 		DBObject query = new BasicDBObject();
@@ -316,13 +325,13 @@ public class ChatService {
 		return response.toString();
 	}
 	
-	/*public String searchList(String searchTerm){
+	public String searchList(String searchTerm){
 		JSONObject searchJson = new JSONObject();
 
 		JSONObject sLUsersData = searchListUser(searchTerm);
-		JSONObject sLTopicsData = searchListTopics(searchTerm);
+		//JSONObject sLTopicsData = searchListTopics(searchTerm);
 		searchJson.putAll(sLUsersData);
-		searchJson.putAll(sLTopicsData);
+		//searchJson.putAll(sLTopicsData);
 		if(searchJson.isEmpty())
 		{
 			searchJson.put("errorMessage", "We couldn't find anything for \"" + searchTerm + "\"");
@@ -333,7 +342,7 @@ public class ChatService {
 	
 	@SuppressWarnings("unchecked")
 	public JSONObject searchListUser(String userName) {
-		DBObject query = new BasicDBObject();
+		BasicDBObject query = new BasicDBObject();
 		List<JSONObject> userSearchList = new ArrayList<JSONObject> ();
 		JSONObject UserSearchJson = new JSONObject();
 		String imgUrl;
@@ -341,7 +350,7 @@ public class ChatService {
 		//Query
 		//query.limit(10);
 		DBCollection userCollName = database.getCollection(COLLECTION_USER);
-		query.put("username", userName);
+		query.put("userName", java.util.regex.Pattern.compile(userName.toString()));
 		DBCursor searchListUser = userCollName.find(query);
 		
 		if(searchListUser.size() > 0)
@@ -367,7 +376,7 @@ public class ChatService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public JSONObject searchListTopics(String topicName) {
+	/*public JSONObject searchListTopics(String topicName) {
 		Query query = new Query();
 		List<JSONObject> topicSearchList = new ArrayList<JSONObject> ();
 		JSONObject topicSearchJson = new JSONObject();
@@ -397,37 +406,41 @@ public class ChatService {
 		}
 		
 		return topicSearchJson;
-	}
+	}*/
 	
 	//Add Friend
 	public void addFriends(String collName, String friendId, String friendsName, int status) {
-		Query query = new Query();
+		DBObject query = new BasicDBObject();
+		DBCollection collection = database.getCollection(collName);
+		DBObject frndObj = new BasicDBObject();
 		if(status != 0)
 		{
-			//Query
-			FriendsList frndList = new FriendsList();
-			frndList.setFriend_Id(friendId);
-			frndList.setFriendsName(friendsName);
-			frndList.setStatus(status);
-			mongoTemplate.insert(frndList, collName);
+			frndObj.put("friend_Id", friendId);
+			frndObj.put("friendsName", friendsName);
+			frndObj.put("status", status);
+			
+			collection.insert(frndObj);
 		}
 		else
 		{
-			query.addCriteria(Criteria.where("_id").is(friendId));
-			//Query
-			mongoTemplate.updateFirst(query, Update.update("status", status), collName);
+			BasicDBObject frndUpdateObj = new BasicDBObject();
+			frndObj.put("status", status);
+			frndUpdateObj.append("$set", frndObj);
+			
+			query.put("friend_Id", friendId);
+			collection.update(query, frndUpdateObj);
 		}
 	}
 
 	//Get Chat Data Collection Name
 	public String getChatListCollName(String senderId, String receiverId){
-		DBCollection senderCollName = mongoTemplate.getCollection(senderId+"_ChatList");
+		DBCollection senderCollName = database.getCollection(senderId+"_ChatList");
 		BasicDBObject objRef = new BasicDBObject();
 		BasicDBObject fields = new BasicDBObject();
 		String chatCollName = null;
 
 		//Query
-		objRef.append("_id", receiverId);
+		objRef.put("chatList_Id", receiverId);
 		fields.put("collectionName", 1);
 		DBObject resultSet = senderCollName.findOne(objRef, fields);
 
@@ -456,8 +469,10 @@ public class ChatService {
 	@SuppressWarnings("unchecked")
 	public String saveChat(String senderId, String senderName, String receiverId, String receiverName, String message, String commType){
 		String chatCollName = getChatListCollName(senderId, receiverId);
-		Chat chat = new Chat();
 		Date date = new Date();
+		
+		DBCollection senderColl = database.getCollection(senderId +"_ChatList");
+		DBCollection receiverColl = database.getCollection(receiverId +"_ChatList");
 
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm, MMM dd, yyyy");
 		DateFormat chatDataDateFormat = new SimpleDateFormat("MMM dd, yyyy");
@@ -466,55 +481,53 @@ public class ChatService {
 		if(chatCollName == null)
 		{
 			//Query
-			ChatList senderChatList = new ChatList();
-			ChatList ReceiverChatList = new ChatList();
+			DBObject senderChatList = new BasicDBObject();
+			DBObject receiverChatList = new BasicDBObject();
 			
 			chatCollName = senderId + "_" + receiverId + "_chats";
 			
-			senderChatList.setChatList_Id(receiverId);
-			senderChatList.setChatNames(receiverName);
-			senderChatList.setCollectionName(chatCollName);
-			senderChatList.setDateAndTime(dateFormat.format(date));
-			senderChatList.setLastMgs(message);
+			senderChatList.put("chatListId", receiverId);
+			senderChatList.put("chatNames", receiverName);
+			senderChatList.put("collectionName", chatCollName);
+			senderChatList.put("dateAndTime", dateFormat.format(date));
+			senderChatList.put("lastMgs", message);
 			
-			ReceiverChatList.setChatList_Id(senderId);
-			ReceiverChatList.setChatNames(senderName);
-			ReceiverChatList.setCollectionName(chatCollName);
-			ReceiverChatList.setDateAndTime(dateFormat.format(date));
-			ReceiverChatList.setLastMgs(message);
+			receiverChatList.put("chatListId", senderId);
+			receiverChatList.put("chatNames", senderName);
+			receiverChatList.put("collectionName", chatCollName);
+			receiverChatList.put("dateAndTime", dateFormat.format(date));
+			receiverChatList.put("lastMgs", message);
 			
-			mongoTemplate.insert(senderChatList, senderId+"_ChatList");
-			mongoTemplate.insert(ReceiverChatList, receiverId+"_ChatList");
+			senderColl.insert(senderChatList);
+			receiverColl.insert(receiverChatList);
 		}
 		else
 		{
-			Update update = new Update();
-			Query query = new Query();
-			Query query1 = new Query();
+			DBObject update = new BasicDBObject();
+			DBObject query = new BasicDBObject();
+			DBObject query1 = new BasicDBObject();
 			//Query
-			update.set("dateAndTime", dateFormat.format(date));
-			update.set("lastMgs", message);
+			update.put("dateAndTime", dateFormat.format(date));
+			update.put("lastMgs", message);
 			
-			query.addCriteria(Criteria.where("_id").is(receiverId));
-			mongoTemplate.updateFirst(query, update,senderId+"_ChatList");
+			query.put("chatList_Id", receiverId);
+			senderColl.update(query, update);
 			
-			query1.addCriteria(Criteria.where("_id").is(senderId));
-			mongoTemplate.updateFirst(query1, update,receiverId+"_ChatList");
+			query1.put("chatList_Id", senderId);
+			receiverColl.update(query1, update);
 		}
+		DBCollection chatColl = database.getCollection(chatCollName);
+		DBObject chat = new BasicDBObject();
 		
-		//DBCollection collection = mongoTemplate.getCollection(chatCollName);
-		//DBCursor resultSet = collection.find();
-		//resultSet.count();
+		chat.put("ChatListId", UUID.randomUUID().toString());
+		chat.put("senderId", senderId);
+		chat.put("message", message);
+		chat.put("date", chatDataDateFormat.format(date));
+		chat.put("time", chatDataTimeFormat.format(date));
+		chat.put("senderId", senderId);
+		chat.put("commType", commType);
 		
-		chat.setChatListId(UUID.randomUUID().toString());
-		chat.setSenderId(senderId);
-		chat.setMessage(message);
-		chat.setDate(chatDataDateFormat.format(date));
-		chat.setTime(chatDataTimeFormat.format(date));
-		chat.setCommId(senderId);
-		chat.setCommType(commType);
-		
-		mongoTemplate.insert(chat, chatCollName);
+		chatColl.insert(chat);
 		setChatNotification(senderId, receiverId, dateFormat.format(date));
 		
 		JSONObject response = new JSONObject();
@@ -528,12 +541,11 @@ public class ChatService {
 		DBObject chatNotifData;
 		String chatNotifSenderId;
 		int chatCount,userExist = 0;
-		ChatNotification chatNotif = new ChatNotification();
-		Update update = new Update();
-		Query query = new Query();
+		DBObject chatNotifObj = new BasicDBObject();
+		DBObject query = new BasicDBObject();
 
 		//Query
-		DBCollection chatNotifCollName = mongoTemplate.getCollection(receiverId + "_ChatNotification");
+		DBCollection chatNotifCollName = database.getCollection(receiverId + "_ChatNotification");
 		DBCursor chatNotifDataCursor = chatNotifCollName.find();
 		
 		while(chatNotifDataCursor.hasNext())
@@ -544,21 +556,21 @@ public class ChatService {
 			{
 				chatCount = (Integer) chatNotifData.get("chatCount");
 				chatCount = chatCount + 1;
-				update.set("chatCount", chatCount);
-				update.set("dateAndTime", dateAndTime);
-				query.addCriteria(Criteria.where("_id").is(senderId));
-				mongoTemplate.updateFirst(query, update, receiverId+"_ChatNotification");
+				chatNotifObj.put("chatCount", chatCount);
+				chatNotifObj.put("dateAndTime", dateAndTime);
+				query.put("senderId", senderId);
+				chatNotifCollName.update(query, chatNotifObj);
 				userExist = 1;
 				break;
 			}
 		}
 		if(userExist == 0)
 		{
-			chatNotif.setSenderId(senderId);
-			chatNotif.setChatCount(1);
-			chatNotif.setDateAndTime(dateAndTime);
+			chatNotifObj.put("senderId", senderId);
+			chatNotifObj.put("chatCount", 1);
+			chatNotifObj.put("dateAndTime", dateAndTime);
 			
-			mongoTemplate.insert(chatNotif, receiverId+"_ChatNotification");
+			chatNotifCollName.insert(chatNotifObj);
 		}
 	}
 	
@@ -568,7 +580,7 @@ public class ChatService {
 		int messageCount = 0;
 		
 		//Query
-		DBCollection chatNotifCollName = mongoTemplate.getCollection(userId + "_ChatNotification");
+		DBCollection chatNotifCollName = database.getCollection(userId + "_ChatNotification");
 		DBCursor chatNotifDataCursor = chatNotifCollName.find();
 		while(chatNotifDataCursor.hasNext())
 		{
@@ -583,7 +595,7 @@ public class ChatService {
 		BasicDBObject docObjRef = new BasicDBObject();
 
 		//Query
-		DBCollection chatNotifCollName = mongoTemplate.getCollection(userId + "_ChatNotification");
+		DBCollection chatNotifCollName = database.getCollection(userId + "_ChatNotification");
 		docObjRef.append("_id", senderId);
 		
 		chatNotifCollName.remove(docObjRef);
@@ -597,31 +609,36 @@ public class ChatService {
 	{
 		JSONObject chatListJson = new JSONObject();
 		JSONObject chatListResponseJson = new JSONObject();
-		Query query = new Query();
 		List<JSONObject> newL = new ArrayList<JSONObject>();
+		DBCollection chatNotifColl = database.getCollection(senderId + "_ChatNotification");
+		DBCollection chatDataColl = database.getCollection(senderId + "_ChatList");
+		DBObject orderBy = new BasicDBObject();
 		
-		query.with(new Sort(Sort.Direction.DESC, "dateAndTime"));
-		List<ChatNotification> chatNotifDataList = mongoTemplate.find(query, ChatNotification.class, senderId + "_ChatNotification");
-		List<ChatList> chatListDataList = mongoTemplate.find(query, ChatList.class, senderId + "_ChatList");
+		orderBy.put("dateAndTime", -1);
+		
+		DBCursor chatNotifDataList = chatNotifColl.find().sort(orderBy);
+		DBCursor chatListDataList = chatDataColl.find().sort(orderBy);
 		
 		int chatListSize = chatListDataList.size();
 		if(chatListSize > 0)
 		{
 			for(int i = 0, j = 0 ;i < chatListSize; i++)
 			{
+				DBObject chatNotifData = chatNotifDataList.next();
+				DBObject chatListData = chatListDataList.next();
 				if(j < chatNotifDataList.size())
 				{
-					if(chatNotifDataList.get(j).getSenderId().equals(chatListDataList.get(i).getChatList_Id()))
+					if(chatNotifData.get("senderId").toString().equals(chatListData.get("chatList_Id").toString()))
 					{
 						chatListJson.put("newMsg", true);
-						chatListJson.put("newMsgCount", chatNotifDataList.get(i).getChatCount());
+						chatListJson.put("newMsgCount", chatNotifData.get("chatCount"));
 					}
 					j++;
 				}
-				chatListJson.put("chatListId", chatListDataList.get(i).getChatList_Id());
-				chatListJson.put("chatNames", chatListDataList.get(i).getChatNames());
-				chatListJson.put("dateAndTime", getDateFormat(chatListDataList.get(i).getDateAndTime(), clientTZ));
-				chatListJson.put("lastMgs", chatListDataList.get(i).getLastMgs());
+				chatListJson.put("chatListId", chatListData.get("chatList_Id"));
+				chatListJson.put("chatNames", chatListData.get("chatNames"));
+				chatListJson.put("dateAndTime", getDateFormat(chatListData.get("dateAndTime").toString(), clientTZ));
+				chatListJson.put("lastMgs", chatListData.get("lastMgs"));
 				newL.add(chatListJson);
 			}
 			chatListResponseJson.put("status", 0);
@@ -632,7 +649,6 @@ public class ChatService {
 		}
 		
 		chatListResponseJson.put("chats", newL);
-		//List<ChatList> resultSetL = mongoTemplate.find(query, ChatList.class, senderId + "_ChatList");
 		
 		return chatListResponseJson.toString();
 	}
@@ -656,13 +672,13 @@ public class ChatService {
 			Pagination page = new Pagination();
 			
 			//Query
-			skipLevel = page.getSkipLevel(mongoTemplate, chatCollName, pageLevel, limits);
+			skipLevel = page.getSkipLevel(chatCollName, pageLevel, limits);
 			if(skipLevel < 0)
 			{
 				limits = page.getLimits(skipLevel, limits);
 				skipLevel = 0;
 			}
-			chatDataDataList = page.getPaginationData(mongoTemplate, chatCollName, false, skipLevel, limits);
+			chatDataDataList = page.getPaginationData(chatCollName, false, skipLevel, limits);
 			chatDataDataListCount = chatDataDataList.size();
 			
 			for(int i = 0; i < chatDataDataListCount; i++)
@@ -713,7 +729,7 @@ public class ChatService {
 		String userId;
 		boolean isOnlineMember = false;
 		
-		DBCollection frndsListCollName = mongoTemplate.getCollection(collName);
+		DBCollection frndsListCollName = database.getCollection(collName);
 		DBCursor frndsDocCursor = frndsListCollName.find();
 		
 		while(frndsDocCursor.hasNext())
@@ -741,7 +757,7 @@ public class ChatService {
 		}
 		frndsDataJson.put("friendsList",frndsList);
 		return frndsDataJson.toString();
-	}*/
+	}
 
 	public DBObject profileData(String profileId)
 	{
@@ -800,6 +816,7 @@ public class ChatService {
 		responseJson.put("dob", dob);
 		responseJson.put("country", profileData.get("country"));
 		responseJson.put("countryState", profileData.get("countryState"));
+		responseJson.put("city", profileData.get("city"));
 		
 		if(dob != null)
 		{
@@ -832,7 +849,7 @@ public class ChatService {
 	}
 	
 	//Upload Image
-	public String uploadImage(String userId, String imgType, String imgId, byte[] imgBytes) throws IOException {
+	public String uploadImage(byte[] imgBytes) throws IOException {
 		
 		/*PropertiesData propData = new PropertiesData();
 		propData.initProp();
@@ -947,11 +964,6 @@ public class ChatService {
 		}
 	}
 
-	/*private void getUserId() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public String getLikeOrCmnts(String uerId, String id, String type, String clientTZ) throws ParseException{
 		List dataList = new ArrayList();
 		JSONObject dataJson = new JSONObject();
@@ -967,7 +979,7 @@ public class ChatService {
 		}
 		
 		//Query
-		DBCollection collection = mongoTemplate.getCollection(collName);
+		DBCollection collection = database.getCollection(collName);
 		DBCursor resultSet = collection.find();
 		
 		while(resultSet.hasNext())
@@ -994,22 +1006,23 @@ public class ChatService {
 		DateFormat photodDateFormat = new SimpleDateFormat("HH:mm, MMM dd, yyyy");
 		String photoDateAndTime = photodDateFormat.format(date);
 
-		Photos photo = new Photos();
-		photo.setId(photoId);
-		photo.setDesc(desc);
-		photo.setImgUrl(imgUrl);
-		photo.setDateAndTime(photoDateAndTime);
+		DBObject photoObj = new BasicDBObject();
+		photoObj.put("Photo_Id", photoId);
+		photoObj.put("desc", desc);
+		photoObj.put("imgUrl", imgUrl);
+		photoObj.put("dateAndTime", photoDateAndTime);
 		
 		//Query
-		mongoTemplate.insert(photo, userId+"_Photos");
+		DBCollection collection = database.getCollection(userId+"_Photos");
+		collection.insert(photoObj);
 		
-		DBCollection frndsCollName = mongoTemplate.getCollection(userId + "_FriendsList");
-		HomeFeed homeFeed = new HomeFeed();
+		DBCollection frndsCollName = database.getCollection(userId + "_FriendsList");
 		
-		homeFeed.setFeedId(photoId);
-		homeFeed.setDateAndTime(photoDateAndTime);
-		homeFeed.setType("photo");
-		homeFeed.setUserFeedId(userId);
+		DBObject homeFeedObj = new BasicDBObject();
+		homeFeedObj.put("feedId", photoId);
+		homeFeedObj.put("userFeedId", userId);
+		homeFeedObj.put("dateAndTime", photoDateAndTime);
+		homeFeedObj.put("type", "photo");
 		
 		DBCursor frndsDataCursor = frndsCollName.find();
 		while(frndsDataCursor.hasNext())
@@ -1017,9 +1030,10 @@ public class ChatService {
 			objDoc = frndsDataCursor.next();
 			frndId = (String) objDoc.get("_id");
 
-			mongoTemplate.insert(homeFeed, frndId + "_HomeFeeds");
+			DBCollection frndCollName = database.getCollection(frndId + "_HomeFeeds");
+			frndCollName.insert(homeFeedObj);
 		}
-	}*/
+	}
 	
 	public String getPhotos(String userId, String profileId, String photosCollName, String clientTZ) throws ParseException
 	{
@@ -1170,11 +1184,11 @@ public class ChatService {
 		feedData.put("feedList", feedList);
 		
 		return feedData.toString();
-	}
+	}*/
 
 	public boolean checkPsw(String userId, String password)
 	{
-		DBCollection userCollName = mongoTemplate.getCollection(COLLECTION_USER);
+		DBCollection userCollName = database.getCollection(COLLECTION_USER);
 		List<BasicDBObject> objRefList = new ArrayList<BasicDBObject>();
 		BasicDBObject andQuery = new BasicDBObject();
 		String email = null;
@@ -1208,15 +1222,18 @@ public class ChatService {
 	
 	public String setPassword(HttpSession session, String userId, String password, int OTP)
 	{
+		DBCollection collection = database.getCollection(COLLECTION_USER);
 		JSONObject response = new JSONObject();
-		Query query = new Query();
+		DBObject query = new BasicDBObject();
+		DBObject pswObj = new BasicDBObject();
 		try
 		{
 			int OTPResult = (Integer) session.getAttribute(userId);
 			if(OTPResult == OTP)
 			{
-				query.addCriteria(Criteria.where("_id").is(userId));
-				mongoTemplate.updateFirst(query, Update.update("password", password), COLLECTION_USER);
+				query.put("user_Id", userId);
+				pswObj.put("password", password);
+				collection.update(query, pswObj);
 				response.put("status", 0);
 			}
 			else
@@ -1250,7 +1267,7 @@ public class ChatService {
 					"</div>";
 			String mailSubject = "OTP for Reset Password";
 
-			DBCollection userCollName = mongoTemplate.getCollection(COLLECTION_USER);
+			DBCollection userCollName = database.getCollection(COLLECTION_USER);
 			List<BasicDBObject> objRefList = new ArrayList<BasicDBObject>();
 			BasicDBObject andQuery = new BasicDBObject();
 			
@@ -1271,7 +1288,7 @@ public class ChatService {
 		return response.toString();
 	}
 	
-	public void updateCommunities(String commId, String name, String coverImg, String img, String address, String phNo, String email, String ownerId, boolean isEdit){
+	/*public void updateCommunities(String commId, String name, String coverImg, String img, String address, String phNo, String email, String ownerId, boolean isEdit){
 		DBCollection frndsCollName, membersCollName;
 		DBObject objDoc;
 		String frndId, updatedDataKeys = "", updatedDataValues = "";
@@ -1568,14 +1585,14 @@ public class ChatService {
 		{
 			saveChat(senderId, senderName, friendsListId[i].toString(), friendsListName.toString(), commId, "invite");
 		}
-	}
+	}*/
 	
 	public void setOnlineMember(String userId)
 	{
 		onlineMembers.put(userId, new Date());
-	}*/
+	}
 	
-	/*public String getOnlineMembers(HttpSession session, ArrayList<String> userIds) throws ParseException
+	public String getOnlineMembers(HttpSession session, ArrayList<String> userIds) throws ParseException
 	{
 		JSONObject OnlineMembersJsonObj = new JSONObject();
 		ArrayList OnlineMembersArr = new ArrayList();
@@ -1600,9 +1617,9 @@ public class ChatService {
 		}
 		OnlineMembersJsonObj.put("onlineMembers", OnlineMembersArr);
 		return OnlineMembersJsonObj.toString();
-	}*/
+	}
 	
-	/*public boolean isMemberOnline(String userId)
+	public boolean isMemberOnline(String userId)
 	{
 		Date currDate = new Date();
 		Date startDate = (Date) onlineMembers.get(userId);
@@ -1616,7 +1633,7 @@ public class ChatService {
 		{
 			return true;
 		}
-	}*/
+	}
 	
 	public String getDateFormat(String date, String clientTZ) throws ParseException
 	{

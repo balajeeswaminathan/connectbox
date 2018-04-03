@@ -6,7 +6,7 @@
 	<div class="connUs-menu-cont">
 		<div class="menu-cont">
 			<div class="connUs-basicInfo">
-		        <img class="connUs-profile-img" src="../img/photo.jpg"/>
+		        <img class="connUs-profile-img" src="<c:url value="/resources/img/photo.jpg" />"/>
 		        <div class="connUs-profile-name"></div>
 		    </div>
 		    

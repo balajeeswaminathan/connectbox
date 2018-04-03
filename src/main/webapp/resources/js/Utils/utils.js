@@ -225,6 +225,7 @@ var utilClass = {
            "email" : userData.email,
            "password": userData.password,
            "dob": userData.dob,
+           "city" : userData.city,
            "countryState" : userData.countryState,
            "country" : userData.country,
            "gender": userData.gender,

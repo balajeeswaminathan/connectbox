@@ -41,8 +41,8 @@ var headerAndMenuClass = {
 		var homeCbk = function(response)
 		{
 			var obj = JSON.parse(response);
-			var img = obj.properties.data[0].imgPath;
-			var userName = obj.properties.data[0].username;
+			var img = obj.properties.data.imgPath;
+			var userName = obj.properties.data.userName;
 			$(".connUs-profile-name").text(userName);
 			utilClass.userName = userName;
 			if(img)

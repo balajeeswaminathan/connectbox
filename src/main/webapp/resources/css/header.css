@@ -124,7 +124,7 @@ body {
     box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
     margin-top: 10px;
     margin-left: -10px;
-    z-index: 99;
+    z-index: 999;
     display: none;
 }
 

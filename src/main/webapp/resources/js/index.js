@@ -107,7 +107,7 @@ var indexClass= {
 			
 			var userData = {};
 	        userData.userId = "";
-	        userData.userName = userName;
+	        userData.userName = username;
 	        userData.email = email;
 	        userData.password = password;
 	        userData.dob = dob;
@@ -135,7 +135,7 @@ var indexClass= {
 				utilClass.sendMail(email, "Email Verification", mailDom, sendMailCbk);
 			};
 			
-			utilClass.updateUser(userData, true, registerCbk);
+			utilClass.updateUser(userData, false, registerCbk);
 		}
 	},
 

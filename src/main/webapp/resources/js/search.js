@@ -61,7 +61,7 @@ var searchClass = {
 				utilClass.callHandlebar("#searchList-hb-template", ".connUs-search-list", obj.properties);
 				$(".connUs-searchList-cont").off("click").on("click",function(){
 					var profileId = $(this).attr("userId");
-					window.location.href = "http://localhost:8080/chatUI/profile.jsp?pId=" + profileId;
+					window.location.href = window.streamDomain + "profile.jsp?pId=" + profileId;
 				});
 			};
 			

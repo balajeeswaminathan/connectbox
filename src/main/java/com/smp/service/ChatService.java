@@ -144,16 +144,17 @@ public class ChatService {
 	public DBObject getUserData(String user_Id){
 		DBCollection userCollName = database.getCollection(COLLECTION_USER);
 		BasicDBObject objRef = new BasicDBObject();
-		BasicDBObject fields = new BasicDBObject();
+		BasicDBObject userDataObj = new BasicDBObject();
 
 		//Query
 		objRef.append("user_Id", user_Id);
-		fields.put("userName", 1);
-		fields.put("imgPath", 2);
-		fields.put("gender", 3);
-		DBObject userData = userCollName.findOne(objRef, fields);
+		DBObject userData = userCollName.findOne(objRef);
+		userDataObj.put("user_Id", userData.get("user_Id"));
+		userDataObj.put("userName", userData.get("userName"));
+		userDataObj.put("gender", userData.get("gender"));
+		userDataObj.put("imgPath", userData.get("imgPath"));
 		
-		return userData;
+		return userDataObj;
 	}
 	
 	//Home call
@@ -263,7 +264,7 @@ public class ChatService {
 			while(frndsDataCursor.hasNext())
 			{
 				objDoc = frndsDataCursor.next();
-				frndId = (String) objDoc.get("_id");
+				frndId = (String) objDoc.get("friend_Id");
 				
 				DBCollection frndIdCollName = database.getCollection(frndId + "_HomeFeeds");
 				frndIdCollName.insert(homeFeed);
@@ -294,7 +295,7 @@ public class ChatService {
 	{
 		DBObject query = new BasicDBObject();
 		DBObject update = new BasicDBObject();
-		query.put("_id", userId);
+		query.put("user_Id", userId);
 		update.put("state", "active");
 		
 		DBCollection userCollName = database.getCollection(COLLECTION_USER);
@@ -309,11 +310,11 @@ public class ChatService {
 		JSONObject response = new JSONObject();
 		
 		objRef.put("email", email);
-		fields.put("_id", 1);
+		fields.put("user_Id", 1);
 		resultSet = userCollName.findOne(objRef, fields);
 		try
 		{
-			String userId = (String) resultSet.get("_id");
+			String userId = (String) resultSet.get("user_Id");
 			response.put("status", true);
 			response.put("userId", userId);
 		}
@@ -360,7 +361,7 @@ public class ChatService {
 				DBObject user = searchListUser.next();
 				JSONObject UserSearchDataJson = new JSONObject();
 				UserSearchDataJson.put("userId", user.get("user_Id"));
-				UserSearchDataJson.put("userName", user.get("username"));
+				UserSearchDataJson.put("userName", user.get("userName"));
 				UserSearchDataJson.put("gender", user.get("gender"));
 				imgUrl = (String) user.get("imgPath");
 				if(imgUrl != "")
@@ -486,13 +487,13 @@ public class ChatService {
 			
 			chatCollName = senderId + "_" + receiverId + "_chats";
 			
-			senderChatList.put("chatListId", receiverId);
+			senderChatList.put("chatList_Id", receiverId);
 			senderChatList.put("chatNames", receiverName);
 			senderChatList.put("collectionName", chatCollName);
 			senderChatList.put("dateAndTime", dateFormat.format(date));
 			senderChatList.put("lastMgs", message);
 			
-			receiverChatList.put("chatListId", senderId);
+			receiverChatList.put("chatList_Id", senderId);
 			receiverChatList.put("chatNames", senderName);
 			receiverChatList.put("collectionName", chatCollName);
 			receiverChatList.put("dateAndTime", dateFormat.format(date));
@@ -551,7 +552,7 @@ public class ChatService {
 		while(chatNotifDataCursor.hasNext())
 		{
 			chatNotifData = chatNotifDataCursor.next();
-			chatNotifSenderId = (String) chatNotifData.get("_id");
+			chatNotifSenderId = (String) chatNotifData.get("senderId");
 			if(senderId.equals(chatNotifSenderId))
 			{
 				chatCount = (Integer) chatNotifData.get("chatCount");
@@ -596,7 +597,7 @@ public class ChatService {
 
 		//Query
 		DBCollection chatNotifCollName = database.getCollection(userId + "_ChatNotification");
-		docObjRef.append("_id", senderId);
+		docObjRef.append("senderId", senderId);
 		
 		chatNotifCollName.remove(docObjRef);
 		
@@ -658,6 +659,7 @@ public class ChatService {
 	public String getChatData(String senderId, String chatCollName, int pageLevel, int limits)
 	{
 		DBObject chatData;
+		DBObject chatDataObj = new BasicDBObject();
 		String senderID, dateTemp = "";
 		JSONObject chatDataresponseJson = new JSONObject();
 		List<DBObject> chatDataList = new ArrayList<DBObject>();
@@ -685,24 +687,25 @@ public class ChatService {
 			{
 				chatData = (DBObject) chatDataDataList.get(i);
 				senderID = (String) chatData.get("senderId");
-				if(dateTemp.equals((String) chatData.get("date")))
+				dateTemp = (String) chatData.get("date");
+				String todayDate = chatDataDateFormat.format(date);
+				
+				chatDataObj.put("senderId", senderID);
+				if(dateTemp.equals(todayDate))
 				{
-					chatData.removeField("date");
+					chatDataObj.put("date", "Today");
 				}
 				else
 				{
-					dateTemp = (String) chatData.get("date");
-					String todayDate = chatDataDateFormat.format(date);
-					if(dateTemp.equals(todayDate))
-					{
-						chatData.put("date", "Today");
-					}
+					chatDataObj.put("date", dateTemp);
 				}
 				if(senderID.equals(senderId))
 				{
-					chatData.put("sender",true);
+					chatDataObj.put("sender", true);
 				}
-				chatDataList.add(chatData);
+				chatDataObj.put("message", chatData.get("message"));
+				chatDataObj.put("time", chatData.get("time"));
+				chatDataList.add(chatDataObj);
 			}
 			chatDataresponseJson.put("chatList", chatDataList);
 			if(skipLevel == 0)
@@ -724,6 +727,7 @@ public class ChatService {
 	public String getFriendsList(String collName, int friendsType, boolean isOnline) throws ParseException {
 		int status;
 		DBObject friendData, userData;
+		DBObject friendDataObj = new BasicDBObject();
 		List <DBObject> frndsList = new ArrayList <DBObject>();
 		JSONObject frndsDataJson = new JSONObject();
 		String userId;
@@ -736,7 +740,9 @@ public class ChatService {
 		{
 			//Query
 			friendData = frndsDocCursor.next();
-			userId = (String) friendData.get("_id");
+			userId = (String) friendData.get("friend_Id");
+			status = (Integer) friendData.get("status");
+			friendDataObj.put("status", status);
 			if(isOnline)
 			{
 				ArrayList<String> userList = new ArrayList<String>();
@@ -745,12 +751,11 @@ public class ChatService {
 			}
 			if(isOnlineMember || !isOnline)
 			{
-				status = (Integer) friendData.get("status");
 				if(status == friendsType)
 				{
 					userData = getUserData(userId);
-					friendData.putAll(userData);
-					frndsList.add(friendData);
+					friendDataObj.putAll(userData);
+					frndsList.add(friendDataObj);
 				}
 			}
 			isOnlineMember = false;
@@ -827,7 +832,7 @@ public class ChatService {
 
 		if(!userId.equals(profileId))
 		{
-			objRef.append("_id", profileId);
+			objRef.append("friend_Id", profileId);
 			DBCollection frndsCollName = database.getCollection(userId+"_FriendsList");
 			DBObject frndsData = frndsCollName.findOne(objRef);
 			if(frndsData != null)
@@ -1007,7 +1012,7 @@ public class ChatService {
 		String photoDateAndTime = photodDateFormat.format(date);
 
 		DBObject photoObj = new BasicDBObject();
-		photoObj.put("Photo_Id", photoId);
+		photoObj.put("photo_Id", photoId);
 		photoObj.put("desc", desc);
 		photoObj.put("imgUrl", imgUrl);
 		photoObj.put("dateAndTime", photoDateAndTime);
@@ -1028,7 +1033,7 @@ public class ChatService {
 		while(frndsDataCursor.hasNext())
 		{
 			objDoc = frndsDataCursor.next();
-			frndId = (String) objDoc.get("_id");
+			frndId = (String) objDoc.get("friend_Id");
 
 			DBCollection frndCollName = database.getCollection(frndId + "_HomeFeeds");
 			frndCollName.insert(homeFeedObj);
@@ -1040,6 +1045,7 @@ public class ChatService {
 		List photosList = new ArrayList();
 		JSONObject photoData = new JSONObject();
 		DBObject photo;
+		DBObject photoObj = new BasicDBObject();
 		String photoId;
 		long likeCount, cmntsCount;
 		boolean isLiked;
@@ -1052,18 +1058,23 @@ public class ChatService {
 		{
 			photo = resultSet.next();
 
-			photoId = (String) photo.get("_id");
+			photoId = (String) photo.get("photo_Id");
 			likeCount = findCollectionCount(photoId + "_LikedList");
 			cmntsCount = findCollectionCount(photoId + "_CommentList");
 			isLiked = dataExist(userId, photoId + "_LikedList");
+			
+			photoObj.put("photo_Id", photoId);
 			if(isLiked)
 			{
-				photo.put("isLiked", true);
+				photoObj.put("isLiked", true);
 			}
-			photo.put("dateAndTime", getDateFormat((String)photo.get("dateAndTime"), clientTZ));
-			photo.put("likeCount", likeCount);
-			photo.put("cmntsCount", cmntsCount);
-			photosList.add(photo);
+			photoObj.put("dateAndTime", getDateFormat((String)photo.get("dateAndTime"), clientTZ));
+			photoObj.put("likeCount", likeCount);
+			photoObj.put("cmntsCount", cmntsCount);
+			photoObj.put("desc", photo.get("desc"));
+			photoObj.put("imgUrl", photo.get("imgUrl"));
+			
+			photosList.add(photoObj);
 		}
 		photoData.put("photosList", photosList);
 
@@ -1193,7 +1204,7 @@ public class ChatService {
 		BasicDBObject andQuery = new BasicDBObject();
 		String email = null;
 		
-		objRefList.add(new BasicDBObject("_id", userId));
+		objRefList.add(new BasicDBObject("user_Id", userId));
 		objRefList.add(new BasicDBObject("password", password));
 		andQuery.put("$and", objRefList);
 		DBObject pswExist = userCollName.findOne(andQuery);
@@ -1272,7 +1283,7 @@ public class ChatService {
 			BasicDBObject andQuery = new BasicDBObject();
 			
 			
-			objRefList.add(new BasicDBObject("_id", userId));
+			objRefList.add(new BasicDBObject("user_Id", userId));
 			andQuery.put("$and", objRefList);
 			DBObject emailData = userCollName.findOne(andQuery);
 			

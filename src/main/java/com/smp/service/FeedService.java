@@ -91,7 +91,7 @@ public class FeedService {
 		while(frndsDataCursor.hasNext())
 		{
 			objDoc = frndsDataCursor.next();
-			frndId = (String) objDoc.get("_id");
+			frndId = (String) objDoc.get("friend_Id");
 			DBCollection homeFeedColl = database.getCollection(frndId + "_HomeFeeds");
 			
 			//get yesterday date
@@ -323,9 +323,11 @@ public class FeedService {
 		
 		userFeedId = (String) homeFeedObj.get("userFeedId");
 		commId = (String) homeFeedObj.get("commId");
+		feedId = (String) homeFeedObj.get("feedId");
 		if(type.equals("user"))
 		{
 			feedColl = userFeedId + "_Feed";
+			feedIdRef.append("photo_Id", feedId);
 		}
 		/*else if(type.equals("community"))
 		{
@@ -335,11 +337,9 @@ public class FeedService {
 		else if(type.equals("photo"))
 		{
 			feedColl = userFeedId + "_Photos";
+			feedIdRef.append("feedId", feedId);
 		}
-		
-		feedId = (String) homeFeedObj.get("_id");
 		userFeedsColl = database.getCollection(feedColl);
-		feedIdRef.append("_id", feedId);
 		userFeedData = userFeedsColl.findOne(feedIdRef);
 		
 		likeCount = findCollectionCount(feedId + "_LikedList");
@@ -425,7 +425,7 @@ public class FeedService {
 			userDataResultSet = chatService.getUserData(userId);
 			
 			userFeedsColl = database.getCollection(userFeedId + "_Feed");
-			feedIdRef.append("_id", feedId);
+			feedIdRef.append("feedId", feedId);
 			userFeedData = userFeedsColl.findOne(feedIdRef);
 			
 			/*if(userFeedData == null && commId != null) // for community
@@ -440,7 +440,7 @@ public class FeedService {
 				commFeedsColl = database.getCollection(userFeedId + "_Photos");
 				userFeedData = commFeedsColl.findOne(feedIdRef);
 			}
-			userFeedId = (String) userFeedDataResultSet.get("_id");
+			userFeedId = (String) userFeedDataResultSet.get("user_Id");
 			userFeedUsername = (String) userFeedDataResultSet.get("username");
 			userFeedUserImg = (String) userFeedDataResultSet.get("imgPath");
 			
@@ -456,7 +456,7 @@ public class FeedService {
 			userFeedData.put("likeCount", likeCount);
 			userFeedData.put("cmntsCount", cmntsCount);
 			
-			userId = (String) userDataResultSet.get("_id");
+			userId = (String) userDataResultSet.get("user_Id");
 			userName = (String) userDataResultSet.get("username");
 			userImg = (String) userDataResultSet.get("imgPath");
 			
@@ -629,7 +629,7 @@ public class FeedService {
 		while(resultSet.hasNext())
 		{
 			feed = resultSet.next();
-			feedId = (String) feed.get("_id");
+			feedId = (String) feed.get("feedId");
 			likeCount = chatService.findCollectionCount(feedId + "_LikedList");
 			cmntsCount = chatService.findCollectionCount(feedId + "_CommentList");
 			

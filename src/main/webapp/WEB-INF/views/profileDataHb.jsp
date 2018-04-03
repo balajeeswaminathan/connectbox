@@ -55,7 +55,7 @@ Handlebars.registerHelper('compare', function(lvalue, rvalue, options) {
 				<div class="profile-edit-saveBtn"></div>
 			{{/if}}
 			<div class="connUs-profileData-img-cont">
-				<img class="connUs-profileData-img" src="{{#if data.profileDataList.profileImgUrl}}{{data.profileDataList.profileImgUrl}}{{else}}//localhost/chatClient/img/photo.jpg{{/if}}"/>
+				<img class="connUs-profileData-img" src="{{#if data.profileDataList.profileImgUrl}}{{data.profileDataList.profileImgUrl}}{{else}}<c:url value="/resources/img/photo.jpg" />{{/if}}"/>
 				{{#if data.profileDataList.myProfile}}
     				<div class="profileImg-edit-btn"></div>
                 {{/if}}

@@ -13,7 +13,7 @@
                     <div class="connUs-frnds-online"></div>
                     <img class="connUs-frnds-img" src="{{#if imgPath}}{{imgPath}}{{else}}//localhost/chatClient/img/photo.jpg{{/if}}"/>
               </div>
-              <div class="connUs-frnds-name">{{friendsName}}</div>
+              <div class="connUs-frnds-name">{{userName}}</div>
 			  <div class="connUs-frnds-gender">{{gender}}</div>
            </div>
         {{/each}}

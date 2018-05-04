@@ -102,32 +102,24 @@ public class ChatService {
 		DBCollection userCollName = database.getCollection(COLLECTION_USER);
 		
 		BasicDBObject andQuery = new BasicDBObject();
-		BasicDBObject andQuery1 = new BasicDBObject();
 		List<BasicDBObject> objRefList = new ArrayList<BasicDBObject>();
-		List<BasicDBObject> objRefList1 = new ArrayList<BasicDBObject>();
 		JSONObject response = new JSONObject();
 		
 		//Query
-		objRefList1.add(new BasicDBObject("email", email));
-		objRefList1.add(new BasicDBObject("password", password));
-		objRefList1.add(new BasicDBObject("state", "active"));
-		andQuery1.put("$and", objRefList1);
-		DBObject userExistData1 = userCollName.findOne(andQuery1);
-		
 		objRefList.add(new BasicDBObject("email", email));
 		objRefList.add(new BasicDBObject("password", password));
 		andQuery.put("$and", objRefList);
 		DBObject userExistData = userCollName.findOne(andQuery);
 
-		if(userExistData1 == null && userExistData != null)
+		if(userExistData == null)
 		{
 			response.put("status", 1);
-			response.put("errorMessage","Your account is inactive now.Please check your to activate your account");
+			response.put("errorMessage", "Email or Password id Incorrect");
 		}
-		else if(userExistData == null)
+		else if(!userExistData.get("state").equals("active"))
 		{
 			response.put("status", 1);
-			response.put("errorMessage","Email or Password id Incorrect");
+			response.put("errorMessage", "Your account is inactive now. Kindly check your email to activate your account");
 		}
 		else
 		{
@@ -176,6 +168,8 @@ public class ChatService {
 		String curentTime = dateFormat.format(date);
 		String user_Id;
 		DBCollection userCollName;
+		JSONObject response = new JSONObject();
+		DBObject user = new BasicDBObject();
 		if(database.collectionExists(COLLECTION_USER))
 		{
 			userCollName = database.getCollection(COLLECTION_USER);
@@ -184,16 +178,14 @@ public class ChatService {
 		{
 			userCollName = database.createCollection(COLLECTION_USER, null);
 		}
-		DBObject user = new BasicDBObject();
 		
 		if(isEdit)
 		{
-			BasicDBObject userUpdatedData = new BasicDBObject();
-			DBCursor frndsDataCursor;
+			/*DBCursor frndsDataCursor;
 			String updatedDataKeys = "", updatedDataValues = "", frndId;
+			DBObject objDoc;*/
 			DBObject query = new BasicDBObject();
 			DBObject homeFeed = new BasicDBObject();
-			DBObject objDoc;
 			
 			user_Id = userId;
 			DateFormat feedDateFormat = new SimpleDateFormat("HH:mm, MMM dd, yyyy");
@@ -206,8 +198,8 @@ public class ChatService {
 			if(!userName.isEmpty())
 			{
 				user.put("username", userName);
-				updatedDataKeys += "name|||";
-				updatedDataValues += userName + "|||";
+				//updatedDataKeys += "name|||";
+				//updatedDataValues += userName + "|||";
 			}
 			if(!email.isEmpty())
 			{
@@ -220,8 +212,8 @@ public class ChatService {
 			if(!dob.isEmpty())
 			{
 				user.put("dob", dob);
-				updatedDataKeys += "Date Of Birth|||";
-				updatedDataValues += dob + "|||";
+				//updatedDataKeys += "Date Of Birth|||";
+				//updatedDataValues += dob + "|||";
 			}
 			if(!gender.isEmpty())
 			{
@@ -242,15 +234,14 @@ public class ChatService {
 			if(!profileImgUrl.isEmpty())
 			{
 				user.put("imgPath", profileImgUrl);
-				homeFeed.put("updatedDataKeys", "profile picture");
-				homeFeed.put("updatedDataValues", profileImgUrl);
+				//homeFeed.put("updatedDataKeys", "profile picture");
+				//homeFeed.put("updatedDataValues", profileImgUrl);
 			}
 			
-			userUpdatedData.append("$set", user);
 			query.put("user_Id", user_Id);
-			userCollName.update(query, userUpdatedData);
+			userCollName.update(query, user);
 			
-			if(!updatedDataKeys.isEmpty())
+			/*if(!updatedDataKeys.isEmpty())
 			{
 				homeFeed.put("updatedDataKeys", updatedDataKeys);
 			}
@@ -268,7 +259,7 @@ public class ChatService {
 				
 				DBCollection frndIdCollName = database.getCollection(frndId + "_HomeFeeds");
 				frndIdCollName.insert(homeFeed);
-			}
+			}*/
 		}
 		else
 		{
@@ -287,8 +278,12 @@ public class ChatService {
 			//Query
 			userCollName.insert(user);
 		}
+		
+		response.put("status", "0");
+    	response.put("sucessMessage", isEdit ? "User updated sucessfully" : "User registered sucessfully");
+    	response.put("user_Id", user_Id);
 
-		return user_Id;
+		return response.toString();
 	}
 
 	public void activateUser(String userId)
@@ -321,7 +316,7 @@ public class ChatService {
 		catch(Exception ex)
 		{
 			response.put("status", false);
-			response.put("errorMessage", "Your email is not registered with us !");
+			response.put("errorMessage", "Your email Id is not registered with us");
 		}
 		return response.toString();
 	}

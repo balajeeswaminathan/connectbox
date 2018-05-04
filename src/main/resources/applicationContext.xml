@@ -20,7 +20,7 @@ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
         </property>  
     </bean>
 
-    <bean id="mailMail" class="com.smp.service.Mail">  
+    <bean id="mail" class="com.smp.service.Mail">  
         <property name="mailSender" ref="mailSender" />  
     </bean>    
 </beans> 

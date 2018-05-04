@@ -13,14 +13,13 @@ public class Mail{
         this.mailSender = mailSender;  
     }  
 
-    public void sendMail(String from, String to, String subject, String messageDom) throws MessagingException {  
+    public void sendMail(String to, String subject, String messageDom) throws MessagingException {  
     	 MimeMessage message = mailSender.createMimeMessage(); 
     	 MimeMessageHelper helper = new MimeMessageHelper(message, true);  
-    	 helper.setFrom(from);
     	 helper.setTo(to);
     	 helper.setSubject(subject);
 
-    	helper.setText(messageDom,true);
-    	mailSender.send(message);
+    	 helper.setText(messageDom,true);
+    	 mailSender.send(message);
     }  
 }  

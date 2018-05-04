@@ -30,10 +30,6 @@
     <bean id="multipartResolver"
         class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
     </bean>
-    
-    <bean id="chatService"
-        class="com.smp.service.ChatService">
-    </bean>
         
     <bean id="jspViewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver"

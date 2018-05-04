@@ -317,6 +317,7 @@ public class FeedService {
 		DBCollection userFeedsColl;
 		BasicDBObject feedIdRef = new BasicDBObject();
 		DBObject userFeedData;
+		DBObject userFeedDataObj = new BasicDBObject();
 		//JSONObject commJsonObj = new JSONObject();
 		long likeCount, cmntsCount;
 		boolean isLiked;
@@ -327,7 +328,7 @@ public class FeedService {
 		if(type.equals("user"))
 		{
 			feedColl = userFeedId + "_Feed";
-			feedIdRef.append("photo_Id", feedId);
+			feedIdRef.append("feedId", feedId);
 		}
 		/*else if(type.equals("community"))
 		{
@@ -337,7 +338,7 @@ public class FeedService {
 		else if(type.equals("photo"))
 		{
 			feedColl = userFeedId + "_Photos";
-			feedIdRef.append("feedId", feedId);
+			feedIdRef.append("photo_Id", feedId);
 		}
 		userFeedsColl = database.getCollection(feedColl);
 		userFeedData = userFeedsColl.findOne(feedIdRef);
@@ -347,17 +348,23 @@ public class FeedService {
 		
 		isLiked = chatService.dataExist(userId, feedId + "_LikedList");
 		
-		userFeedData.put("dateAndTime", chatService.getDateFormat((String)userFeedData.get("dateAndTime"), clientTZ));
+		userFeedDataObj.put("photo_Id", userFeedData.get("photo_Id"));
+		userFeedDataObj.put("desc", userFeedData.get("desc"));
+		userFeedDataObj.put("imgUrl", userFeedData.get("imgUrl"));
+		userFeedDataObj.put("dateAndTime", userFeedData.get("dateAndTime"));
+		userFeedDataObj.put("userFeedId", userFeedData.get("userFeedId"));
+		
+		userFeedDataObj.put("dateAndTime", chatService.getDateFormat((String)userFeedData.get("dateAndTime"), clientTZ));
 		//userFeedData.putAll(commJsonObj);
-		userFeedData.put("likeCount", likeCount);
-		userFeedData.put("cmntsCount", cmntsCount);
+		userFeedDataObj.put("likeCount", likeCount);
+		userFeedDataObj.put("cmntsCount", cmntsCount);
 		if(isLiked)
 		{
-			userFeedData.put("isLiked", true);
+			userFeedDataObj.put("isLiked", true);
 		}
 
-		userFeedData.put("type", type);
-		return userFeedData;
+		userFeedDataObj.put("type", type);
+		return userFeedDataObj;
 	}
 	
 	public JSONObject getUsercreateOrUpdateCommOreProfileHomeFeeds(String commId, DBObject homeFeedObj, String type, String clientTZ) throws ParseException

@@ -7,19 +7,19 @@ var indexClass= {
 	init : function()
 	{
 		var _self = this;
-		_self.RegisterEvents();
+		_self.registerEvents();
 	},
 	
-    RegisterEvents : function()
+    registerEvents : function()
 	{
 		var _self = this;
 		
 		$(".connUs-login-Btn").off("click").on("click",function(){
-			_self.madeLoginAjaxCall();
+			_self.login();
 		});
 			
 		$(".connUs-signUp-Btn").off("click").on("click",function(){
-			_self.madeRegisterAjaxCall();
+			_self.register();
 		});
 			
 		$(".tab-group").off("click").on("click",function(e){
@@ -27,11 +27,11 @@ var indexClass= {
 		});
 		
 		$(".forgotPsw-btn").off("click").on("click",function(){
-			_self.showOrHideForgetPsw(true);
+			_self.showOrHideForgetPswTab(true);
 		});
 		
 		$(".cont-close-btn").off("click").on("click",function(){
-			_self.showOrHideForgetPsw(false);
+			_self.showOrHideForgetPswTab(false);
 		});
 
 		$(".sendEmail-btn").off("click").on("click",function(){
@@ -39,7 +39,7 @@ var indexClass= {
 		});
 		
 		$(".emailVerification-ok-Btn, .forgetPswSuccess-ok-Btn").off("click").on("click",function(){
-			_self.showOrHideForgetPsw(false);
+			_self.showOrHideForgetPswTab(false);
 		});
 		
 		$(".connUsform").addClass("login-form");
@@ -47,7 +47,7 @@ var indexClass= {
 		//print_country("connUs-country");
 	},
 	
-	madeLoginAjaxCall: function(){
+	login: function(){
 		var _self = this;
 		var email = $("#login-Email").val();
 		var password = $("#login-Password").val();
@@ -70,14 +70,12 @@ var indexClass= {
 				var obj = JSON.parse(response);
 				  if(obj.properties.data.status == 1)
 				   {
-					    alert(obj.properties.data.errorMessage);
+					  	utilClass.showError(".connUs-login-cont", "Email_or_psw", obj.properties.data.errorMessage, true);
 				   }
 				  else
 				   {
 					  var userId = obj.properties.data.user_Id;
-					  var userName = obj.properties.data.userName;
 					  utilClass.setCookie("userId", userId);
-					  //utilClass.setCookie("userName", userName);
 					  window.location.href = "../connectbox/home.jsp";
 				   }
 			};
@@ -86,20 +84,23 @@ var indexClass= {
 		}
 	   },
 	
-	madeRegisterAjaxCall : function(){
+	register : function(){
 		var _self = this;
 		var username = $("#signup-Firstname").val();
 		var email = $("#signup-Email").val();
 		var password = $("#signup-Password").val();
 		var dob = $("#signup-Dob").val();
 		var gender = $('input[name="gender"]:checked').val();
+		var city = $("#cityId").val();
+		var state = $("#stateId").val();
+		var country = $("#countryId").val();
 		
 		returnVal1 = utilClass.formValidation(username, ".connUs-signup-Cont", "Firstname", "signup");
 		returnVal2 = utilClass.formValidation(email, ".connUs-signup-Cont", "Email", "signup");
 		returnVal3 = utilClass.formValidation(password, ".connUs-signup-Cont", "Password", "signup");
 		returnVal4 = utilClass.formValidation(dob, ".connUs-signup-Cont", "Dob", "signup");
-		returnVal5 = _self.validateGender(gender, ".connUs-signup-Cont", ".connUs-gender-label");
-		returnVal6 = utilClass.validateStateAndCountry("#connUs-country", "#connUs-state");
+		returnVal5 = utilClass.validateStateAndCountry(city, state, country);
+		returnVal6 = _self.validateGender(gender, ".connUs-signup-Cont", ".connUs-gender-label");
 
 		if(returnVal1 && returnVal2 && returnVal3 && returnVal4 && returnVal5 && returnVal6)
 		{
@@ -111,9 +112,9 @@ var indexClass= {
 	        userData.email = email;
 	        userData.password = password;
 	        userData.dob = dob;
-	        userData.city = $("#cityId").val();
-	        userData.countryState = $("#stateId").val();
-	        userData.country = $("#countryId").val();
+	        userData.city = city
+	        userData.countryState = state
+	        userData.country = country
 	        userData.gender = gender;
 	        userData.imgUrl = "";
 	        
@@ -157,7 +158,7 @@ var indexClass= {
 		 	$("#connUs-errCont").remove();
 		 	$(".connUs-login-cont").children().removeClass("input-error");
 		 	$(".connUs-login-cont, .connUs-forgetPsw-Cont").removeAttr("style");
-		 	_self.showOrHideForgetPsw(false);
+		 	_self.showOrHideForgetPswTab(false);
 		 	$(".connUsform").removeClass("login-form");
 		 	$(".login").removeClass("active");
 		 }
@@ -165,7 +166,7 @@ var indexClass= {
 		 $this.addClass("active");
 	 },
 	 
-	 showOrHideForgetPsw : function(isShow)
+	 showOrHideForgetPswTab : function(isShow)
 	 {
 		 $(".connUsform").removeClass("login-form forgetPsw-form emailVerification-form forgetPswSuccess-form");
 		 $("#connUs-errCont").remove();
@@ -233,7 +234,7 @@ var indexClass= {
 		 var _self = this;
 		 if(gender)
 		 {
-			 $("#connUs--err").remove();
+			 $("#connUs-gender-err").remove();
 			 $(genderLabelDom).removeClass("gender-error");
 			 return true;
 		 }

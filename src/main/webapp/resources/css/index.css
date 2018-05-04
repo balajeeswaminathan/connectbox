@@ -4,13 +4,13 @@
     {
         width: 340px;
     }
-    .connUs-intro
-    {
-        width: 85%;
-    }
     .emailVerification-form .connUs-emailVerification-cont
     {
         height: 220px;
+    }
+    .connUs-grabApp-txt, .connUs-playstore-icon
+    {
+    	display: none;
     }
 }
 
@@ -18,8 +18,8 @@ body {
   font-family: 'Titillium Web', sans-serif;
   margin: 0px;
   color: #fff;
-  background: linear-gradient(90deg, #8668ad 0%, #55bbeb 100%);
-  background: -webkit-linear-gradient(90deg, #8668ad 0%, #55bbeb 100%);
+  background: linear-gradient(90deg, #8668ad 10%, #2196F3 100%);
+  background: -webkit-linear-gradient(90deg, #8668ad 10%, #2196F3 100%);
 }
 
 *, *:before, *:after {
@@ -77,8 +77,16 @@ body {
 
 .connUs-header-label{
     font-size: 32px;
-    width: 200px;
+    width: 170px;
     margin: auto;
+    font-family: Lily Script One;
+}
+
+.connUs-join-now{
+	width: 110px;
+    margin: auto;
+    margin-top: 30px;
+    font-size: 25px;
 }
 
 .connUsform {
@@ -110,14 +118,14 @@ body {
   width: 50%;
   text-align: center;
   cursor: pointer;
-  border-bottom: 0px solid #FFEB3B;
-  -webkit-transition: all .5s ease;
-  transition: all .5s ease;
+  border-bottom: 0px solid #ffe500;
+  -webkit-transition: color .5s ease;
+  transition: color .5s ease;
 }
 
 .tab-group .active {
-  border-bottom: 1px solid #FFEB3B;
-  color: #FFEB3B;
+  border-bottom: 1px solid #ffe500;
+  color: #ffe500;
 }
 
 .connUs-login-cont, .connUs-signup-Cont, .connUs-forgetPsw-Cont, .connUs-emailVerification-cont, .connUs-forgetPswSuccess-cont{
@@ -150,19 +158,18 @@ body {
 .cont-label{
   text-align: center;
   font-size: 25px;
-  color: #FFEB3B;
+  color: #ffe500;
 }
 
 .connUs-intro
 {
-    width: 60%;
+    width: 330px;
     margin: auto;
     margin-top: 30px;
 }
 
 .emailVerification-fun-label{
 	text-align: center;
-    color: #FF5722;
     font-size: 25px;
     font-family: cursive;
     margin-bottom: 25px;
@@ -170,16 +177,16 @@ body {
 
 .emailVerification-content, .forgetPswSuccess-content{
 	text-align: center;
-    color: #616161;
     font-size: 13px;
 	margin-bottom: 20px;
 }
 
 .cont-close-btn{
 	float: right;
-    margin-bottom: 15px;
-    color: #828282;
-    font-size: 13px;
+	background-image: url("../img/new/close-icon.png");
+    width: 25px;
+    height: 25px;
+    background-size: 25px;
 }
 
 .connUs-radio-Cont{
@@ -220,7 +227,7 @@ input{
 
 input:focus{
   outline: 0;
-  border-color: #FFEB3B;
+  border-color: #ffe500;
 }
 
 button {
@@ -246,7 +253,7 @@ button {
   margin-top: 20px;
   margin-bottom: 20px;
   font-size: 14px;
-  color: #FFEB3B;
+  color: #ffe500;
 }
 
 .sendEmail-btn{
@@ -254,8 +261,11 @@ button {
 }
 
 #connUs-errCont{
-	color: #FFEB3B;
     font-size: 13px;
+}
+
+.connUs-err{
+	padding-bottom: 5px;
 }
 
 .input-error{
@@ -273,12 +283,12 @@ button {
 .connUs-login-Btn, .connUs-signUp-Btn{
 	width: 50px;
     height: 50px;
-    background-image: url(../img/canva-arrow-MAB5nccL-pw.png);
+    background-image: url("../img/new/left-arrow.png");
     background-size: 50px;
     margin: 0px auto;
 }
 
-select#countryId, select#stateId, select#cityId{
+#countryId, #stateId, #cityId{
     width: 100%;
     padding: 5px;
     margin-top: 10px;
@@ -290,12 +300,38 @@ select#countryId, select#stateId, select#cityId{
     color: #fff;
     -webkit-appearance: none;
     background-color: transparent;
-    background-image: url(../img/down-arrow.png);
+    background-image: url("../img/new/down-arrow.png");
     background-size: 22px;
     background-repeat: no-repeat;
     background-position: 100%;
+    outline: none;
 }
 
-#connUs-country option, #connUs-state option{
-    color: #828282;
+#countryId option, #stateId option, #cityId option{
+	background-color: #6975c1;
+}
+
+#countryId.input-select-error, #stateId.input-select-error, #cityId.input-select-error{
+	border: 1px solid #ff3d00;
+}
+
+.connUs-grabApp-txt{
+	display: none;
+	text-align: center;
+    margin-bottom: 20px;
+}
+
+.connUs-playstore-icon{
+	display: none;
+	background-image: url("../img/new/play-store.png");
+    width: 150px;
+    height: 50px;
+    background-size: 150px;
+    background-position: 150px;
+    margin: 20px auto;
+}
+
+.connUs-copyright{
+    text-align: center;
+    margin-bottom: 20px;
 }

@@ -104,19 +104,42 @@ var utilClass = {
 		 }
 	 },
 	 
-	 validateStateAndCountry : function(stateId, countryId)
+	 validateStateAndCountry : function(city, state, country)
 	 {
 	     var _self = this;
 	     var isValid = true;
-	     if($(countryId).val() == "")
+	     if(country == "")
          {
              _self.showError(".connUs-signup-Cont", "country", "Select your country", true);
              isValid = false;
+             $("#countryId").addClass("input-select-error");
          }
-	     if($(stateId).val() == "")
+	     else
+	     {
+	    	 $("#countryId").removeClass("input-select-error");
+	    	 $("#connUs-country-err").remove();
+	     }
+	     if(state == "")
 	     {
 	         _self.showError(".connUs-signup-Cont", "state", "Select your state", true);
 	         isValid = false;
+	         $("#stateId").addClass("input-select-error");
+	     }
+	     else
+	     {
+	    	 $("#stateId").removeClass("input-select-error");
+	    	 $("#connUs-state-err").remove();
+	     }
+	     if(city == "")
+	     {
+	         _self.showError(".connUs-signup-Cont", "city", "Select your city", true);
+	         isValid = false;
+	         $("#cityId").addClass("input-select-error");
+	     }
+	     else
+	     {
+	    	 $("#cityId").removeClass("input-select-error");
+	    	 $("#connUs-city-err").remove();
 	     }
 	     return isValid;
 	 },

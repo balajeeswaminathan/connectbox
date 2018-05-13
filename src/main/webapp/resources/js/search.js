@@ -69,6 +69,7 @@ var searchClass = {
 		{
 			$("body").removeClass("connUs-searchDropBoxActive");
 			utilClass.hideMask();
+			$(".connUs-search-wrapper").remove();
 		}
 	},
 	
@@ -77,5 +78,6 @@ var searchClass = {
 		utilClass.hideMask();
 		$(".connUs-search-txt").val("");
 	    $("body").removeClass("connUs-searchDropBoxActive");
+	    $(".connUs-search-wrapper").remove();
 	}
 };

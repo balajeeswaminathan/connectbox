@@ -16,7 +16,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
     <script src="<c:url value="/resources/js/Utils/utils.js" />"></script>
-    <script src="<c:url value="/resources/js/headerAndMenu.js" />"></script>
+    <script src="<c:url value="/resources/js/menu.js" />"></script>
     <script src="<c:url value="/resources/js/chat.js" />"></script>
     <script src="<c:url value="/resources/js/feed.js" />"></script>
     <script src="<c:url value="/resources/js/communities.js" />"></script>

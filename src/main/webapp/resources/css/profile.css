@@ -6,6 +6,18 @@
 	}
 }
 
+.connUs-myProfile .profileImg-edit-btn{
+    position: relative;
+    width: 30px;
+    height: 30px;
+    margin-top: -25px;
+    margin-left: 80px;
+    background-image: url("../img/editProfile_pic.png");
+    background-size: 30px 30px;
+    border-radius: 15px;
+    border: 1px solid #616161;
+}
+
 .profile-active .connUs-profileData-wrapper, .profile-active .connUs-feedList-wrapper, .friends-active .connUs-friendsListAll-wrapper, .communities-active .connUs-comm-wrapper, .img-crop-active .upload-wrapper, .img-crop-active .upload-crop-cont{
 	display: block;
 }

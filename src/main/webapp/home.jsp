@@ -6,8 +6,9 @@
 
     <link href="<c:url value="/resources/css/unite-gallery.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/header.css" />" rel="stylesheet">
-    <link href="<c:url value="/resources/css/chat.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/menu.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/search.css" />" rel="stylesheet">
+    <link href="<c:url value="/resources/css/chat.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/home.css" />" rel="stylesheet">
     <link href="<c:url value="/resources/css/feed.css" />" rel="stylesheet">
     
@@ -16,7 +17,8 @@
     <script src="<c:url value="/resources/js/plugins/unitegallery.js" />"></script>
     <script src="<c:url value="/resources/js/plugins/ug-theme-tiles.js" />"></script>
     <script src="<c:url value="/resources/js/Utils/utils.js" />"></script>
-    <script src="<c:url value="/resources/js/headerAndMenu.js" />"></script>
+    <script src="<c:url value="/resources/js/menu.js" />"></script>
+    <script src="<c:url value="/resources/js/search.js" />"></script>
     <script src="<c:url value="/resources/js/chat.js" />"></script>
     <script src="<c:url value="/resources/js/home.js" />"></script>
     <script src="<c:url value="/resources/js/feed.js" />"></script>

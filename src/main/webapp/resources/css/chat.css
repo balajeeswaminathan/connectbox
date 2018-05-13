@@ -63,22 +63,6 @@
     text-align: center;
 }
 
-.connUs-header-chatCount-cont{
-    display: none;
-    background-color: #FFC107;
-    padding: 5px;
-    width: 10px;
-    float: left;
-    border-radius: 10px;
-    font-size: 10px;
-    color: #616161;
-    text-align: center;
-}
-
-.showCount{
-	display: block;
-}
-
 .connUs-chatNotification-wrapper{
 	width: 250px;
 	overflow: hidden;

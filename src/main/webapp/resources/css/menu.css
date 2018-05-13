@@ -1,150 +1,141 @@
-.pancake-cont
-{
-	display: none;
-	width: 30px;
-    height: 30px;
-    float: left;
-    color: #fff;
-    line-height: 1;
-    margin-top: -4px;
-}
-.pancake-top, .pancake-bottom
-{
-	transform: scale(1) rotate(0deg);
-    -ms-transform: transform 800ms ease;
-	-webkit-transition: transform 800ms ease;
-	transition: transform 800ms ease;
-	position: absolute;
-}
-.pancake-top
-{
-	top: 5px;
-}
-.pancake-bottom
-{
-	top: 15px;
-}
-
-.pancake-active .pancake-top
-{
-	-webkit-transform: scale(1) rotate(40deg);
-	left: 10px;
-	top: 8px;
-}
-.pancake-active .pancake-bottom
-{
-	top: 8px;
-	-webkit-transform: scale(1) rotate(-40deg);
-	left: 0px;
-}
-
-.connUs-menu-cont{
-	float: left;
+.connUs-menu-outerCont{
 	position: fixed;
     z-index: 999;
-    width: 25%;
-}
-
-.menu-cont{
-	color: #828282;
-	box-sizing: border-box;
-	width: 200px;
-    margin: 0px auto;
-    font-size: 21px;
+    width: 20%;
 }
 
 .connUs-basicInfo{
-	padding-left: 15px;
+	width: 150px;
+    margin: 10px auto;
+}
+
+.connUs-profile-img{
+	width: 120px;
+    height: 120px;
+    margin-left: 15px;
 }
 
 .connUs-profile-name{
-	color: #009688;
-	font-size: 23px;
-	margin-left: 17px;
+    color: #52bdff;
+    font-size: 23px;
+    text-align: center;
     margin-top: 10px;
+    word-wrap: break-word;
 }
 
-.menu-innerCont{
-	margin-top: 10px;
+.connUs-menu-innerCont{
+	color: #828282;
+    width: 155px;
+    font-size: 20px;
+    margin: 30px auto;
+}
+
+.connUs-menu-icon{
+	background-image: url(../img/new/menu_sprites.png);
+    width: 40px;
+    height: 40px;
+    background-size: 150px 100px;
+    float: left;
+    margin-left: 12px;
+}
+
+.connUs-home-icon{
+	background-position: -5px -7px;	
+}
+
+.connUs-profile-icon{
+	background-position: -55px -7px;	
+}
+
+.connUs-friends-icon{
+	background-position: -55px -55px;	
+}
+
+.connUs-photos-icon{
+	background-position: -103px -3px;	
+}
+
+.connUs-mgs-icon{
+	background-position: -105px -54px;
+}
+
+.connUs-menu-cont{
+	height: 50px;
+	margin-left: -12px;
 }
 
 .connUs-menu{
-	padding-left: 15px;
 	line-height: 40px;
 }
 
 .connUs-menu:hover{
-    background-color: #cecece;
-}
-
-.connUs-menu.active{
-	color: #009688;
-}
-
-.connUs-profile-img{
-	width: 100px;
-    height: 100px;
-    background-size: 100px 100px;
-    border-radius: 55px;
-}
-
-.connUs-myProfile .profileImg-edit-btn{
-    position: relative;
-    width: 30px;
-    height: 30px;
-    margin-top: -25px;
-    margin-left: 80px;
-    background-image: url("../img/editProfile_pic.png");
-    background-size: 30px 30px;
-    border-radius: 15px;
-    border: 1px solid #616161;
+    background-color: #fff;
+    border-radius: 20px;
 }
 
 @media screen and (max-width: 767px)
 {
-	.connUs-menu-cont
+	.connUs-menu-outerCont
 	{
 		overflow: hidden;
 		height: 0px;
-		top: 50px;
+		top: 0px;
 		-ms-transform: height 800ms ease;
 		-webkit-transition: height 800ms ease;
 		transition: height 800ms ease;
-		background-color: #fff;
-		color: #616161;
+		background-color: #9e9e9e;
 		width: 100%;
     	position: absolute;
     }
 	
-	.menu-cont{
-		padding-left: 20px;
-		padding-top: 10px;
+	.connUs-menu-close{
+	    background-image: url(../img/new/close.png);
+	    width: 40px;
+	    height: 40px;
+	    float: left;
+	    margin: 10px;
+	    background-size: 40px;
+	}
+	
+	.menu-active .connUs-menu-outerCont{
+		height: 100%;
 	}
 	
 	.connUs-basicInfo{
-		width: 40%;
-    	float: left;
+	    width: 250px;
+	    margin: 0px auto;
+	    margin-top: 80px;
 	}
 	
-	.menu-innerCont
-	{
-		float: left;
-		width: 50%;
+	.connUs-profile-img {
+	    width: 150px;
+	    height: 150px;
+	    margin-left: 50px;
 	}
 	
-	.pancake-active .connUs-menu-cont
-	{
-		height: 150px;
+	.connUs-profile-name{
+	    color: #ffe500;
+		font-size: 35px;
 	}
 	
-	.pancake-cont
-	{
-		display: block;
+	.connUs-menu-innerCont {
+		color: #fff;
+	    width: 180px;
+	    font-size: 28px;
 	}
 	
-	#profileImg-edit
-	{
-		top: 80px;
-		left: 90px;
+	.connUs-menu-cont{
+		height: 60px;
+	}
+	
+	.connUs-menu-icon{
+		margin-left: 5px;
+	}
+}
+
+@media screen and (max-width: 767px) and (orientation : landscape)
+{
+	.menu-active .connUs-menu-outerCont{
+		height: 150%;
 	}
 }

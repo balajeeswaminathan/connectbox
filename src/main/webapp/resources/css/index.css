@@ -1,25 +1,9 @@
-@media screen and (max-width: 767px)
-{
-    .connUsform
-    {
-        width: 340px;
-    }
-    .emailVerification-form .connUs-emailVerification-cont
-    {
-        height: 220px;
-    }
-    .connUs-grabApp-txt, .connUs-playstore-icon
-    {
-    	display: none;
-    }
-}
-
 body {
   font-family: 'Titillium Web', sans-serif;
   margin: 0px;
   color: #fff;
-  background: linear-gradient(90deg, #8668ad 10%, #2196F3 100%);
-  background: -webkit-linear-gradient(90deg, #8668ad 10%, #2196F3 100%);
+  background: linear-gradient(90deg, #8668ad 10%, #03a9f4 100%);
+  background: -webkit-linear-gradient(90deg, #8668ad 10%, #03a9f4 100%);
 }
 
 *, *:before, *:after {
@@ -183,7 +167,7 @@ body {
 
 .cont-close-btn{
 	float: right;
-	background-image: url("../img/new/close-icon.png");
+	background-image: url("../img/new/close.png");
     width: 25px;
     height: 25px;
     background-size: 25px;
@@ -334,4 +318,20 @@ button {
 .connUs-copyright{
     text-align: center;
     margin-bottom: 20px;
+}
+
+@media screen and (max-width: 767px)
+{
+    .connUsform
+    {
+        width: 340px;
+    }
+    .emailVerification-form .connUs-emailVerification-cont
+    {
+        height: 220px;
+    }
+    .connUs-grabApp-txt, .connUs-playstore-icon
+    {
+    	display: none;
+    }
 }

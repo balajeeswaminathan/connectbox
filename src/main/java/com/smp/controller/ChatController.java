@@ -87,6 +87,7 @@ public class ChatController {
         	return createJsonObject(JSON.parse(response));
     }
 	
+	//forgetpsw
 	@RequestMapping(value = "/forgetPsw", method = RequestMethod.POST)
 	@ResponseBody
 	public String forgetPsw(@RequestParam String email){
@@ -94,6 +95,7 @@ public class ChatController {
 		return createJsonObject(JSON.parse(response));
 	}
 	
+	//sendmail
 	@RequestMapping(value = "/sendMail", method = RequestMethod.POST)
 	@ResponseBody
 	public void sendMail(@RequestParam String email, @RequestParam String mailSubject, @RequestParam String mailDom) throws MessagingException{
@@ -167,12 +169,12 @@ public class ChatController {
 		return createJsonObject(JSON.parse(getChatData));
 	}
 	
-	//Home
-	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	//userBasicInfo
+	@RequestMapping(value = "/userBasicInfo", method = RequestMethod.POST)
 	@ResponseBody
 	public String homeCall(@RequestParam String userId)
 	{
-		String response = chatService.homeCall(userId);
+		String response = chatService.getUserBasicInfo(userId);
 		
 		return createJsonObject(JSON.parse(response));
 	}

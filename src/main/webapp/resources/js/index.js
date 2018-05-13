@@ -148,6 +148,7 @@ var indexClass= {
 		 {
 		 	$("#connUs-errCont").remove();
 		 	$(".connUs-signup-cont").children().removeClass("input-error");
+		 	$(".connUs-signup-cont").children().removeClass("input-select-error");
 		 	$(".connUs-signup-cont").removeAttr("style");
 		 	$(".connUs-gender-label").removeClass("gender-error");
 		 	$(".connUsform").removeClass("register-form emailVerification-form");

@@ -150,7 +150,7 @@ public class ChatService {
 	}
 	
 	//Home call
-	public String homeCall(String user_Id) {
+	public String getUserBasicInfo(String user_Id) {
 		JSONObject response = new JSONObject();
 		DBObject userDbObj = getUserData(user_Id);
 		

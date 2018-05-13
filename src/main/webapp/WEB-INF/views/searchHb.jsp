@@ -1,38 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head>
-        <script src="<c:url value="/resources/js/search.js" />"></script>
-    </head>
 <body>
 <script id="searchList-hb-template" type="text/x-handlebars-template">
     <div class="connUs-search-wrapper">
         {{#if data.userSearchList}}
-		     <div class="people-head">People</div>
              {{#each data.userSearchList}}
                 <div class="connUs-searchList-cont" userId="{{userId}}">
-                    <img class="connUs-search-img" src="{{#if userImgUrl}}{{userImgUrl}}{{else}}//localhost/chatClient/img/photo.jpg{{/if}}"></img>
-					<div class="userData-cont">
-                    	<div class="connUs-search-userName">{{userName}}</div>
-						<div class="connUs-search-gender">{{gender}}</div>
-					</div>
+                    <img class="connUs-search-img" src="{{#if userImgUrl}}{{userImgUrl}}{{else}}data:image/png;base64,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{{/if}}"></img>
+                    <div class="connUs-search-userName">{{userName}}</div>
                  </div>
              {{/each}}
         {{/if}}
-		{{#if data.topicSearchList}}
-		     <div class="topic-head">Topics</div>
-             {{#each data.topicSearchList}}
-                <div class="connUs-searchList-cont" topicId="{{topicId}}">
-                    <img class="connUs-search-img" src="{{#if topicImgUrl}}{{topicImgUrl}}{{else}}//localhost/chatClient/img/photo.jpg{{/if}}"></img>
-                    <div class="connUs-search-topicName">{{topicName}}</div>
-                 </div>
-             {{/each}}
-        {{/if}}
+
 		{{#if data.errorMessage}}
-			<div class="errorMsg">{{data.errorMessage}}</div>
+			<div class="errorMsg">No result found</div>
 		{{/if}}
     </div>
 </script>
 </body>
-</html>

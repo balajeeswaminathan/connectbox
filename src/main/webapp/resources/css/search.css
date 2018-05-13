@@ -1,0 +1,45 @@
+.connUs-search-wrapper{
+	width: 350px;
+    background-color: #fff;
+    position: absolute;
+    box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+    margin-top: 10px;
+    z-index: 999;
+    display: none;
+}
+
+.connUs-searchDropBoxActive .connUs-search-wrapper{
+	display: block;
+}
+
+.connUs-searchList-cont{
+	overflow: hidden;
+    padding: 5px;
+}
+
+.connUs-search-img{
+	width: 60px;
+    height: 60px;
+    float: left;
+}
+
+.connUs-search-userName{
+	float: left;
+    margin: 18px 10px;
+    color: #52bdff;
+    font-size: 18px;
+}
+
+.errorMsg{
+	color: #828282;
+    padding: 10px;
+    text-align: center;
+}
+
+@media screen and (max-width: 767px)
+{
+	.connUs-search-wrapper{
+		width: 100%;
+    	margin: 0px;
+	}
+}	

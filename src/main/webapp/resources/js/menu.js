@@ -1,15 +1,15 @@
 $( document ).ready(function() {
 	userId = utilClass.getCookie("userId");
-	headerAndMenuClass.init();
+	menuClass.init();
 });
 
 
-var headerAndMenuClass = {
+var menuClass = {
 	
 	init : function()
 	{
 		var _self = this;
-		_self.userData();
+		_self.getuserData();
 		_self.RegisterEvents();
 	},
 	
@@ -21,19 +21,19 @@ var headerAndMenuClass = {
 			_self.menuNavigation(events);
 		});
 
-		$(".pancake-cont, .connUs-Mask").off("click").on("click",function(){
-			_self.openPancake();
+		$(".menu-icon, .connUs-menu-close").off("click").on("click",function(){
+			_self.openMenu();
 		});
 	},
 	
-	userData : function()
+	getuserData : function()
     {
 		var userId = utilClass.getCookie("userId");
 	    $(".connUs-profile-name").attr("userId",userId);
 	   
 	   var config = {};
-		config.callType = "home"
-		config.type = "get";
+		config.callType = "userBasicInfo"
+		config.type = "post";
 		config.data= ({
 			"userId" : userId
 		});
@@ -49,29 +49,6 @@ var headerAndMenuClass = {
 			{
 				$(".connUs-profile-img").attr("src", img);
 			}
-			
-			setTimeout(function(){
-				if($("body").hasClass("connUs-myProfile"))
-				{
-					var groupId = utilClass.getQueryParam("groupId");
-					if(!groupId)
-					{
-						$($(".connUs-menu")[0]).addClass("active");
-					}
-					if(groupId == "members")
-					{
-						$($(".connUs-menu")[1]).addClass("active");
-					}
-					else if(groupId == "photos")
-					{
-						$($(".connUs-menu")[2]).addClass("active");
-					}
-					else if(groupId == "communities")
-                    {
-                        $($(".connUs-menu")[4]).addClass("active");
-                    }
-				}
-			},400);
 		};
 		
 		utilClass.makeAjaxCall(config, homeCbk);
@@ -103,25 +80,20 @@ var headerAndMenuClass = {
 		{
 			myProfileUrl += "&groupId=topics";
 		}
-		else if(type == 4)
-        {
-            myProfileUrl += "&groupId=communities";
-        }
 		window.location.href = myProfileUrl;
 	},
 	
-	openPancake: function(){
-		var _self = this;
-		if(!$("body").hasClass("pancake-active"))
+	openMenu: function(){
+		if($("body").hasClass("menu-active"))
 		{
-			$("body").addClass("pancake-active");
-			utilClass.showMask("#000", 0.7);
-			_self.RegisterEvents();
+			utilClass.hideMask();
+			$("body").removeClass("menu-active");
 		}
 		else
 		{
-			$("body").removeClass("pancake-active");
-			utilClass.hideMask();
+			utilClass.showMask();
+			$("body").addClass("menu-active");
 		}
+		
 	}
 }

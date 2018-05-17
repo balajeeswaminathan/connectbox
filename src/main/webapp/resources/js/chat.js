@@ -17,6 +17,11 @@ var chatClass = {
 	{
 		var _self = this;
 		
+		$(".connUs-header-chat-icon").off("click").on("click",function(){
+			_self.showdropDownBox();
+			_self.madeChatListCall();
+		});
+		
 		_self.getChatNotification();
 	},
 
@@ -45,16 +50,10 @@ var chatClass = {
 				{
 					$(".connUs-header-chatCount-cont").removeClass("showCount");
 				}
-				
-				$(".connUs-header-chatLabel").off("click").on("click",function(){
-					_self.showdropDownBox();
-					_self.madeChatListCall();
-				});
-				
 			};
 			
 			utilClass.makeAjaxCall(config, getChatNotificationCbk);
-		}, 1000);
+		}, 2000);
 	},
 	
 	showdropDownBox : function(){
@@ -77,7 +76,7 @@ var chatClass = {
 		
 		var config = {};
 		config.callType = "chatList"
-		config.type = "get";
+		config.type = "POST";
 		config.data= ({
 				"senderId" : userId,
 				"clientTZ" : utilClass.clientTZ
@@ -85,9 +84,9 @@ var chatClass = {
 		
 		var chatListCbk = function(response){
 			var obj = JSON.parse(response);
-			utilClass.callHandlebar("#chatsList-hb-template", ".connUs-chatNotification-wrapper", obj.properties);
+			utilClass.callHandlebar("#chatsList-hb-template", ".connUs-chatNotification-list", obj.properties);
 			
-			$(".connUs-chatsList-inner-cont").off("click").on("click",function(event){
+			$(".connUs-chatsList-cont").off("click").on("click",function(event){
 				_self.madeChatListDataCall(event);
 			});
 		};
@@ -116,7 +115,7 @@ var chatClass = {
 		$(".connUs-chatBox-wrapper").attr("receiverId", receiverId);
 		var config = {};
 		config.callType = "chatListData"
-		config.type = "get";
+		config.type = "POST";
 		config.data= ({
 				"senderId" : userId,
 				"receiverId" : receiverId,

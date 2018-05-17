@@ -1,46 +1,3 @@
-@media screen and (max-width: 767px) and (orientation : landscape) 
-{
-	.connUs-chatBox-outerWrapper
-	{
-		height: 87% !important;
-	}
-	.connUs-chatBox-wrapper
-	{
-		height: 83% !important;
-	}
-	.emoji-menu
-	{
-    	top: 50px;
-    	left: 17px;
-	}
-}
-@media screen and (max-width: 767px)
-{
-	.connUs-chatNotification-wrapper
-	{
-		height: 100%;
-		width: 100% !important;
-    	left: 0px !important;
-	}
-	.connUs-chatBox-outerWrapper
-	{
-		width: 100% !important;
-    	right: 0px !important;
-	}
-	.connUs-chatBox-outerWrapper
-	{
-		height: 93%;
-	}
-	.connUs-chatBox-wrapper
-	{
-		height: 90%;
-	}
-	.connUs-chatBox-wrapper, .connUs-chatsListMgs-inner-wrapper
-	{
-		height: 100% !important;
-	}
-}
-
 .connUs-header-chat-cont{
     width: 40px;
     top: 16px;
@@ -63,67 +20,61 @@
     text-align: center;
 }
 
-.connUs-chatNotification-wrapper{
-	width: 250px;
-	overflow: hidden;
+.connUs-chatNotification-list{
+	width: 350px;
     position: fixed;
-    top: 51px;
-    left: 101px;
+    top: 50px;
+    right: 15px;
     background-color: #fff;
     z-index: 9999;
     box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
     display: none;
 }
 
-.connUs-chatDropBoxActive .connUs-chatNotification-wrapper, .connUs-chatBoxActive .connUs-chatBox-outerWrapper, .chat-map-active #map-cont{
+.connUs-chatDropBoxActive .connUs-chatNotification-list, .connUs-chatBoxActive .connUs-chatBox-outerWrapper, .chat-map-active #connUs-chatBox-map-cont{
 	display: block;
 }
 
-.connUs-chatNotification-wrapper .connUs-chatsList-head, .chat-map-active .connUs-chatsListMgs-inner-wrapper, #map-cont{
+.connUs-chatNotification-list .connUs-chatsList-head, .chat-map-active .connUs-chatBox-inner-wrapper, #connUs-chatBox-map-cont{
 	display: none;
 }
 
-.chat-map-active .connUs-smiley, .chat-map-active .connUs-chatsListMgs-input{
+.chat-map-active .connUs-smiley, .chat-map-active .connUs-chatBox-input{
     pointer-events: none;
     opacity: 0.4;
 }
 
-.connUs-chatNotification-wrapper .connUs-chatsList-img{
-	width: 50px;
-    height: 50px;
-    background-size: 50px;
-    margin: 5px;
-    padding-bottom: 5px;
-}
-
-.connUs-chatNotification-wrapper .connUs-chatData-cont{
-	overflow: hidden;
-	height: 45px;
-	margin-top: 15px;
-	border-bottom: 0.5px solid #e4e4e4;
+.connUs-chatData-cont{
+	width: 75%;
+	margin: 15px 10px;
+    float: left;
 }
 
 .connUs-chatBox-outerWrapper{
 	display: none;
-	width: 320px;
-    overflow: hidden;
+    width: 350px;
     position: fixed;
     bottom: 0px;
     right: 23px;
     z-index: 99;
-    border: 1px solid #2196F3;
-    background-color: #fff;
+    border: 1px solid #52bdff;
 }
 
 .connUs-chatBox-head-cont{
     padding: 5px;
-	background-color: #2196F3;
+	background-color: #52bdff;
     overflow: hidden;	
 }
 
-.connUs-chatBox-head{
-    font-size: 15px;
-    margin-top: 6px;
+.connUs-chatBox-img{
+	width: 35px;
+    height: 35px;
+    float: left;
+}
+
+.connUs-chatBox-name{
+    font-size: 18px;
+    margin: 8px 5px;
     color: #fff;
     float: left;
 }
@@ -142,37 +93,36 @@
     margin-left: 15px;
 }
 
-.connUs-chatsList-inner-wrapper{
-    overflow-y: auto;
-}
-
-.connUs-chatsList-inner-cont{
+.connUs-chatsList-cont{
 	overflow: hidden;
-    background-color: #fff;
 	margin: 5px;
 	font-size: 15px;
-    color: #000;
+    color: #a7a7a7;
+}
+
+.connUs-chatsList-img{
+	width: 55px;
+    height: 55px;
+    float: left;
+    margin: 5px 0px;
 }
 
 .connUs-chatsList-name{
-	color: #009688;
-	float: left;
+	color: #000;
+    float: left;
+    font-size: 16px;
 }
 
 .connUs-chatsList-dateAndTime{
-	font-size: 10px;
-    color: #868686;
+	font-size: 14px;
     float: right;
 }
 
 .connUs-chatsList-lastMgs{
-    color: #868686;
-    width: 100px;
-    margin: 5px 0px;
-    clear: both;
+    width: 85%;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: hidden;
+    clear: both;
 }
 
 .connUs-chats-wrapper, .connUs-friends-wrapper{
@@ -214,16 +164,6 @@
     overflow: hidden;
     height: 400px;
     overflow-y: scroll;
-}
-
-.connUs-chatsList-img{
-	width: 60px;
-    height: 60px;
-    background-image: url("../img/photo.jpg");
-    background-size: 65px 64px;
-    border-radius: 55px;
-    float: left;
-    margin: 5px;
 }
 
 .connUs-chatsListMgs-inner-cont {
@@ -269,19 +209,19 @@
 	transition: height 800ms ease;
 }
 
-.connUs-chatsListMgs-inner-wrapper{
+.connUs-chatBox-inner-wrapper{
 	height: 260px;
 	margin: 10px 0px;
 	overflow-y: scroll;
 }
 
-.connUs-chatsListMgs-input-cont{
+.connUs-chatBox-input-cont{
 	padding: 10px 5px;
 	overflow: hidden;
 	border-top: 1px solid #616161;
 }
 
-.connUs-chatsListMgs-input{
+.connUs-chatBox-input{
 	float: left;
 	overflow-y: scroll;
 	max-height: 50px;
@@ -294,7 +234,7 @@
     outline: none;
 }
 
-.connUs-chatsListMgs-submit{
+.connUs-chatBox-send{
     width: 30px;
     height: 30px;
     float: left;
@@ -353,7 +293,7 @@
     height: 25px;
     float: left;
     margin-top: 4px;
-    background-image: url(//localhost/chatClient/img/smiley.jpg);
+    background-image: url(../img/new/smiley.png);
     background-size: 19px 18px;
     background-repeat: no-repeat;
 }
@@ -362,7 +302,7 @@
 	margin: 10px;
 }
 
-#map-cont{
+#connUs-chatBox-map-cont{
     height: 83%;
     margin: 5px;
 }
@@ -403,8 +343,75 @@
 	width: 15px;
     height: 15px;
     float: left;
-    background-color: #07f510;
-    margin-top: 8px;
-    margin-right: 8px;
+    background-color: #00ff11;
+    margin: 10px 5px;
     border-radius: 20px;
+}
+
+@media screen and (max-width: 767px)
+{
+	.connUs-chatNotification-list
+	{
+		height: 100%;
+		width: 100%;
+    	left: 0px;
+	}
+	
+	.connUs-chatBox-outerWrapper
+	{
+		width: 100%;
+    	right: 0px;
+	}
+	
+	.connUs-chatBox-outerWrapper
+	{
+		height: 93%;
+	}
+	
+	.connUs-chatBox-wrapper
+	{
+		height: 90%;
+	}
+	
+	.connUs-chatBox-wrapper, .connUs-chatBox-inner-wrapper
+	{
+		height: 100%;
+	}
+	
+	.connUs-chatsList-img
+	{
+		width: 70px;
+    	height: 70px;
+	}
+	
+	.connUs-chatData-cont
+	{
+    	margin-top: 17px;
+	}
+	
+	.connUs-chatsList-name
+	{
+		 font-size: 20px;
+	}
+}
+
+@media screen and (max-width: 767px) and (orientation : landscape) 
+{
+	.connUs-chatBox-outerWrapper
+	{
+		height: 87% !important;
+	}
+	.connUs-chatBox-wrapper
+	{
+		height: 83% !important;
+	}
+	.emoji-menu
+	{
+    	top: 50px;
+    	left: 17px;
+	}
+	.connUs-chatData-cont
+	{
+		width: 85%;
+	}
 }

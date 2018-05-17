@@ -2,7 +2,7 @@
 	<div class="connUs-menu-outerCont">
 		<div class="connUs-menu-close"></div>
 		<div class="connUs-basicInfo">
-		    <img class="connUs-profile-img" src="<c:url value="/resources/img/new/men-profile.png" />"/>
+		    <img class="connUs-profile-img" src="<c:url value="/resources/img/new/male-profile.png" />"/>
 		    <div class="connUs-profile-name"></div>
 		</div>
 		

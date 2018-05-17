@@ -32,14 +32,6 @@
 	    <%@ include file="/WEB-INF/views/feedListHb.jsp" %>
 	    <%@ include file="/WEB-INF/views/likeListHb.jsp" %>
 	    <%@ include file="/WEB-INF/views/cmntsListHb.jsp" %>
-	
-	    <div class="connUs-chatsListhb">
-	        <%@ include file="/WEB-INF/views/chatsList.jsp" %>
-	    </div>
-	    
-	    <div class="connUs-chatsListMgsthb">
-	        <%@ include file="/WEB-INF/views/chatsListMgs.jsp" %>
-	    </div>
 	    
 	   <div class="connUs-friends-wrapper"></div>
 	   <div class="connUs-chats-wrapper"></div>

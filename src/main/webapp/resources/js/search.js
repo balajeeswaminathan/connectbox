@@ -35,7 +35,7 @@ var searchClass = {
 	madeSearchListCall : function()
 	{	
 		var _self = this;
-		var searchTerm = $(".connUs-search-txt").val();
+		var searchTerm = $(".connUs-search-txt").val().toLowerCase();
 		
 		if(searchTerm.length > 0)
 		{
@@ -48,7 +48,7 @@ var searchClass = {
 			
 		    var config = {};
 			config.callType = "searchList"
-			config.type = "get";
+			config.type = "POST";
 			config.data= ({
 					"searchTerm" : searchTerm
 			});

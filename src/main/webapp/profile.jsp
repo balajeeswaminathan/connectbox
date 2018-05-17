@@ -80,8 +80,6 @@
 	<%@ include file="/WEB-INF/views/friendsListHb.jsp" %>
 	<%@ include file="/WEB-INF/views/profileDataHb.jsp" %>
 	<%@ include file="/WEB-INF/views/feedListHb.jsp" %>
-    <%@ include file="/WEB-INF/views/chatsList.jsp" %>
-    <%@ include file="/WEB-INF/views/chatsListMgs.jsp" %>
     <%@ include file="/WEB-INF/views/likeListHb.jsp" %>
     <%@ include file="/WEB-INF/views/cmntsListHb.jsp" %>
     <%@ include file="/WEB-INF/views/viewPhotosHb.jsp" %>

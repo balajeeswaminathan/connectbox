@@ -71,20 +71,20 @@ public class ChatController {
 	private ChatService chatService = new ChatService();
 	private FeedService feedService = new FeedService();
 	
-	//Login
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	@ResponseBody
-	public String login(@RequestParam String email, @RequestParam String password) throws UnknownHostException {
-		String response = chatService.userExist(email,password);
-		return createJsonObject(JSON.parse(response));
-    }
-	
 	//Register
 	@RequestMapping(value = "/updateUser", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateUser(@RequestParam String userId, @RequestParam String userName, @RequestParam String email, @RequestParam String password, @RequestParam String dob, @RequestParam String city, @RequestParam String countryState, @RequestParam String country, @RequestParam String gender, @RequestParam String profileImgUrl, @RequestParam boolean isEdit) throws ParseException {
-		    String response = chatService.updateUser(userId, userName, email, password, dob, gender, city, countryState, country, profileImgUrl, isEdit);
-        	return createJsonObject(JSON.parse(response));
+		String response = chatService.updateUser(userId, userName, email, password, dob, gender, city, countryState, country, profileImgUrl, isEdit);
+	    return createJsonObject(JSON.parse(response));
+	}
+	
+	//Login
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@ResponseBody
+	public String login(@RequestParam String email, @RequestParam String password) throws UnknownHostException {
+		String response = chatService.login(email, password);
+		return createJsonObject(JSON.parse(response));
     }
 	
 	//forgetpsw
@@ -106,14 +106,14 @@ public class ChatController {
 	//Request Friend
 	@RequestMapping(value = "/requestFriends", method = RequestMethod.GET)
 	@ResponseBody
-	public String requestFriends(@RequestParam String requesterId, @RequestParam String requesterName, @RequestParam String accepterId, @RequestParam String accepterName) {
+	public String requestFriends(@RequestParam String requesterId, @RequestParam String accepterId) {
 		JSONObject response = new JSONObject();
 		
-		chatService.addFriends(requesterId+"_FriendsList", accepterId, accepterName, -1);
-		chatService.addFriends(accepterId+"_FriendsList", requesterId, requesterName, 1);
+		chatService.addFriends(requesterId+"_FriendsList", accepterId, -1);
+		chatService.addFriends(accepterId+"_FriendsList", requesterId, 1);
 		
-		response.put("status","-1");
-		response.put("sucessMessage","Friend request send successfully");
+		response.put("status", 0);
+		response.put("sucessMessage", "Friend request send successfully");
 		
 		return createJsonObject(response);
     }
@@ -121,13 +121,13 @@ public class ChatController {
 	//Accept Friend
 	@RequestMapping(value = "/acceptFriends", method = RequestMethod.GET)
 	@ResponseBody
-	public String acceptFriends(@RequestParam String accepterId, @RequestParam String accepterName, @RequestParam String requesterId, @RequestParam String requesterName) {
+	public String acceptFriends(@RequestParam String accepterId, @RequestParam String requesterId) {
 		JSONObject response = new JSONObject();
 		
-		chatService.addFriends(accepterId+"_FriendsList", requesterId, requesterName, 0);
-		chatService.addFriends(requesterId+"_FriendsList", accepterId, accepterName, 0);
+		chatService.addFriends(accepterId+"_FriendsList", requesterId, 0);
+		chatService.addFriends(requesterId+"_FriendsList", accepterId, 0);
 		
-		response.put("status","0");
+		response.put("status", 0);
 		response.put("sucessMessage","Friend accept send successfully");
     	
 		return createJsonObject(response);
@@ -143,7 +143,7 @@ public class ChatController {
     }
 
 	//Chat List
-	@RequestMapping(value = "/chatList", method = RequestMethod.GET)
+	@RequestMapping(value = "/chatList", method = RequestMethod.POST)
 	@ResponseBody
 	public String chatList(@RequestParam String senderId, @RequestParam String clientTZ) throws ParseException {
 		String chatByList = chatService.getChatListData(senderId, clientTZ);
@@ -152,7 +152,7 @@ public class ChatController {
     }
 	
 	//Chat List Data - pending for date format
-	@RequestMapping(value = "/chatListData", method = RequestMethod.GET)
+	@RequestMapping(value = "/chatListData", method = RequestMethod.POST)
 	@ResponseBody
 	public String chatListData(@RequestParam String senderId, @RequestParam String receiverId,@RequestParam int pageLevel, @RequestParam int limits) {
 		String getChatData = chatService.getChatListData(senderId, receiverId, pageLevel, limits);
@@ -229,7 +229,7 @@ public class ChatController {
 	}
 	
 	//Search Users List
-	@RequestMapping(value = "/searchList", method = RequestMethod.GET)
+	@RequestMapping(value = "/searchList", method = RequestMethod.POST)
 	@ResponseBody
 	public String searchList(@RequestParam String searchTerm) {
 		String slData = chatService.searchList(searchTerm);

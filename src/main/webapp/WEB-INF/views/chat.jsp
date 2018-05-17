@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<!-- Begin emoji-picker Stylesheets -->
-	    <link href="//localhost/chatClient/css/lib/emoji.css" rel="stylesheet">
+	    <link href="<c:url value="/resources/css/emoji.css" />" rel="stylesheet">
 	<!-- End emoji-picker Stylesheets -->
 
     <!-- Begin emoji-picker JavaScript -->
@@ -16,29 +16,32 @@
 
 <body>
     <div class="connUs-chatsListhb">
-        <%@ include file="/WEB-INF/views/chatsList.jsp" %>
+        <%@ include file="/WEB-INF/views/chatListHb.jsp" %>
     </div>
     
     <div class="connUs-chatsListMgsthb">
         <%@ include file="/WEB-INF/views/chatsListMgs.jsp" %>
     </div>
     
-    <div class="connUs-chatNotification-wrapper"></div>
+    <div class="connUs-chatNotification-list"></div>
     
     <div class="connUs-chatBox-outerWrapper">
     	<div class="connUs-chatBox-head-cont">
     	    <div class="connUs-chatBox-online"></div>
-        	<div class="connUs-chatBox-head">Chat</div>
-        	<div class="connUs-chatBox-location"></div>
+    	    <img class="connUs-chatBox-img" src=""></img>
+        	<div class="connUs-chatBox-name"></div>
        	</div>
+
         <div class="connUs-chatBox-wrapper">
-			<div class="connUs-chatsListMgs-inner-wrapper"></div>
-            <div id="map-cont"></div>
-			<div class="connUs-chatsListMgs-input-cont">
-			     <div class="connUs-smiley"></div>
-			    <input type="text" class="connUs-chatsListMgs-input" placeholder="Send a Message" data-emojiable="true"/>
-			    <div class="connUs-chatsListMgs-submit">></div>
+			<div class="connUs-chatBox-inner-wrapper"></div>
+            <div id="connUs-chatBox-map-cont"></div>
+			<div class="connUs-chatBox-input-cont">
+				<div class="connUs-chatBox-location"></div>
+				<div class="connUs-chatBox-plus-icon"></div>
+				<input type="text" class="connUs-chatBox-input" placeholder="Type a message" data-emojiable="true"/>
+				<div class="connUs-smiley"></div>
 			</div>
+			<div class="connUs-chatBox-send"></div>
         </div>
     </div>
 

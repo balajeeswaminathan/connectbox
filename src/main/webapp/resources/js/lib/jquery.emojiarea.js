@@ -253,7 +253,7 @@
     var row = emoji[1];
     var column = emoji[2];
     var name = emoji[3];
-    $.emojiarea.assetsPath = "//localhost/chatClient/img";
+    $.emojiarea.assetsPath = location.origin + "/connectbox/resources/img/new";
     
     var filename = $.emojiarea.assetsPath + '/emoji_spritesheet_!.png';
     var blankGifPath = $.emojiarea.assetsPath + '/blank.gif';

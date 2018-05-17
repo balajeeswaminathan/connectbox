@@ -12,7 +12,7 @@ public class MailSend
 	public void sendMail(String receiverEmail, String mailSubject, String mailDom) throws MessagingException
 	{  
 	      
-		Resource resource = new ClassPathResource("applicationContext.xml");  
+		Resource resource = new ClassPathResource("applicationContext.xml");
 		BeanFactory beanFactory = new XmlBeanFactory(resource);  
 		Mail mail = (Mail)beanFactory.getBean("mail");  
 		mail.sendMail(receiverEmail, mailSubject, mailDom);

@@ -212,7 +212,7 @@ var profileClass = {
 		
 		var config = {};
 		config.callType = "chatListData"
-		config.type = "get";
+		config.type = "POST";
 		config.data= ({
 				"senderId" : userId,
 				"receiverId" : receiverId,

@@ -2,6 +2,7 @@
 	position: fixed;
     z-index: 999;
     width: 20%;
+    color: #a7a7a7;
 }
 
 .connUs-basicInfo{
@@ -16,7 +17,6 @@
 }
 
 .connUs-profile-name{
-    color: #52bdff;
     font-size: 23px;
     text-align: center;
     margin-top: 10px;
@@ -24,7 +24,6 @@
 }
 
 .connUs-menu-innerCont{
-	color: #828282;
     width: 155px;
     font-size: 20px;
     margin: 30px auto;
@@ -75,36 +74,41 @@
 
 @media screen and (max-width: 767px)
 {
+	.menu-active .connUs-page-outerWrapper{
+		position: fixed;
+	}
+	
 	.connUs-menu-outerCont
 	{
 		overflow: hidden;
+		position: absolute;
 		height: 0px;
 		top: 0px;
 		-ms-transform: height 800ms ease;
 		-webkit-transition: height 800ms ease;
 		transition: height 800ms ease;
-		background-color: #9e9e9e;
+		background-color: #f1f1f1;
 		width: 100%;
-    	position: absolute;
     }
 	
 	.connUs-menu-close{
-	    background-image: url(../img/new/close.png);
-	    width: 40px;
-	    height: 40px;
+	    background-image: url(../img/new/close-grey.png);
+	    position: absolute;
+	    width: 30px;
+	    height: 30px;
 	    float: left;
 	    margin: 10px;
-	    background-size: 40px;
+	    background-size: 30px;
 	}
 	
 	.menu-active .connUs-menu-outerCont{
-		height: 100%;
+		height: 600px;
 	}
 	
 	.connUs-basicInfo{
 	    width: 250px;
 	    margin: 0px auto;
-	    margin-top: 80px;
+	    margin-top: 40px;
 	}
 	
 	.connUs-profile-img {
@@ -112,16 +116,9 @@
 	    height: 150px;
 	    margin-left: 50px;
 	}
-	
-	.connUs-profile-name{
-	    color: #ffe500;
-		font-size: 35px;
-	}
-	
+
 	.connUs-menu-innerCont {
-		color: #fff;
 	    width: 180px;
-	    font-size: 28px;
 	}
 	
 	.connUs-menu-cont{
@@ -129,13 +126,6 @@
 	}
 	
 	.connUs-menu-icon{
-		margin-left: 5px;
-	}
-}
-
-@media screen and (max-width: 767px) and (orientation : landscape)
-{
-	.menu-active .connUs-menu-outerCont{
-		height: 150%;
+		margin-left: 25px;
 	}
 }

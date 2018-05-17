@@ -89,6 +89,7 @@ public class ChatService {
 	DB database = Util.mongoClientInit();
 	//define collection name
 	public static final String COLLECTION_USER = "user", COLLECTION_CHAT = "chat", COLLECTION_COMMUNITIES = "communities";
+	DBCollection userCollName = database.getCollection(COLLECTION_USER);
 
 	//Img System path
 	public String sysImgPath = "C:/xampp/htdocs/connectingUs/";
@@ -96,85 +97,15 @@ public class ChatService {
 	//Img Apache server url
 	public String serverImgUrl = "http://localhost/connectingUs/";
 	
-	//User Exist
-	@SuppressWarnings("unchecked")
-	public String userExist(String email, String password){
-		DBCollection userCollName = database.getCollection(COLLECTION_USER);
-		
-		BasicDBObject andQuery = new BasicDBObject();
-		List<BasicDBObject> objRefList = new ArrayList<BasicDBObject>();
-		JSONObject response = new JSONObject();
-		
-		//Query
-		objRefList.add(new BasicDBObject("email", email));
-		objRefList.add(new BasicDBObject("password", password));
-		andQuery.put("$and", objRefList);
-		DBObject userExistData = userCollName.findOne(andQuery);
-
-		if(userExistData == null)
-		{
-			response.put("status", 1);
-			response.put("errorMessage", "Email or Password id Incorrect");
-		}
-		else if(!userExistData.get("state").equals("active"))
-		{
-			response.put("status", 1);
-			response.put("errorMessage", "Your account is inactive now. Kindly check your email to activate your account");
-		}
-		else
-		{
-			response.put("status", 0);
-			response.put("sucessMessage","Username And Password Is Correct");
-			response.put("user_Id", userExistData.get("user_Id"));
-			response.put("userName", userExistData.get("username"));
-		}
-
-		return response.toString();
-	}
-
-	//get user data
-	public DBObject getUserData(String user_Id){
-		DBCollection userCollName = database.getCollection(COLLECTION_USER);
-		BasicDBObject objRef = new BasicDBObject();
-		BasicDBObject userDataObj = new BasicDBObject();
-
-		//Query
-		objRef.append("user_Id", user_Id);
-		DBObject userData = userCollName.findOne(objRef);
-		userDataObj.put("user_Id", userData.get("user_Id"));
-		userDataObj.put("userName", userData.get("userName"));
-		userDataObj.put("gender", userData.get("gender"));
-		userDataObj.put("imgPath", userData.get("imgPath"));
-		
-		return userDataObj;
-	}
-	
-	//Home call
-	public String getUserBasicInfo(String user_Id) {
-		JSONObject response = new JSONObject();
-		DBObject userDbObj = getUserData(user_Id);
-		
-		response.put("userName", userDbObj.get("userName"));
-		response.put("imgPath", userDbObj.get("imgPath"));
-		response.put("gender", userDbObj.get("gender"));
-		
-		return response.toString();
-	}
-	
 	//Register
 	public String updateUser(String userId, String userName, String email, String password, String dob, String gender, String city, String countryState, String country, String profileImgUrl, boolean isEdit){
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
 		String curentTime = dateFormat.format(date);
 		String user_Id;
-		DBCollection userCollName;
 		JSONObject response = new JSONObject();
 		DBObject user = new BasicDBObject();
-		if(database.collectionExists(COLLECTION_USER))
-		{
-			userCollName = database.getCollection(COLLECTION_USER);
-		}
-		else
+		if(!database.collectionExists(COLLECTION_USER))
 		{
 			userCollName = database.createCollection(COLLECTION_USER, null);
 		}
@@ -183,31 +114,21 @@ public class ChatService {
 		{
 			/*DBCursor frndsDataCursor;
 			String updatedDataKeys = "", updatedDataValues = "", frndId;
-			DBObject objDoc;*/
-			DBObject query = new BasicDBObject();
+			DBObject objDoc;
 			DBObject homeFeed = new BasicDBObject();
-			
-			user_Id = userId;
 			DateFormat feedDateFormat = new SimpleDateFormat("HH:mm, MMM dd, yyyy");
 			String feedDateAndTime = feedDateFormat.format(date);
-
 			homeFeed.put("dateAndTime", feedDateAndTime);
 			homeFeed.put("userFeedId", user_Id);
-			homeFeed.put("type", "updateProfile");
+			homeFeed.put("type", "updateProfile");*/
+			DBObject query = new BasicDBObject();
+			user_Id = userId;
 			
 			if(!userName.isEmpty())
 			{
 				user.put("username", userName);
 				//updatedDataKeys += "name|||";
 				//updatedDataValues += userName + "|||";
-			}
-			if(!email.isEmpty())
-			{
-				user.put("email", email);
-			}
-			if(!password.isEmpty())
-			{
-				user.put("password", password);
 			}
 			if(!dob.isEmpty())
 			{
@@ -274,17 +195,100 @@ public class ChatService {
 			user.put("countryState", countryState);
 			user.put("country", country);
 			user.put("state", "inActive");
-
+	
 			//Query
 			userCollName.insert(user);
 		}
 		
-		response.put("status", "0");
-    	response.put("sucessMessage", isEdit ? "User updated sucessfully" : "User registered sucessfully");
-    	response.put("user_Id", user_Id);
+		response.put("status", 0);
+		response.put("user_Id", user_Id);
+		response.put("sucessMessage", isEdit ? "User updated sucessfully" : "User registered sucessfully");
+	
+		return response.toString();
+	}
+		
+	//User Exist
+	@SuppressWarnings("unchecked")
+	public String login(String email, String password){
+		BasicDBObject andQuery = new BasicDBObject();
+		JSONObject response = new JSONObject();
+		
+		//Query
+		andQuery.put("email", email);
+		andQuery.put("password", password);
+		DBObject userExistData = userCollName.findOne(andQuery);
+
+		if(userExistData == null)
+		{
+			response.put("status", 1);
+			response.put("errorMessage", "Email or Password id Incorrect");
+		}
+		else if(!userExistData.get("state").equals("active"))
+		{
+			response.put("status", 1);
+			response.put("errorMessage", "Your account is inactive now. Kindly check your email to activate your account");
+		}
+		else
+		{
+			response.put("status", 0);
+			response.put("sucessMessage","Username And Password Is Correct");
+			response.put("user_Id", userExistData.get("user_Id"));
+			response.put("userName", userExistData.get("username"));
+		}
 
 		return response.toString();
 	}
+
+	public String emailExist(String email){
+		DBObject objRef = new BasicDBObject();
+		DBObject resultSet;
+		JSONObject response = new JSONObject();
+		
+		objRef.put("email", email);
+		resultSet = userCollName.findOne(objRef);
+		try
+		{
+			String userId = (String) resultSet.get("user_Id");
+			response.put("status", 0);
+			response.put("userId", userId);
+		}
+		catch(Exception ex)
+		{
+			response.put("status", 1);
+			response.put("errorMessage", "Your email Id is not registered with us");
+		}
+		return response.toString();
+	}	
+	
+	//get user data
+	public DBObject getUserData(String user_Id){
+		BasicDBObject objRef = new BasicDBObject();
+		BasicDBObject userDataObj = new BasicDBObject();
+
+		//Query
+		objRef.append("user_Id", user_Id);
+		DBObject userData = userCollName.findOne(objRef);
+		userDataObj.put("user_Id", userData.get("user_Id"));
+		userDataObj.put("userName", userData.get("userName"));
+		userDataObj.put("gender", userData.get("gender"));
+		userDataObj.put("imgPath", userData.get("imgPath"));
+		
+		return userDataObj;
+	}
+	
+	//Home call
+	public String getUserBasicInfo(String user_Id) {
+		JSONObject response = new JSONObject();
+		DBObject userDbObj = getUserData(user_Id);
+		
+		response.put("userName", userDbObj.get("userName"));
+		response.put("imgPath", userDbObj.get("imgPath"));
+		response.put("gender", userDbObj.get("gender"));
+		
+		return response.toString();
+	}
+	
+	
 
 	public void activateUser(String userId)
 	{
@@ -293,34 +297,9 @@ public class ChatService {
 		query.put("user_Id", userId);
 		update.put("state", "active");
 		
-		DBCollection userCollName = database.getCollection(COLLECTION_USER);
 		userCollName.update(query, update);
 	}
-	
-	public String emailExist(String email){
-		DBCollection userCollName = database.getCollection(COLLECTION_USER);
-		DBObject objRef = new BasicDBObject();
-		DBObject fields = new BasicDBObject();
-		DBObject resultSet;
-		JSONObject response = new JSONObject();
 		
-		objRef.put("email", email);
-		fields.put("user_Id", 1);
-		resultSet = userCollName.findOne(objRef, fields);
-		try
-		{
-			String userId = (String) resultSet.get("user_Id");
-			response.put("status", true);
-			response.put("userId", userId);
-		}
-		catch(Exception ex)
-		{
-			response.put("status", false);
-			response.put("errorMessage", "Your email Id is not registered with us");
-		}
-		return response.toString();
-	}
-	
 	public String searchList(String searchTerm){
 		JSONObject searchJson = new JSONObject();
 
@@ -344,8 +323,6 @@ public class ChatService {
 		String imgUrl;
 
 		//Query
-		//query.limit(10);
-		DBCollection userCollName = database.getCollection(COLLECTION_USER);
 		query.put("userName", java.util.regex.Pattern.compile(userName.toString()));
 		DBCursor searchListUser = userCollName.find(query);
 		
@@ -405,26 +382,21 @@ public class ChatService {
 	}*/
 	
 	//Add Friend
-	public void addFriends(String collName, String friendId, String friendsName, int status) {
+	public void addFriends(String collName, String friendId, int status) {
 		DBObject query = new BasicDBObject();
 		DBCollection collection = database.getCollection(collName);
 		DBObject frndObj = new BasicDBObject();
 		if(status != 0)
 		{
 			frndObj.put("friend_Id", friendId);
-			frndObj.put("friendsName", friendsName);
 			frndObj.put("status", status);
-			
 			collection.insert(frndObj);
 		}
 		else
 		{
-			BasicDBObject frndUpdateObj = new BasicDBObject();
-			frndObj.put("status", status);
-			frndUpdateObj.append("$set", frndObj);
-			
+			frndObj.put("status", status);			
 			query.put("friend_Id", friendId);
-			collection.update(query, frndUpdateObj);
+			collection.update(query, frndObj);
 		}
 	}
 
@@ -456,7 +428,7 @@ public class ChatService {
 	public String getChatListData(String senderId, String receiverId, int pageLevel,int limits)
 	{
 		String chatCollName = getChatListCollName(senderId, receiverId);
-		String getChatData =  getChatData(senderId, chatCollName, pageLevel,limits);
+		String getChatData =  getChatData(senderId, receiverId, chatCollName, pageLevel,limits);
 		
 		return getChatData;
 	}
@@ -620,7 +592,7 @@ public class ChatService {
 		{
 			for(int i = 0, j = 0 ;i < chatListSize; i++)
 			{
-				DBObject chatNotifData = chatNotifDataList.next();
+				DBObject chatNotifData = chatNotifDataList.hasNext() ? chatNotifDataList.next() : new BasicDBObject();
 				DBObject chatListData = chatListDataList.next();
 				if(j < chatNotifDataList.size())
 				{
@@ -651,7 +623,7 @@ public class ChatService {
 	
 	//Get Chat Data
 	@SuppressWarnings("unchecked")
-	public String getChatData(String senderId, String chatCollName, int pageLevel, int limits)
+	public String getChatData(String senderId, String receiverId, String chatCollName, int pageLevel, int limits)
 	{
 		DBObject chatData;
 		DBObject chatDataObj = new BasicDBObject();
@@ -707,6 +679,8 @@ public class ChatService {
 			{
 				chatDataresponseJson.put("isLast", true);
 			}
+			DBObject receiverData = getUserData(receiverId);
+			chatDataresponseJson.putAll((Map) receiverData);
 			chatDataresponseJson.put("limits", limits);
 		}
 		catch(Exception e)
@@ -761,7 +735,6 @@ public class ChatService {
 
 	public DBObject profileData(String profileId)
 	{
-		DBCollection userCollName = database.getCollection(COLLECTION_USER);
 		BasicDBObject objRef = new BasicDBObject();
 
 		//Query
@@ -810,7 +783,7 @@ public class ChatService {
 		String dob = (String) profileData.get("dob");
 		
 		responseJson.put("profileId", profileId);
-		responseJson.put("profileName", profileData.get("username"));
+		responseJson.put("profileName", profileData.get("userame"));
 		responseJson.put("profileImgUrl", profileData.get("imgPath"));
 		responseJson.put("gender", profileData.get("gender"));
 		responseJson.put("dob", dob);
@@ -1194,7 +1167,6 @@ public class ChatService {
 
 	public boolean checkPsw(String userId, String password)
 	{
-		DBCollection userCollName = database.getCollection(COLLECTION_USER);
 		List<BasicDBObject> objRefList = new ArrayList<BasicDBObject>();
 		BasicDBObject andQuery = new BasicDBObject();
 		String email = null;
@@ -1273,7 +1245,6 @@ public class ChatService {
 					"</div>";
 			String mailSubject = "OTP for Reset Password";
 
-			DBCollection userCollName = database.getCollection(COLLECTION_USER);
 			List<BasicDBObject> objRefList = new ArrayList<BasicDBObject>();
 			BasicDBObject andQuery = new BasicDBObject();
 			

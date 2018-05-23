@@ -382,7 +382,8 @@ public class ChatService {
 	}*/
 	
 	//Add Friend
-	public void addFriends(String collName, String friendId, int status) {
+	public String addFriends(String collName, String friendId, int status) {
+		JSONObject response = new JSONObject();
 		DBObject query = new BasicDBObject();
 		DBCollection collection = database.getCollection(collName);
 		DBObject frndObj = new BasicDBObject();
@@ -391,13 +392,18 @@ public class ChatService {
 			frndObj.put("friend_Id", friendId);
 			frndObj.put("status", status);
 			collection.insert(frndObj);
+			response.put("sucessMessage", "Friend request send successfully");
 		}
 		else
 		{
 			frndObj.put("status", status);			
 			query.put("friend_Id", friendId);
 			collection.update(query, frndObj);
+			response.put("sucessMessage","Friend accept send successfully");
 		}
+		response.put("status", 0);
+		
+		return response.toString();
 	}
 
 	//Get Chat Data Collection Name
@@ -472,17 +478,19 @@ public class ChatService {
 		else
 		{
 			DBObject update = new BasicDBObject();
+			DBObject updateSet = new BasicDBObject();
 			DBObject query = new BasicDBObject();
 			DBObject query1 = new BasicDBObject();
 			//Query
 			update.put("dateAndTime", dateFormat.format(date));
 			update.put("lastMgs", message);
+			updateSet.put("$set", update);
 			
 			query.put("chatList_Id", receiverId);
-			senderColl.update(query, update);
+			senderColl.update(query, updateSet);
 			
 			query1.put("chatList_Id", senderId);
-			receiverColl.update(query1, update);
+			receiverColl.update(query1, updateSet);
 		}
 		DBCollection chatColl = database.getCollection(chatCollName);
 		DBObject chat = new BasicDBObject();
@@ -627,15 +635,18 @@ public class ChatService {
 	{
 		DBObject chatData;
 		DBObject chatDataObj = new BasicDBObject();
-		String senderID, dateTemp = "";
+		String senderID, dateTemp = "", commType;
 		JSONObject chatDataresponseJson = new JSONObject();
 		List<DBObject> chatDataList = new ArrayList<DBObject>();
 		List chatDataDataList;
 		int skipLevel, chatDataDataListCount;
+		String previousDate = "";
 		
 		Date date = new Date();
 		DateFormat chatDataDateFormat = new SimpleDateFormat("MMM dd, yyyy");
 		
+		DBObject receiverData = getUserData(receiverId);
+		chatDataresponseJson.putAll((Map) receiverData);
 		try
 		{
 			Pagination page = new Pagination();
@@ -655,32 +666,40 @@ public class ChatService {
 				chatData = (DBObject) chatDataDataList.get(i);
 				senderID = (String) chatData.get("senderId");
 				dateTemp = (String) chatData.get("date");
-				String todayDate = chatDataDateFormat.format(date);
+				commType = (String) chatData.get("commType");
 				
-				chatDataObj.put("senderId", senderID);
-				if(dateTemp.equals(todayDate))
+				if(!previousDate.equals(dateTemp))
 				{
-					chatDataObj.put("date", "Today");
-				}
-				else
-				{
-					chatDataObj.put("date", dateTemp);
+					String todayDate = chatDataDateFormat.format(date);
+					chatDataObj.put("senderId", senderID);
+					if(dateTemp.equals(todayDate))
+					{
+						chatDataObj.put("date", "Today");
+					}
+					else
+					{
+						chatDataObj.put("date", dateTemp);
+					}
 				}
 				if(senderID.equals(senderId))
 				{
 					chatDataObj.put("sender", true);
 				}
+				if(!commType.equals(""))
+				{
+					chatDataObj.put("commType", commType);
+				}
+				previousDate = dateTemp;
 				chatDataObj.put("message", chatData.get("message"));
 				chatDataObj.put("time", chatData.get("time"));
 				chatDataList.add(chatDataObj);
+				chatDataObj = new BasicDBObject();
 			}
 			chatDataresponseJson.put("chatList", chatDataList);
 			if(skipLevel == 0)
 			{
 				chatDataresponseJson.put("isLast", true);
 			}
-			DBObject receiverData = getUserData(receiverId);
-			chatDataresponseJson.putAll((Map) receiverData);
 			chatDataresponseJson.put("limits", limits);
 		}
 		catch(Exception e)

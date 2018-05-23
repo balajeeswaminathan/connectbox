@@ -27,21 +27,30 @@
     
     <div class="connUs-chatBox-outerWrapper">
     	<div class="connUs-chatBox-head-cont">
+    		<div class="connUs-chatBox-back-icon"></div>
     	    <div class="connUs-chatBox-online"></div>
     	    <img class="connUs-chatBox-img" src=""></img>
-        	<div class="connUs-chatBox-name"></div>
+        	<div class="connUs-chatBox-name-cont">
+	        	<div class="connUs-chatBox-name"></div>
+	        	<div class="connUs-chatBox-online-txt">online</div>
+	        </div>
        	</div>
 
         <div class="connUs-chatBox-wrapper">
 			<div class="connUs-chatBox-inner-wrapper"></div>
             <div id="connUs-chatBox-map-cont"></div>
-			<div class="connUs-chatBox-input-cont">
+            
+            <div class="connUs-chatBox-location-cont">
 				<div class="connUs-chatBox-location"></div>
+			</div>
+			<div class="connUs-chatBox-input-cont">
 				<div class="connUs-chatBox-plus-icon"></div>
 				<input type="text" class="connUs-chatBox-input" placeholder="Type a message" data-emojiable="true"/>
 				<div class="connUs-smiley"></div>
 			</div>
-			<div class="connUs-chatBox-send"></div>
+			<div class="connUs-chatBox-send-cont">
+				<div class="connUs-chatBox-send"></div>
+			</div>
         </div>
     </div>
 

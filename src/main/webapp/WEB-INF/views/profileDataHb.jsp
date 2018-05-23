@@ -73,7 +73,7 @@ Handlebars.registerHelper('compare', function(lvalue, rvalue, options) {
 				    	<div class="connUs-connect-btn" type="accept">Accept</div>
 				    {{/compare}}
 				{{/compare}}
-			<div class="connUs-msg">Message</div>
+			<div class="connUs-msg" chatListId="{{data.profileDataList.profileId}}">Message</div>
 			</div>
 			<div class="connUs-profileData-innerCont">
 				<input type="text" class="profile-name" value="{{data.profileDataList.profileName}}"/>

@@ -30,8 +30,8 @@ var profileClass = {
 			_self.acceptFriends();
 		});
 		
-		$(".connUs-msg").off("click").on("click",function(){
-			_self.madeChatListDataCall();
+		$(".connUs-msg").off("click").on("click",function(event){
+			chatClass.madeChatListDataCall(event);
 		});
 		
 		$(".profileImg-edit-btn").off("click").on("click",function(){
@@ -205,7 +205,7 @@ var profileClass = {
 		utilClass.makeAjaxCall(config, acceptFrndsCbk);
 	},
 	
-	madeChatListDataCall : function(){
+	/*madeChatListDataCall : function(){
 		var _self = this;
 		var userId = utilClass.getCookie("userId");
 		var receiverId = profileClass.profileData.profileId;
@@ -234,7 +234,7 @@ var profileClass = {
 		};
 		
 		utilClass.makeAjaxCall(config, chatsListCbk);
-	},
+	},*/
 	
 	uploadImage : function(){
 		var _self = this;

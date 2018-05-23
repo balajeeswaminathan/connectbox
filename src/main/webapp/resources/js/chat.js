@@ -1,6 +1,7 @@
 $( document ).ready(function() {
 	chatClass.init();
 	chatClass.audio = new Audio('/WEB-INF/audio/solemn.mp3');
+	receiverId = "";
 });
 
 
@@ -96,7 +97,7 @@ var chatClass = {
 	
 	madeChatListDataCall : function(event){
 		var _self = this;
-		var receiverId = $(event.target).attr("chatListId");
+		receiverId = $(event.target).attr("chatListId");
 		
 		utilClass.hideMask();
 		$("body").removeClass("connUs-chatDropBoxActive");
@@ -110,9 +111,14 @@ var chatClass = {
 			receiverId = $(event.target).parent().parent().attr("chatListId");
 		}
 		
-		var chatName = $(event.target).parent().find(".connUs-chatsList-name").html();
-		
 		$(".connUs-chatBox-wrapper").attr("receiverId", receiverId);
+		_self.getChatListData();
+		_self.removeChatNotification();
+	},
+	
+	getChatListData : function()
+	{
+		var _self = this;
 		var config = {};
 		config.callType = "chatListData"
 		config.type = "POST";
@@ -127,17 +133,22 @@ var chatClass = {
 		var chatsListDataCbk = function(response){
 			var obj = JSON.parse(response);
 			isLast = obj.properties.data.isLast;
+			var chatName = obj.properties.data.userName;
+			var chatImg = obj.properties.data.imgPath;
+			chatImg = chatImg ? chatImg : "https://res.cloudinary.com/connectbox/image/upload/v1526567231/male-profile.png";
+			
 			if(config.data.pageLevel > 1)
 			{
-				utilClass.callHandlebar("#chatsListData-hb-template", ".connUs-chatsListMgs-inner-wrapper", obj.properties, false, true);
+				utilClass.callHandlebar("#chatsListData-hb-template", ".connUs-chatBox-inner-wrapper", obj.properties, false, true);
 			}
 			else
 			{
-				utilClass.callHandlebar("#chatsListData-hb-template", ".connUs-chatsListMgs-inner-wrapper", obj.properties);
+				utilClass.callHandlebar("#chatsListData-hb-template", ".connUs-chatBox-inner-wrapper", obj.properties);
 			}
 			
 			if(config.data.pageLevel == 1)
 			{
+				$(".connUs-chatBox-inner-wrapper").animate({ scrollTop: $(document).height() }, 1000);
 			    var onlineMemberCbk = function(response){
 		            var obj = JSON.parse(response);
 		            if(obj.properties.data.onlineMembers.length == 0)
@@ -148,10 +159,15 @@ var chatClass = {
 		        
 			    utilClass.getOnlineMembers(receiverId, onlineMemberCbk);
 			    
-				$(".connUs-chatBox-head").html(chatName);
+			    $(".connUs-chatBox-img").attr("src", chatImg);
+				$(".connUs-chatBox-name").html(chatName);
 				$("body").addClass("connUs-chatBoxActive");
 				
-				$(".connUs-chatsListMgs-submit").off("click").on("click",function(){
+				$(".connUs-chatBox-plus-icon").off("click").on("click",function(){
+					$(".connUs-chatBox-location-cont").toggle();
+				});
+				
+				$(".connUs-chatBox-send-cont").off("click").on("click",function(){
 					_self.madeSendChat();
 				});
 				
@@ -163,8 +179,8 @@ var chatClass = {
 					_self.getCurrentLocation();
 				});
 				
-				$(".connUs-chatsListMgs-inner-wrapper").scroll(function() {
-					if($(".connUs-chatsListMgs-inner-wrapper").scrollTop() + $(".connUs-chatsListMgs-inner-wrapper").height() == $(".connUs-chatsListMgs-inner-wrapper").height()) {
+				$(".connUs-chatBox-inner-wrapper").scroll(function() {
+					if($(".connUs-chatBox-inner-wrapper").scrollTop() + $(".connUs-chatBox-inner-wrapper").height() == $(".connUs-chatBox-inner-wrapper").height()) {
 						if(!isLast)
 						{
 							config.data.pageLevel++;
@@ -177,10 +193,8 @@ var chatClass = {
 					  _self.renderSmileys();
 				});
 			}
-
 		};
 		utilClass.makeAjaxCall(config, chatsListDataCbk);
-		_self.removeChatNotification();
 	},
 	
 	renderSmileys : function()
@@ -221,14 +235,14 @@ var chatClass = {
 		var _self = this;
 		var userName = $(".connUs-profile-name").html();
 		var receiverId = $(".connUs-chatBox-wrapper").attr("receiverId");
-		var receiverName = $(".connUs-chatBox-head").html();
-		var message = $($(".connUs-chatsListMgs-input")[1]).html();
+		var receiverName = $(".connUs-chatBox-name").html();
+		var message = $($(".connUs-chatBox-input")[1]).html();
 		var commType = "";
 		
 		if($(".connUs-chatBox-outerWrapper").hasClass("chat-map-active"))
 		{
 			commType = "map";
-			message = $("#map-cont").attr("address");
+			message = $("#connUs-chatBox-map-cont").attr("address");
 		}
 		
 		var config = {};
@@ -243,7 +257,10 @@ var chatClass = {
 			"commType" : commType
 		});
 		
-		utilClass.makeAjaxCall(config);
+		var sendChatCbk = function(){
+			_self.getChatListData();
+		};
+		utilClass.makeAjaxCall(config, sendChatCbk);
 	},
 	
 	getCurrentLocation : function(){
@@ -261,7 +278,7 @@ var chatClass = {
 	              if (status == google.maps.GeocoderStatus.OK)
 	              {
 	            	  address = results[0].formatted_address;
-	            	  $("#map-cont").attr("address", address);
+	            	  $("#connUs-chatBox-map-cont").attr("address", address);
 	              }
 	              else
 	              {
@@ -280,7 +297,7 @@ var chatClass = {
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           mapTypeControl: false
         };
-        var map = new google.maps.Map(document.getElementById("map-cont"),myOptions);
+        var map = new google.maps.Map(document.getElementById("connUs-chatBox-map-cont"),myOptions);
 
         var marker = new google.maps.Marker({
           position: latlng,

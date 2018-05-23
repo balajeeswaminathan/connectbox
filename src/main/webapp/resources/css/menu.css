@@ -2,7 +2,7 @@
 	position: fixed;
     z-index: 999;
     width: 20%;
-    color: #a7a7a7;
+    color: #909090;
 }
 
 .connUs-basicInfo{
@@ -68,7 +68,7 @@
 }
 
 .connUs-menu:hover{
-    background-color: #fff;
+    background-color: #e2e2e2;
     border-radius: 20px;
 }
 
@@ -87,7 +87,7 @@
 		-ms-transform: height 800ms ease;
 		-webkit-transition: height 800ms ease;
 		transition: height 800ms ease;
-		background-color: #f1f1f1;
+		background-color: #fff;
 		width: 100%;
     }
 	

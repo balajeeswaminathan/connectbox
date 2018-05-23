@@ -107,31 +107,19 @@ public class ChatController {
 	@RequestMapping(value = "/requestFriends", method = RequestMethod.GET)
 	@ResponseBody
 	public String requestFriends(@RequestParam String requesterId, @RequestParam String accepterId) {
-		JSONObject response = new JSONObject();
-		
 		chatService.addFriends(requesterId+"_FriendsList", accepterId, -1);
-		chatService.addFriends(accepterId+"_FriendsList", requesterId, 1);
-		
-		response.put("status", 0);
-		response.put("sucessMessage", "Friend request send successfully");
-		
-		return createJsonObject(response);
+		String response = chatService.addFriends(accepterId+"_FriendsList", requesterId, 1);
+		return createJsonObject(JSON.parse(response));
     }
 	
 	//Accept Friend
 	@RequestMapping(value = "/acceptFriends", method = RequestMethod.GET)
 	@ResponseBody
 	public String acceptFriends(@RequestParam String accepterId, @RequestParam String requesterId) {
-		JSONObject response = new JSONObject();
-		
 		chatService.addFriends(accepterId+"_FriendsList", requesterId, 0);
-		chatService.addFriends(requesterId+"_FriendsList", accepterId, 0);
-		
-		response.put("status", 0);
-		response.put("sucessMessage","Friend accept send successfully");
-    	
-		return createJsonObject(response);
-    }
+		String response = chatService.addFriends(requesterId+"_FriendsList", accepterId, 0);
+		return createJsonObject(JSON.parse(response));
+	}
 	
 	//Friends List
 	@RequestMapping(value = "/friendList", method = RequestMethod.GET)
